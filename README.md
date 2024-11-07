@@ -1,7 +1,3 @@
-Here's a lively README for your SciAstra blog and courses platform:
-
----
-
 # 🚀 SciAstra Platform - Blogs & Courses 🌌
 
 Welcome to **SciAstra**! 🌠 A place where knowledge meets convenience, empowering users with engaging blogs and easy-to-access courses.
