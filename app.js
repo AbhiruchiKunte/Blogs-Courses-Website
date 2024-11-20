@@ -37,7 +37,7 @@ app.get('/adminpanel', (req, res) => {
 });
 
 //route for the display of blogs & courses data on the website
-app.get('/blogs-courses-website', async (req, res) => {
+app.get('/', async (req, res) => {
     try {
         // Query for blogs
         const blogsQuery = 'SELECT Blog_img, Blog_title, Blog_description, created_at, blog_link FROM blogs';
