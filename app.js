@@ -44,7 +44,9 @@ app.get('/', async (req, res) => {
         const [blogResults] = await pool.query(blogsQuery);
         const blogs = blogResults.map(blog => ({
             ...blog,
-            Blog_img: `data:image/jpeg;base64,${Buffer.from(blog.Blog_img).toString('base64')}`
+            Blog_img: blog.Blog_img
+                ? `data:image/jpeg;base64,${Buffer.from(blog.Blog_img).toString('base64')}`
+                : null
         }));
 
         // Query for free courses
@@ -56,21 +58,26 @@ app.get('/', async (req, res) => {
         const [freeCourseResults] = await pool.query(freeCoursesQuery);
         const freeCourses = freeCourseResults.map(course => ({
             ...course,
-            course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+            course_img: course.course_img
+                ? `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+                : null
         }));
 
-        // Query for paid courses with link
-const paidCoursesQuery = `
-    SELECT course_img, coursename, price, link 
-    FROM courses 
-    WHERE price > 0
-`;
-const [paidCourseResults] = await pool.query(paidCoursesQuery);
-const paidCourses = paidCourseResults.map(course => ({
-    ...course,
-    course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
-}));
-        
+        // Query for paid courses
+        const paidCoursesQuery = `
+            SELECT course_img, coursename, price, link 
+            FROM courses 
+            WHERE price > 0
+        `;
+        const [paidCourseResults] = await pool.query(paidCoursesQuery);
+        const paidCourses = paidCourseResults.map(course => ({
+            ...course,
+            course_img: course.course_img
+                ? `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+                : null
+        }));
+
+        // Render the index page
         res.render('index', { blogs, freeCourses, paidCourses });
 
     } catch (err) {
