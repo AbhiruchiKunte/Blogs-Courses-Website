@@ -51,6 +51,8 @@ body {
     font-family: "Lobster", serif;
     font-weight: 400;
     font-style: normal;
+    margin-left: -20px;
+
 }
 
 .navbar .nav-links {
@@ -405,6 +407,17 @@ section h1, section h3 {
         height: 20px;
     }
 }
+@media (max-width: 320px) {
+    .swiper-button-next{
+       margin-right: -15px;
+       margin-top: 10px !important;
+    }
+    .swiper-button-prev{
+       margin-left: -15px;
+       margin-top: 10px !important;
+    }
+}
+
 
  /* Footer */
 .footer {
@@ -514,7 +527,9 @@ section h1, section h3 {
         font-size: 20px;
     }
 }
-@media (max-width: 375px) {
+
+
+@media (max-width: 320px) {
     .two_footer {
         display: flex;
         flex-direction: column;
@@ -525,13 +540,33 @@ section h1, section h3 {
         width: 100%;
     }
 
-    .left, .mid, .right {
+    .left{
         width: 100%; /* Ensure full width for each column on small screens */
         margin-bottom: 1rem; /* Uniform spacing between sections */
-        text-align: center;
+        text-align: left ;
+    }
+    .mid{
+        width: 100%; /* Ensure full width for each column on small screens */
+        margin-bottom: 1rem; /* Uniform spacing between sections */
+        text-align: center ;
+        position: relative;
+        top: 45px;
+    }
+    .right{
+        width: 100%; /* Ensure full width for each column on small screens */
+        margin-bottom: 1rem; /* Uniform spacing between sections */
+        text-align: right;
+        position: relative;
+        top: 75px;
     }
 
-    .left h2, .mid h2, .right h2 {
+   .left h2, .mid h2, .right h2 {
+        margin-bottom: 0.5rem; /* Adds spacing below headers */
+        font-size: 16px !important; /* Adjusted for smaller screens */
+
+    }
+ 
+    .left a, .mid a, .right a {
         margin-bottom: 0.5rem; /* Adds spacing below headers */
         font-size: 12px !important; /* Adjusted for smaller screens */
     }
@@ -828,7 +863,7 @@ html {
                   <span class="name"><%= course.coursename %></span>
                 </div>
                 <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free</p>
-                <div class="button">
+                <div class="button" style="position: relative; top: -20px;">
                   <button class="message-button" onclick="window.location.href='<%= course.link %>'">Learn More</button>
                 </div>
               </div>
@@ -852,16 +887,16 @@ html {
             <div class="card">
               <div class="card-content">
                 <div class="image">
-                  <img src="<%= course.course_img %>" alt="<%= course.courseName %>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                  <img src="<%= course.course_img %>" alt="<%= course.coursename %>" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                 </div>
                 <div class="name-profession">
-                  <span class="name"><%= course.courseName %></span>
+                  <span class="name"><%= course.coursename %></span>
                 </div>
                 <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹<%= course.price %></p>
-                <div class="button" style="margin-top: 40px;">
+                <div class="button" style="margin-top: 30px;">
                     <button class="message-button" 
-                        onclick="enrollNow('<%= course.courseName %>', '<%= course.price %>', '<%= course.link %>')">
-                        Enroll now
+                        onclick="enrollNow('<%= course.coursename %>', '<%= course.price %>', '<%= course.link %>')">
+                        Enroll Now
                     </button>
                 </div>
                 </div>
@@ -940,7 +975,7 @@ html {
   <!-- Razorpay checkout & order -->
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-  function enrollNow(courseName, price, link) {
+  function enrollNow(coursename, price, link) {
       fetch('/createOrder', {
           method: 'POST',
           headers: {
@@ -948,7 +983,7 @@ html {
           },
           body: JSON.stringify({
               amount: price, 
-              name: courseName,
+              name: coursename,
               description: 'Course Payment'
           })
       })
@@ -1057,7 +1092,7 @@ html {
             <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
         </div>
         <div class="right">
-            <h2 id="title">Quick links</h2>
+            <h2 id="title">Links</h2>
             <a id="sub_link" href="#free-courses">Our Courses</a>
             <a id="sub_link" href="#blogs">Blogs</a>
             <a id="sub_link" href="#contact">Contact Us</a>
