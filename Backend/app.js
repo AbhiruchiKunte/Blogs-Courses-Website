@@ -9,14 +9,14 @@ const { createClient } = require('redis'); // Add Redis import
 const app = express();
 const http = require('http').Server(app);
 
-console.log('Views directory path:', path.join(__dirname, '../frontend/views'));
+console.log('Views directory path:', path.join(__dirname, '../Frontend/views'));
 
 // Set the view engine and views directory
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../frontend/views'));
+app.set('views', path.join(__dirname, '../Frontend/views'));
 
 
-app.use(express.static(path.join(__dirname, '../frontend/public')));
+app.use(express.static(path.join(__dirname, '../Frontend/public')));
 app.use(express.urlencoded({ extended: true }));
 
 // Local Database Configuration
@@ -117,7 +117,7 @@ app.use('/', paymentRoute);
 
 // Serve admin panel
 app.get('/adminpanel', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/adminpanel', 'addnew.html'));
+    res.sendFile(path.join(__dirname, '../Frontend/adminpanel', 'addnew.html'));
 });
 // Route for adding a new course
 app.post('/add-course', (req, res) => {
