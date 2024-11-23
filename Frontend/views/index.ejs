@@ -514,6 +514,45 @@ section h1, section h3 {
         font-size: 20px;
     }
 }
+@media (max-width: 375px) {
+    .two_footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center; /* Changed to 'center' to stack everything neatly */
+        gap: 20px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .left, .mid, .right {
+        width: 100%; /* Ensure full width for each column on small screens */
+        margin-bottom: 1rem; /* Uniform spacing between sections */
+        text-align: center;
+    }
+
+    .left h2, .mid h2, .right h2 {
+        margin-bottom: 0.5rem; /* Adds spacing below headers */
+        font-size: 12px !important; /* Adjusted for smaller screens */
+    }
+
+    .social_icon {
+        font-size: 20px; /* Keep icons responsive */
+        display: flex;
+        justify-content: center; /* Center icons */
+        gap: 10px; /* Add spacing between icons */
+    }
+
+    .quick_links ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .quick_links li {
+        margin-bottom: 5px; /* Add spacing between list items */
+    }
+}
+
 
  /*Contact Section Styling */
         #contact {
@@ -1019,9 +1058,9 @@ html {
         </div>
         <div class="right">
             <h2 id="title">Quick links</h2>
-            <a id="sub_link" href="./courses.html">Our Courses</a>
-            <a id="sub_link" href="./blog.html">Blogs</a>
-            <a id="sub_link" href="./contact.html">Contact Us</a>
+            <a id="sub_link" href="#free-courses">Our Courses</a>
+            <a id="sub_link" href="#blogs">Blogs</a>
+            <a id="sub_link" href="#contact">Contact Us</a>
         </div>
     </div>
 </div>

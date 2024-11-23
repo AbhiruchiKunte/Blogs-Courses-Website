@@ -4,21 +4,22 @@ const formidable = require('formidable');
 const path = require('path');
 const fs = require('fs');
 const mysql = require('mysql2');
+const { createClient } = require('redis'); // Add Redis import
 
 const app = express();
-var http = require('http').Server(app);
+const http = require('http').Server(app);
 
+console.log('Views directory path:', path.join(__dirname, '../frontend/views'));
+
+// Set the view engine and views directory
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../frontend/views'));
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../frontend/public')));
 app.use(express.urlencoded({ extended: true }));
 
-const paymentRoute = require('./routes/paymentRoute');
-app.use('/', paymentRoute);
-
-// Database pool configuration
-const pool = mysql.createPool({
+// Local Database Configuration
+const localDbConfig = {
     host: 'localhost',
     user: 'root',
     password: 'Abhiruchi@25',
@@ -26,20 +27,47 @@ const pool = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
-}).promise();
+};
 
-module.exports = { app, pool };
+const pool = mysql.createPool(localDbConfig).promise();
 
-
-// Serve admin panel for blog management
-app.get('/adminpanel', (req, res) => {
-    res.sendFile(path.join(__dirname, 'adminpanel', 'addnew.html'));
+// Redis Configuration - use the Redis client created with `createClient`
+const redisClient = createClient({
+    password: process.env.REDIS_PASSWORD, // Your Redis password from the .env file
+    socket: {
+        host: 'redis-18267.c16.us-east-1-2.ec2.redns.redis-cloud.com',
+        port: 18267
+    }
 });
 
-//route for the display of blogs & courses data on the website
-app.get('/blogs-courses-website', async (req, res) => {
+// Connect to Redis
+(async () => {
     try {
-        // Query for blogs
+        await redisClient.connect();
+        console.log('Connected to Redis!');
+    } catch (err) {
+        console.error('Redis Connection Error:', err);
+    }
+})();
+
+module.exports = { app, pool, redisClient };
+
+// Route for rendering index.ejs
+app.get('/', async (req, res) => {
+    try {
+        // Key for Redis caching
+        const redisKey = 'home_data';
+
+        // Check if data exists in Redis
+        const cachedData = await redisClient.get(redisKey);
+
+        if (cachedData) {
+            console.log('Data fetched from Redis cache.');
+            const { blogs, freeCourses, paidCourses } = JSON.parse(cachedData);
+            return res.render('index', { blogs, freeCourses, paidCourses });
+        }
+
+        // Fetch Blogs from MySQL
         const blogsQuery = 'SELECT Blog_img, Blog_title, Blog_description, created_at, blog_link FROM blogs';
         const [blogResults] = await pool.query(blogsQuery);
         const blogs = blogResults.map(blog => ({
@@ -47,7 +75,7 @@ app.get('/blogs-courses-website', async (req, res) => {
             Blog_img: `data:image/jpeg;base64,${Buffer.from(blog.Blog_img).toString('base64')}`
         }));
 
-        // Query for free courses
+        // Fetch Free Courses from MySQL
         const freeCoursesQuery = `
             SELECT course_img, coursename, price, link
             FROM courses 
@@ -59,27 +87,37 @@ app.get('/blogs-courses-website', async (req, res) => {
             course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
         }));
 
-        // Query for paid courses with link
-const paidCoursesQuery = `
-    SELECT course_img, coursename, price, link 
-    FROM courses 
-    WHERE price > 0
-`;
-const [paidCourseResults] = await pool.query(paidCoursesQuery);
-const paidCourses = paidCourseResults.map(course => ({
-    ...course,
-    course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
-}));
-        
-        res.render('index', { blogs, freeCourses, paidCourses });
+        // Fetch Paid Courses from MySQL
+        const paidCoursesQuery = `
+            SELECT course_img, coursename, price, link 
+            FROM courses 
+            WHERE price > 0
+        `;
+        const [paidCourseResults] = await pool.query(paidCoursesQuery);
+        const paidCourses = paidCourseResults.map(course => ({
+            ...course,
+            course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+        }));
 
+        const dataToCache = { blogs, freeCourses, paidCourses };
+        await redisClient.setEx(redisKey, 3600, JSON.stringify(dataToCache));
+
+        // Render the data
+        res.render('index', { blogs, freeCourses, paidCourses });
     } catch (err) {
         console.error('Error fetching data:', err);
         res.status(500).send('Internal Server Error');
     }
 });
 
+// Import and use payment routes
+const paymentRoute = require('./routes/paymentRoute');
+app.use('/', paymentRoute);
 
+// Serve admin panel
+app.get('/adminpanel', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/adminpanel', 'addnew.html'));
+});
 // Route for adding a new course
 app.post('/add-course', (req, res) => {
     const form = new formidable.IncomingForm();
@@ -206,7 +244,9 @@ app.post('/add-blog', (req, res) => {
         }
     });
 });
-
-http.listen(3000, function(){
-    console.log('Server is running');
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });
+
