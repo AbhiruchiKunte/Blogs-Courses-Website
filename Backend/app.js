@@ -36,8 +36,8 @@ const pool = mysql.createPool(localDbConfig).promise();
 const redisClient = createClient({
     password: process.env.REDIS_PASSWORD, // Your Redis password from the .env file
     socket: {
-        host: 'redis-18267.c16.us-east-1-2.ec2.redns.redis-cloud.com',
-        port: 18267
+        host: 'redis-10268.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
+        port: 10268
     }
 });
 

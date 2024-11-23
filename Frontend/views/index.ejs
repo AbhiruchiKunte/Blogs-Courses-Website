@@ -471,9 +471,17 @@ section h1, section h3 {
     flex-wrap: wrap; /* Ensures sections wrap on smaller screens */
 }
 
-.left, .mid, .right {
+.left{
     width: 30%;
     text-align: left;
+}
+.mid{
+    width: 30%;
+    text-align: center;
+}
+.right{
+    width: 30%;
+    text-align: right;
 }
 
 .left h2, .mid h2, .right h2 {
@@ -493,101 +501,119 @@ section h1, section h3 {
 #sub_link:hover {
     color: var(--secondary-color);
 }
-/* Responsive Footer Design */
-@media (max-width: 768px) {
-    .two_footer {
-        flex-direction: column;
+
+/* Footer */
+@media (max-width: 375px) {
+    .footer {
+        padding: 2rem 1rem; /* Adjust padding further for very small screens */
+        height: 300px;
+    }
+
+    #mail_id {
+        font-size: 0.9rem; /* Even smaller font size for extremely small screens */
+        margin-bottom: 10px;
+    }
+
+    #three_div {
         display: flex;
-        align-items: center;
-        justify-content:space-around;
-        gap: 20px;
-        text-align: center;
-        width: 100%;
+        justify-content: center; /* Center align social icons */
+        gap: 8px; /* Even smaller gap */
+        margin-bottom: 15px; /* Space below icons */
+    }
+
+    .social_icon {
+        font-size: 18px; /* Even smaller icons */
+    }
+
+    .two_footer {
+        flex-direction: column; /* Stack the sections vertically */
+        align-items: center; /* Center-align */
+        width: 100%; /* Full width */
+        margin-top: 1rem; /* Compact margin */
     }
 
     .left {
-        width: 90%; 
-        margin-bottom: 2rem;
-        text-align: left;
-    }
-
-    .mid {
-        width: 90%;
-        margin-top: -173px; 
-        text-align: center;
-    }
-
-    .right {
-        width: 90%;
-        margin-top: -245px !important;
-        text-align: right;
-    }
-
-    .social_icon {
-        font-size: 20px;
-    }
-}
-
-
-@media (max-width: 320px) {
-    .two_footer {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center; /* Changed to 'center' to stack everything neatly */
-        gap: 20px;
-        text-align: center;
-        width: 100%;
-    }
-
-    .left{
-        width: 100%; /* Ensure full width for each column on small screens */
-        margin-bottom: 1rem; /* Uniform spacing between sections */
-        text-align: left ;
+        width: 100%; /* Full width for each section */
+        text-align: left; /* Center text */
     }
     .mid{
-        width: 100%; /* Ensure full width for each column on small screens */
-        margin-bottom: 1rem; /* Uniform spacing between sections */
-        text-align: center ;
-        position: relative;
-        top: 45px;
+        width: 100%; /* Full width for each section */
+        text-align: center; /* Center text */
+        margin-top: -96px;
     }
     .right{
-        width: 100%; /* Ensure full width for each column on small screens */
-        margin-bottom: 1rem; /* Uniform spacing between sections */
-        text-align: right;
-        position: relative;
-        top: 75px;
+        width: 100%; /* Full width for each section */
+        text-align: right; /* Center text */
+        margin-top: -185px;
     }
 
-   .left h2, .mid h2, .right h2 {
-        margin-bottom: 0.5rem; /* Adds spacing below headers */
-        font-size: 16px !important; /* Adjusted for smaller screens */
-
+    .left h2, .mid h2, .right h2 {
+        font-size: 10px !important ; /* Small font size for headers */
+        margin-bottom: 0.6rem; /* Smaller margin */
     }
- 
-    .left a, .mid a, .right a {
-        margin-bottom: 0.5rem; /* Adds spacing below headers */
-        font-size: 12px !important; /* Adjusted for smaller screens */
+
+    #sub_link {
+        font-size: 0.8rem; /* Smaller font size for links */
+    }
+}
+/* For 320px screens */
+@media (max-width: 320px) {
+    .footer {
+        padding: 2rem 1rem; /* Adjust padding further for very small screens */
+        height: 300px;
+    }
+
+    #mail_id {
+        font-size: 0.9rem; /* Even smaller font size for extremely small screens */
+        margin-bottom: 10px;
+    }
+
+    #three_div {
+        display: flex;
+        justify-content: center; /* Center align social icons */
+        gap: 8px; /* Even smaller gap */
+        margin-bottom: 15px; /* Space below icons */
     }
 
     .social_icon {
-        font-size: 20px; /* Keep icons responsive */
-        display: flex;
-        justify-content: center; /* Center icons */
-        gap: 10px; /* Add spacing between icons */
+        font-size: 18px; /* Even smaller icons */
     }
 
-    .quick_links ul {
-        list-style: none;
-        padding: 0;
+    .two_footer {
+        flex-direction: column; /* Stack the sections vertically */
+        align-items: center; /* Center-align */
+        width: 100%; /* Full width */
+        margin-top: 1rem; /* Compact margin */
     }
 
-    .quick_links li {
-        margin-bottom: 5px; /* Add spacing between list items */
+    .left {
+        width: 100%; /* Full width for each section */
+        text-align: left; /* Center text */
+    }
+    .mid{
+        width: 100%; /* Full width for each section */
+        text-align: center; /* Center text */
+        margin-top: -94px;
+    }
+    .right{
+        width: 100%; /* Full width for each section */
+        text-align: right; /* Center text */
+        margin-top: -179px;
+    }
+
+    .left h2, .mid h2, .right h2 {
+        font-size: 16px !important; /* Small font size for headers */
+        margin-bottom: 0.6rem; /* Smaller margin */
+    }
+    .left a, .mid a, .right a {
+        font-size: 12px !important; /* Small font size for headers */
+        margin-bottom: 0.6rem; /* Smaller margin */
+    }
+
+    #sub_link {
+        font-size: 0.8rem; /* Smaller font size for links */
     }
 }
-
 
  /*Contact Section Styling */
         #contact {
