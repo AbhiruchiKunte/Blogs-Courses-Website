@@ -32,15 +32,9 @@ const localDbConfig = {
 
 const pool = mysql.createPool(localDbConfig).promise();
 
-// Ensure REDIS_PASSWORD is set
-if (!process.env.REDIS_PASSWORD) {
-    console.error('REDIS_PASSWORD environment variable is missing!');
-    process.exit(1); // Exit application if Redis password is not configured
-}
-
 // Redis Client Configuration
 const redisClient = createClient({
-    password: process.env.REDIS_PASSWORD,
+    password: 'pQgkibVBLMo3cKRTTuS0eNEYLkOkZEJO',
     socket: {
         host: 'redis-19769.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
         port: 19769
@@ -54,19 +48,16 @@ const redisClient = createClient({
         console.log('Connected to Redis!');
     } catch (err) {
         console.error('Redis Connection Error:', err);
+        process.exit(1);
     }
 })();
-
-module.exports = { app, pool, redisClient };
 
 // Route for rendering index.ejs
 app.get('/', async (req, res) => {
     try {
         const redisKey = 'home_data';
 
-        let blogs = [];
-        let freeCourses = [];
-        let paidCourses = [];
+        let blogs, freeCourses, paidCourses;
 
         try {
             // Check if data exists in Redis
@@ -85,18 +76,19 @@ app.get('/', async (req, res) => {
                 paidCourses = await fetchPaidCoursesFromMySQL();
 
                 const dataToCache = { blogs, freeCourses, paidCourses };
-                // Save data in Redis without expiration
-                await redisClient.set(redisKey, JSON.stringify(dataToCache));
-                console.log('Data saved to Redis cache without expiration.');
+                await redisClient.set(redisKey, JSON.stringify(dataToCache)); // Save data in Redis
+                console.log('Data saved to Redis cache.');
             }
         } catch (cacheError) {
             console.error('Redis cache error:', cacheError);
+
+            // Fallback to MySQL
             blogs = await fetchBlogsFromMySQL();
             freeCourses = await fetchFreeCoursesFromMySQL();
             paidCourses = await fetchPaidCoursesFromMySQL();
         }
 
-        // Render the data
+        // Render the data in the index.ejs view
         res.render('index', { blogs, freeCourses, paidCourses });
     } catch (err) {
         console.error('Error fetching data:', err);
