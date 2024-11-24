@@ -32,12 +32,18 @@ const localDbConfig = {
 
 const pool = mysql.createPool(localDbConfig).promise();
 
-// Redis Configuration - use the Redis client created with `createClient`
+// Ensure REDIS_PASSWORD is set
+if (!process.env.REDIS_PASSWORD) {
+    console.error('REDIS_PASSWORD environment variable is missing!');
+    process.exit(1); // Exit application if Redis password is not configured
+}
+
+// Redis Client Configuration
 const redisClient = createClient({
-    password: process.env.REDIS_PASSWORD, // Your Redis password from the .env file
+    password: process.env.REDIS_PASSWORD,
     socket: {
-        host: 'redis-10268.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
-        port: 10268
+        host: 'redis-19769.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
+        port: 19769
     }
 });
 
@@ -56,60 +62,85 @@ module.exports = { app, pool, redisClient };
 // Route for rendering index.ejs
 app.get('/', async (req, res) => {
     try {
-        // Key for Redis caching
         const redisKey = 'home_data';
 
-        // Check if data exists in Redis
-        const cachedData = await redisClient.get(redisKey);
+        let blogs = [];
+        let freeCourses = [];
+        let paidCourses = [];
 
-        if (cachedData) {
-            console.log('Data fetched from Redis cache.');
-            const { blogs, freeCourses, paidCourses } = JSON.parse(cachedData);
-            return res.render('index', { blogs, freeCourses, paidCourses });
+        try {
+            // Check if data exists in Redis
+            const cachedData = await redisClient.get(redisKey);
+
+            if (cachedData) {
+                console.log('Data fetched from Redis cache.');
+                const parsedData = JSON.parse(cachedData);
+                blogs = parsedData.blogs;
+                freeCourses = parsedData.freeCourses;
+                paidCourses = parsedData.paidCourses;
+            } else {
+                console.log('Data not found in Redis. Fetching from MySQL...');
+                blogs = await fetchBlogsFromMySQL();
+                freeCourses = await fetchFreeCoursesFromMySQL();
+                paidCourses = await fetchPaidCoursesFromMySQL();
+
+                const dataToCache = { blogs, freeCourses, paidCourses };
+                // Save data in Redis without expiration
+                await redisClient.set(redisKey, JSON.stringify(dataToCache));
+                console.log('Data saved to Redis cache without expiration.');
+            }
+        } catch (cacheError) {
+            console.error('Redis cache error:', cacheError);
+            blogs = await fetchBlogsFromMySQL();
+            freeCourses = await fetchFreeCoursesFromMySQL();
+            paidCourses = await fetchPaidCoursesFromMySQL();
         }
-
-        // Fetch Blogs from MySQL
-        const blogsQuery = 'SELECT Blog_img, Blog_title, Blog_description, created_at, blog_link FROM blogs';
-        const [blogResults] = await pool.query(blogsQuery);
-        const blogs = blogResults.map(blog => ({
-            ...blog,
-            Blog_img: `data:image/jpeg;base64,${Buffer.from(blog.Blog_img).toString('base64')}`
-        }));
-
-        // Fetch Free Courses from MySQL
-        const freeCoursesQuery = `
-            SELECT course_img, coursename, price, link
-            FROM courses 
-            WHERE price = 0
-        `;
-        const [freeCourseResults] = await pool.query(freeCoursesQuery);
-        const freeCourses = freeCourseResults.map(course => ({
-            ...course,
-            course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
-        }));
-
-        // Fetch Paid Courses from MySQL
-        const paidCoursesQuery = `
-            SELECT course_img, coursename, price, link 
-            FROM courses 
-            WHERE price > 0
-        `;
-        const [paidCourseResults] = await pool.query(paidCoursesQuery);
-        const paidCourses = paidCourseResults.map(course => ({
-            ...course,
-            course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
-        }));
-
-        const dataToCache = { blogs, freeCourses, paidCourses };
-        await redisClient.setEx(redisKey, 86400, JSON.stringify(dataToCache));
 
         // Render the data
         res.render('index', { blogs, freeCourses, paidCourses });
     } catch (err) {
         console.error('Error fetching data:', err);
-        res.status(500).send('Internal Server Error');
+        res.status(500).send('We are currently experiencing technical issues. Please try again later.');
     }
 });
+
+// Fetch Blogs from MySQL
+async function fetchBlogsFromMySQL() {
+    const blogsQuery = 'SELECT Blog_img, Blog_title, Blog_description, created_at, blog_link FROM blogs';
+    const [blogResults] = await pool.query(blogsQuery);
+    return blogResults.map(blog => ({
+        ...blog,
+        Blog_img: `data:image/jpeg;base64,${Buffer.from(blog.Blog_img).toString('base64')}`
+    }));
+}
+
+// Fetch Free Courses from MySQL
+async function fetchFreeCoursesFromMySQL() {
+    const freeCoursesQuery = `
+        SELECT course_img, coursename, price, link
+        FROM courses 
+        WHERE price = 0
+    `;
+    const [freeCourseResults] = await pool.query(freeCoursesQuery);
+    return freeCourseResults.map(course => ({
+        ...course,
+        course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+    }));
+}
+
+// Fetch Paid Courses from MySQL
+async function fetchPaidCoursesFromMySQL() {
+    const paidCoursesQuery = `
+        SELECT course_img, coursename, price, link 
+        FROM courses 
+        WHERE price > 0
+    `;
+    const [paidCourseResults] = await pool.query(paidCoursesQuery);
+    return paidCourseResults.map(course => ({
+        ...course,
+        course_img: `data:image/jpeg;base64,${Buffer.from(course.course_img).toString('base64')}`
+    }));
+}
 
 // Import and use payment routes
 const paymentRoute = require('./routes/paymentRoute');
