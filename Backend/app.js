@@ -101,7 +101,7 @@ app.get('/', async (req, res) => {
         }));
 
         const dataToCache = { blogs, freeCourses, paidCourses };
-        await redisClient.setEx(redisKey, 86400, JSON.stringify(dataToCache));
+        await redisClient.setEx(redisKey, 3600, JSON.stringify(dataToCache));
 
         // Render the data
         res.render('index', { blogs, freeCourses, paidCourses });
