@@ -35,8 +35,8 @@ const pool = mysql.createPool(localDbConfig).promise();
 const redisClient = createClient({
     password: process.env.REDIS_PASSWORD, // Your Redis password from the .env file
     socket: {
-        host: 'redis-19769.c301.ap-south-1-1.ec2.redns.redis-cloud.com',
-        port: 19769
+        host: 'redis-14894.c330.asia-south1-1.gce.redns.redis-cloud.com',
+        port: 14894
     }
 });
 
@@ -52,13 +52,10 @@ const redisClient = createClient({
 
 module.exports = { app, pool, redisClient };
 
-// Route for rendering index.ejs
 app.get('/', async (req, res) => {
     try {
-        // Key for Redis caching
         const redisKey = 'home_data';
 
-        // Check if data exists in Redis
         const cachedData = await redisClient.get(redisKey);
 
         if (cachedData) {
@@ -100,7 +97,8 @@ app.get('/', async (req, res) => {
         }));
 
         const dataToCache = { blogs, freeCourses, paidCourses };
-        await redisClient.setEx(redisKey, 86400, JSON.stringify(dataToCache));
+
+        await redisClient.set(redisKey, JSON.stringify(dataToCache));
 
         // Render the data
         res.render('index', { blogs, freeCourses, paidCourses });
