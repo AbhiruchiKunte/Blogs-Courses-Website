@@ -3,12 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SciAstra Platform</title>
+    <title>SciAstra Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lobster&family=Oleo+Script&family=Spicy+Rice&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;0,700;1,300&family=Lobster&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> 
+    
     <style>
+        /* Modernized Color Palette & Base Styles */
+        :root {
+            --primary-color: #0B192C; /* Deep Blue */
+            --secondary-color: #00A38D; /* Vibrant Teal/Cyan Accent */
+            --text-color: #444;
+            --bg-light: #ffffff;
+            --bg-dark: #f0f3f8; /* Light gray background for contrast */
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-dark: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,463 +28,394 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            background-color: #f4f4f9;
-            padding-top: 70px;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-dark);
+            padding-top: 80px;
         }
 
-        :root {
-            --primary-color: #0B192C;
-            --secondary-color: #50b3a2;
-            --text-color: #555;
-            --bg-light: #ffffff;
-            --bg-dark: #f4f4f9;
-        }
-
-        h1, h2, h3, h4, h5 {
+        h1, h2, h3 {
             color: var(--primary-color);
+            font-family: 'Kanit', sans-serif;
         }
 
         p {
-            color: var(--text-color);
             line-height: 1.6;
         }
 
-/* General Navbar Styles (No Changes Here) */
-.navbar {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
 
-.navbar .logo {
-    font-size: 2em;
-    font-weight: bold;
-    color: #fff;
-    font-family: "Lobster", serif;
-    font-weight: 400;
-    font-style: normal;
-}
+        .navbar .logo {
+            font-size: 2.2em;
+            font-weight: 700;
+            color: #fff;
+            font-family: "Lobster", serif;
+            letter-spacing: 1px;
+        }
 
-.navbar .nav-links {
-    list-style: none;
-    display: flex;
-}
+        .navbar .nav-links {
+            list-style: none;
+            display: flex;
+        }
 
-.nav-links li {
-    margin: 0 15px;
-}
+        .nav-links li {
+            margin-left: 20px;
+        }
 
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-    font-size: 18px;
-}
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
 
-.nav-links a:hover,
-.nav-links .active {
-    color: var(--secondary-color);
-}
+        .nav-links a:hover {
+            color: var(--secondary-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-.welcome-message {
-    margin-top: 10px;
-    margin-left: 10px;
-}
+        .welcome-message {
+            padding: 20px 40px;
+            text-align: center;
+        }
+        
+        .welcome-message h2 {
+            font-size: 1.8em;
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
 
-/* Responsive Navbar */
-@media (max-width: 768px) {
-    .navbar {
-        flex-wrap: wrap;
-        padding: 10px 15px;
-    }
+        /* Main Content Layout */
+        .blog-content {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
 
-    .navbar .logo {
-        font-size: 1.8em;
-        margin-bottom: 10px;
-        text-align: left;
-        width: 100%;
-    }
+        .admin-blog-upload, .form-container {
+            background-color: var(--bg-light);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-dark);
+            width: 100%;
+            max-width: 550px;
+            transition: transform 0.3s ease;
+            border: 1px solid #ddd;
+        }
+        
+        .admin-blog-upload:hover, .form-container:hover {
+            transform: translateY(-5px);
+        }
 
-    .nav-links {
-        flex-direction: column;
-        align-items: flex-end;
-        width: 100%;
-        margin-top: -20px;
-    }
+        .admin-blog-upload h2, .form-container h1 {
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--secondary-color);
+        }
 
-    .nav-links li {
-        margin: 5px 0;
-    }
+        /* Form Styling */
+        #upload-form, #courseForm {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    .nav-links a {
-        font-size: 16px;
-    }
-}
+        label {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: -10px;
+            display: block;
+        }
 
-@media (max-width: 768px) {
-    .welcome-message h2 {
-        text-align: center;
-        margin-top: 45px !important; 
-    }
-}
+        input[type="text"],
+        textarea,
+        select,
+        input[type="number"],
+        input[type="url"],
+        input[type="file"] {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f7f7f7;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input[type="file"] {
+            padding: 10px;
+        }
 
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(0, 163, 141, 0.2);
+            outline: none;
+            background-color: #fff;
+        }
 
-/* Blog Content */
-.blog-content {
-    display: flex;
-    flex-direction: column;  
-    max-width: 600px; 
-    margin: 20px auto;
-    padding: 20px;
-    gap: 30px;
-    align-items: center;
-}
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
 
-.blog-left {
-    background-color: var(--bg-light);
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-}
+        /* Submit Button */
+        .submit-btn, .form-container button {
+            background-color: var(--primary-color);
+            color: #fff;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 700;
+            transition: background-color 0.3s ease, transform 0.1s;
+            margin-top: 10px;
+        }
 
-.blog-left h2 {
-    font-size: 2.4em;
-    margin-bottom: 20px;
-    text-align: center;
-}
+        .submit-btn:hover, .form-container button:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-1px);
+        }
+        
+        /* --- FOOTER STYLINGS --- */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-top: 40px;
+            width: 100%; /* Ensure full width */
+        }
 
-.blog-left img {
-    width: 100%;
-    height: 450px;
-    border-radius: 8px;
-    margin: 6px 0;
-}
+        .footer a { 
+            text-decoration: none; 
+            color: white; 
+            transition: color 0.3s ease; 
+        }
 
-.blog-left p {
-    font-size: 1.1em;
-    margin-bottom: 20px;
-    color: var(--text-color);
-}
+        .footer a:hover { 
+            color: var(--secondary-color); 
+        }
 
-.admin-blog-upload {
-    background-color: var(--bg-light);
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%; 
-    margin-bottom: 30px;
-}
+        #mail_id { 
+            font-size: 1.1rem; 
+            margin-bottom: 20px; 
+            font-weight: 600;
+        }
 
-.admin-blog-upload h2 {
-    font-size: 2em;
-    margin-bottom: 15px;
-    color: var(--primary-color);
-    text-align: center;
-}
+        #three_div { 
+            display: flex; 
+            gap: 25px; /* Increased gap for better spacing */
+            margin-bottom: 30px;
+        }
+        
+        .social_icon { 
+            font-size: 28px; /* Slightly larger icons */
+            color: #fff; 
+            transition: color 0.3s, transform 0.3s; 
+        }
 
-#upload-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+        .social_icon:hover { 
+            color: var(--secondary-color); 
+            transform: scale(1.15); /* Slightly less aggressive scale */
+        }
 
-#upload-form label {
-    font-weight: bold;
-    color: var(--primary-color);
-}
+        .two_footer { 
+            display: flex; 
+            justify-content: space-between; 
+            width: 90%; 
+            max-width: 1100px; /* Limit max width on large screens */
+            margin-top: 2rem; 
+            flex-wrap: wrap; 
+        }
 
-#upload-form input[type="text"],
-#upload-form textarea,
-#upload-form input[type="datetime-local"],
-#upload-form select,
-#upload-form input[type="file"],
-#upload-form input[type="url"]{
-    width: 100%;
-    padding: 12px;
-    font-size: 1em;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f7f7f7;
-}
+        .left, .mid, .right { 
+            width: 30%; /* Equal width for desktop */
+            text-align: left; 
+            padding: 10px;
+        }
 
-#upload-form textarea {
-    resize: vertical;
-}
+        .left h2, .mid h2, .right h2 { 
+            font-size: 1.4rem; /* Adjusted title size */
+            margin-bottom: 1.2rem; 
+            color: #fff; 
+            font-weight: 700;
+            border-bottom: 2px solid var(--secondary-color);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        
+        #sub_link { 
+            display: block; 
+            color: #ccc; /* Lighter color for sub-links */
+            text-decoration: none; 
+            margin-bottom: 12px; 
+            font-size: 1rem; 
+            font-weight: 400;
+        }
 
-#upload-form button {
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-    width: 100%;
-}
+        #sub_link:hover { 
+            color: var(--secondary-color); 
+            text-decoration: underline;
+        }
+        
+        /* --- RESPONSIVE FOOTER FIXES --- */
+        @media (max-width: 768px) {
+            .navbar { padding: 15px 15px; }
+            .navbar .logo { font-size: 1.8em; }
+            .nav-links li { margin-left: 10px; }
+            .nav-links a { font-size: 14px; padding: 5px 8px; }
 
-#upload-form button:hover {
-    background-color: var(--secondary-color);
-}
+            .welcome-message h2 { 
+                margin-top: 0 !important; /* Resetting the problematic margin */
+                font-size: 1.5em;
+            }
+            .blog-content { 
+                padding: 15px; 
+                gap: 25px;
+            }
+            .admin-blog-upload, .form-container { 
+                max-width: 100%; 
+            }
 
-.form-container {
-    background-color: var(--bg-light);
-    padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: 100%;
-}
+            .footer {
+                padding: 3rem 1rem;
+            }
+            
+            .two_footer { 
+                flex-direction: column; 
+                align-items: center; 
+                width: 100%;
+                gap: 20px;
+                margin-top: 1.5rem;
+            }
+            
+            .left, .mid, .right { 
+                width: 90%; /* Full width for mobile */
+                text-align: center; /* Center alignment for all blocks */
+                margin-bottom: 10px;
+            }
+            
+            .left h2, .mid h2, .right h2 { 
+                border-bottom: none; /* Remove border on mobile for cleaner look */
+                display: block;
+            }
 
-.form-container h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-    color: var(--primary-color);
-    text-align: center;
-}
+            /* Clean up the inline-block border for mobile links */
+            .left h2, .mid h2, .right h2 {
+                display: block;
+                margin-bottom: 0.5rem;
+            }
+            
+            #sub_link { 
+                margin-bottom: 5px; 
+            }
+            
+            /* The 'mid' and 'right' sections were overlapping due to negative margins, 
+               which are now removed for a clean column stack. */
+        }
+        
+        /* Modal Styles - unchanged and fine */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); 
+            display: none; 
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; 
+            backdrop-filter: blur(5px);
+        }
 
-.form-container label {
-    font-weight: bold;
-    color: var(--primary-color);
-}
+        .overlay.show {
+            display: flex; 
+        }
 
-.form-container input[type="text"],
-.form-container input[type="number"],
-.form-container input[type="file"],
-.form-container input[type="url"],
-.form-container select {
-    width: 100%;
-    padding: 12px;
-    font-size: 1em;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #f7f7f7;
-    margin-bottom: 15px;
-}
+        .modal-content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%; 
+            box-shadow: var(--shadow-dark);
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
 
-.form-container button {
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    transition: background-color 0.3s ease;
-    width: 100%;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-.form-container button:hover {
-    background-color: var(--secondary-color);
-}
-  
-/* Footer */
-.footer {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: 300;
+            color: #777;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: var(--primary-color);
+        }
 
-.footer a {
-    text-decoration: none;
-    color: white;
-    transition: color 0.3s ease;
-}
+        .modal-content img {
+            width: 70px;
+            height: 70px;
+            margin-bottom: 20px;
+        }
 
-.footer a:hover {
-    color: var(--secondary-color);
-}
+        .modal-content h2 {
+            font-size: 1.6em;
+            color: var(--secondary-color); 
+            margin-bottom: 10px;
+        }
 
-#mail_id {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-}
-
-#three_div {
-    display: flex;
-    gap: 15px;
-}
-
-.social_icon {
-    font-size: 24px;
-    color: #fff; 
-    transition: color 0.3s, transform 0.3s; 
-}
-
-.social_icon:hover {
-    color: var(--secondary-color); 
-    transform: scale(1.2); 
-}
-
-/* Footer Sections */
-.two_footer {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-.left, .mid, .right {
-    width: 30%;
-    text-align: left;
-}
-
-.left h2, .mid h2, .right h2 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: #fff;
-}
-
-#sub_link {
-    display: block;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 8px;
-    font-size: 1rem;
-}
-
-#sub_link:hover {
-    color: var(--secondary-color);
-}
-
-/* Responsive Footer Design */
-@media (max-width: 768px) {
-    .two_footer {
-        flex-direction: column;
-        display: flex;
-        align-items: center;
-        justify-content:space-around;
-        gap: 20px;
-        text-align: center;
-        width: 100%;
-    }
-
-    .left {
-        width: 90%; 
-        margin-bottom: 2rem;
-        text-align: left;
-    }
-
-    .mid {
-        width: 90%;
-        margin-top: -173px; 
-        text-align: center;
-    }
-
-    .right {
-        width: 90%;
-        margin-top: -245px;
-        text-align: right;
-    }
-
-    .social_icon {
-        font-size: 20px;
-    }
-}
-/* Overlay */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7); 
-    display: none; 
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; 
-}
-
-.overlay.show {
-    display: flex; 
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    max-width: 400px;
-    width: 90%; /* Ensures it adapts to smaller screens */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    position: relative;
-}
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-    cursor: pointer;
-}
-
-/* Image Inside the Modal */
-.modal-content img {
-    width: 60px; /* Scales image for smaller screens */
-    height: 60px;
-    margin-bottom: 15px;
-}
-
-/* Modal Success Text */
-.modal-content h2 {
-    font-size: 20px; /* Slightly smaller font for smaller screens */
-    color: #28a745; /* Green success color */
-    margin-bottom: 10px;
-}
-
-.modal-content p {
-    font-size: 14px; /* Adjust for readability */
-    color: #555;
-}
-
-/* Responsive Modal */
-@media (max-width: 480px) {
-    .modal-content {
-        max-width: 90%; /* Ensure it fits on smaller screens */
-        padding: 15px; /* Reduce padding for smaller devices */
-    }
-
-    .modal-content h2 {
-        font-size: 18px; /* Slightly smaller font size */
-    }
-
-    .modal-content p {
-        font-size: 14px;
-    }
-
-    .modal-content img {
-        width: 50px; /* Smaller image size */
-        height: 50px;
-    }
-}
+        .modal-content p {
+            font-size: 1em;
+            color: var(--text-color);
+        }
     </style>
 </head>
 <body>
 
-<!-- Navbar -->
 <div class="navbar">
     <div class="logo">SciAstra</div><br>
     <ul class="nav-links">
-        <li><a href="http://localhost:3000/blogs-courses-website">Log out</a></li>
+        <li><a href="/">Log out</a></li>
     </ul>
 </div>
 <div class="welcome-message">
@@ -480,98 +423,84 @@
 </div>
 
 <section class="blog-content">
-    <!-- Blog Management Section -->
-    <div class="blog-left">
-        <div class="admin-blog-upload">
-            <h2>Blog Management</h2>
-            <form action="http://localhost:3000/add-blog" id="upload-form" method="POST" enctype="multipart/form-data">
-                <label for="BlogTitle">Blog Title</label>
-                <input type="text" id="BlogTitle" name="BlogTitle" required>
+    <div class="admin-blog-upload">
+        <h2>Blog Management</h2>
+        <form action="http://localhost:3000/add-blog" id="upload-form" method="POST" enctype="multipart/form-data">
+            <label for="BlogTitle">Blog Title</label>
+            <input type="text" id="BlogTitle" name="BlogTitle" required>
 
-                <label for="BlogDescription">Blog Description</label>
-                <textarea id="BlogDescription" name="BlogDescription" rows="4" required></textarea>
+            <label for="BlogDescription">Blog Description</label>
+            <textarea id="BlogDescription" name="BlogDescription" rows="4" required></textarea>
 
-                <label for="BlogCategory">Category</label>
-                <select id="BlogCategory" name="BlogCategory" required>
-                    <option value="technology">Technology</option>
-                    <option value="science">Science</option>
-                    <option value="space-exploration">Space Exploration</option>
-                    <option value="programming">Programming</option>
-                </select>
+            <label for="BlogCategory">Category</label>
+            <select id="BlogCategory" name="BlogCategory" required>
+                <option value="technology">Technology</option>
+                <option value="science">Science</option>
+                <option value="space-exploration">Space Exploration</option>
+                <option value="programming">Programming</option>
+            </select>
 
-                <label for="BlogImage">Blog Image:</label>
-                <input type="file" id="BlogImage" name="BlogImage" class="file-input" accept="image/*" required>
-                 <!-- Course Link Field -->
-                 <label for="bloglink">Blog Link:</label>
-                 <input type="url" id="bloglink" name="bloglink" placeholder="Enter the blog link" required>
+            <label for="BlogImage">Blog Image:</label>
+            <input type="file" id="BlogImage" name="BlogImage" class="file-input" accept="image/*" required>
+             <label for="bloglink">Blog Link:</label>
+             <input type="url" id="bloglink" name="bloglink" placeholder="Enter the blog link" required>
  
-                <button onclick="myFunction" type="submit" class="submit-btn">Upload Blog</button>
-            </form>
-        </div>
+            <button type="submit" class="submit-btn">Upload Blog</button>
+        </form>
     </div>
 
-    <!-- Overlay and Modal -->
-<div class="overlay" id="successModal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success Icon">
-        <h2>Success!</h2>
-        <p>Your Blog has been added successfully.</p>
-    </div>
-</div>
 
-    <!-- Register a New Course Section -->
-<div class="form-container">
+    <div class="form-container">
     <h1>Register a New Course</h1>
-    <form id="courseForm" action="http://localhost:3000/add-course" method="POST" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
-        <!-- Course Name Field -->
+    <form id="courseForm" action="http://localhost:3000/add-course" method="POST" enctype="multipart/form-data">
         <label for="coursename">Course Name:</label>
         <input type="text" id="coursename" name="coursename" required>
 
-        <!-- Price Field -->
         <label for="price">Price (in INR):</label>
         <input type="number" id="price" name="price" required>
 
-        <!-- Image Upload Field -->
         <label for="courseImage">Course Image:</label>
         <input type="file" id="courseImage" name="courseImage" accept="image/*" required>
 
-        <!-- Course Link Field -->
         <label for="courselink">Course Link:</label>
         <input type="url" id="courselink" name="courselink" placeholder="Enter the course link" required>
 
-        <!-- Free/Paid Option -->
         <label for="coursetype">Course Type:</label>
         <select id="coursetype" name="coursetype" required>
             <option value="free">Free</option>
             <option value="paid">Paid</option>
         </select>
 
-        <!-- Submit Button -->
-        <button onclick="myFunction()" type="submit">Add Course</button>
+        <button type="submit">Add Course</button>
     </form>
 </div>
-<!-- Overlay and Modal -->
+</section>
+
 <div class="overlay" id="successModal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
         <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success Icon">
         <h2>Success!</h2>
-        <p>Your Course has been added successfully.</p>
+        <p id="modalMessage">Your content has been added successfully.</p>
     </div>
 </div>
 
 
 <script>
-    function showModal(message, formId ) {
+    // Handles showing the modal and resetting the form
+    function showModal(message, formId) {
         const modal = document.getElementById("successModal");
-        const modalText = modal.querySelector("p");
+        const modalText = document.getElementById("modalMessage");
         modalText.textContent = message;
         modal.classList.add("show");
         
+        // Timeout to hide the modal and reset the form
         setTimeout(() => {
             closeModal();
-            window.location.href = "http://localhost:3000/blogs-courses-website";
+            const formElement = document.getElementById(formId);
+            if (formElement) {
+                formElement.reset(); // Resets the form fields
+            }
         }, 3000);
     }
 
@@ -581,22 +510,52 @@
         modal.classList.remove("show");
     }
 
+    // New generic function to handle form submission via AJAX (fetch)
+    async function handleFormSubmission(event, formId, successMessage) {
+        event.preventDefault(); // Stop the default page reload
+        const form = document.getElementById(formId);
+        const url = form.action;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+            
+            // Check if the response status is 200-299
+            if (response.ok) {
+                const result = await response.json();
+                
+                if (result.success) {
+                    // On successful response from server, show the modal and trigger form reset
+                    showModal(successMessage, formId);
+                } else {
+                    // Handle application-level error (e.g., database error)
+                    alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
+                }
+            } else {
+                // Handle HTTP errors (e.g., 400 Bad Request, 500 Internal Server Error)
+                const errorResult = await response.json();
+                alert(`Error: ${errorResult.message || response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Network or Parsing Error:', error);
+            alert('An unexpected network error occurred during submission.');
+        }
+    }
+
+    // Attach the new submission handler to the forms
     document.getElementById("upload-form").onsubmit = function (event) {
-        event.preventDefault(); 
-        showModal("Your Blog has been added Successfully.", "upload-form");
-        setTimeout(() => this.submit(), 3000);
+        handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
     };
 
     document.getElementById("courseForm").onsubmit = function (event) {
-        event.preventDefault(); 
-        showModal("Your Course has been added Successfully .", "courseForm");
-        setTimeout(() => this.submit(), 3000); 
+        handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
     };
 </script>
-</section>
 
-      <!-- Footer -->
-<div class="footer">
+<footer class="footer">
     <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
     <div id="three_div">
     <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
@@ -607,31 +566,28 @@
 </div>
 
 <div class="two_footer">
-            <div class="left">
-                <h2 id="title">SciAstra</h2>
-                <a id="sub_link" href="../mission/">Mission</a>
-                <a id="sub_link" href="../selections/">Selections</a>
-                <a id="sub_link" href="../teams/">Team</a>
-            </div>
-            <div class="mid">
-                 <h2 id="title">Institutes</h2>
-                 <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
-                 <a id="sub_link" href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
-                 <a id="sub_link" href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
-                 <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
-                 <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
-                 <a id="sub_link" href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
-                 <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
-            </div>
-            <div class="right">
-                <h2 id="title">Quick links</h2>
-                <a id="sub_link" href="./courses.html">Our Courses</a>
-                <a id="sub_link" href="./blog.html">Blogs</a>
-                <a id="sub_link" href="./contact.html">Contact Us</a>
-            </div>
-        </div>
-
+    <div class="left">
+        <h2 id="title">SciAstra</h2>
+        <a id="sub_link" href="../mission/">Mission</a>
+        <a id="sub_link" href="../selections/">Selections</a>
+        <a id="sub_link" href="../teams/">Team</a>
+    </div>
+    
+    <div class="mid">
+        <h2 id="title">Address</h2>
+        <a id="sub_link" href="#">123 Stellar St.</a>
+        <a id="sub_link" href="#">Mumbai City, 400321</a>
+        <a id="sub_link" href="#">Maharashtra</a>
+    </div>
+    
+    <div class="right">
+        <h2 id="title">Quick links</h2>
+        <a id="sub_link" href="./courses.html">Our Courses</a>
+        <a id="sub_link" href="./blog.html">Blogs</a>
+        <a id="sub_link" href="./contact.html">Contact Us</a>
+    </div>
+</div>
+</footer>
 
 </body>
 </html>
-
