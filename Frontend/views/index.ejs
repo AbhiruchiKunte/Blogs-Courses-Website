@@ -19,7 +19,7 @@
 /* Colors and Typography */
 :root {
     --primary-color: #0B192C;
-    --secondary-color: #78d4c5;
+    --secondary-color: #3a4f9e;
     --text-color: #555;
     --bg-light: #ffffff;
     --bg-dark: #f4f4f9;
@@ -156,12 +156,13 @@ body {
     min-height: 80vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start; /* push content upwards */
     align-items: center;
     animation: fadeIn 1s ease-out;
+    gap: 1.5rem; /* spacing between elements */
 }
 
-/* subtle overlay to improve text contrast */
+/* overlay */
 .hero::before {
     content: "";
     position: absolute;
@@ -171,34 +172,42 @@ body {
 }
 
 .hero h1,
-.hero p {
+.hero p,
+.hero .hero-btn {
     position: relative;
     z-index: 1;
 }
 
 .hero h1 {
-    color: #fff;
-    font-size: 3rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-family: "Anton SC", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    animation: floatHero 4s ease-in-out infinite;
+   color: #fff; 
+   font-size: 3rem; 
+   font-weight: 600; 
+   margin-bottom: 1rem; 
+   font-family: "Anton SC", sans-serif; 
+   font-weight: 400; 
+   font-style: normal; 
+   animation: floatHero 4s ease-in-out infinite;
 }
 
 .hero p {
-    margin-top: 0.5rem;
-    font-size: 1.1rem;
-    font-weight: 400;
+    margin-top: -1.5rem; 
+    font-size: 1.1rem; 
+    font-weight: 400; 
     max-width: 600px;
 }
 
+/* button wrapper for spacing */
+.hero-buttons {
+    margin-top: 1.8rem;
+    display: flex;
+    gap: 1rem;
+}
+
+/* buttons */
 .hero-btn {
     display: inline-block;
-    margin-top: 1.5rem;
     padding: 0.75rem 2.2rem;
-    background: linear-gradient(135deg, var(--secondary-color), #3e8e81);
+    background: linear-gradient(135deg, var(--secondary-color), #9092fe);
     color: white;
     border: none;
     border-radius: 999px;
@@ -207,13 +216,18 @@ body {
     font-weight: 600;
     box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-    z-index: 1;
 }
 
 .hero-btn:hover {
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 14px 30px rgba(0,0,0,0.35);
+}
+
+@media (max-width: 480px) {
+    .hero-buttons {
+        display: flex;
+        flex-direction: column;
+    }
 }
 
 /* General Section Styles */
@@ -222,11 +236,62 @@ section {
 }
 
 /* Section Titles */
-section h1, section h3 {
+section h1 {
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: -30px;
+}
+section h3 {
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
     margin-bottom: 20px;
 }
+
+/* Free Courses Section */
+.free-course-section {
+    margin-top: 40px;       /* reduced space */
+    text-align: center;
+}
+
+.free-course-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.1rem;
+    margin-bottom: 10px;   /* reduce space below title */
+    margin-top: 0;
+}
+/* Paid Courses Section */
+.paid-course-section {
+    margin-top: 40px;         /* reduced space */
+    text-align: center;
+}
+
+.paid-course-title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 32px;
+    letter-spacing: 0.1rem;
+    margin-bottom: 10px;     /* reduce space below title */
+    margin-top: 0;
+}
+/* Blog Section */
+.blog-section {
+    margin-top: 20px !important;
+    text-align: center;
+}
+
+.blogs-title {
+    font-size: 32px;
+    margin: 0 0 10px 0 !important;  /* Removes gap below title */
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Reduce space under swiper so cards come closer */
+.blogs-swiper {
+    padding-top: 10px !important;
+    padding-bottom: 20px !important;
+}
+
 
 /* Swiper Container */
 .container {
@@ -361,13 +426,6 @@ section h1, section h3 {
     z-index: 20;
 }
 
-/* The actual arrow symbols (< >) */
-.swiper-button-next::after,
-.swiper-button-prev::after {
-    font-size: 22px;
-    font-weight: 900;
-    color: #fff !important;
-}
 
 /* Hover Effects */
 .swiper-button-next:hover,
@@ -392,10 +450,8 @@ section h1, section h3 {
     .swiper-button-next::after{
       font-size:22px; font-weight:800; color:#fff;
     }
-    .swiper-button-prev::after{ content: "<"; }
+    .swiper-button-prev::after{ content: "<"; } 
     .swiper-button-next::after{ content: ">"; }
-
-    
 
 /* Smaller screens improvements */
 @media (max-width: 480px) {
@@ -719,50 +775,55 @@ section h1, section h3 {
     }
 }
 
-/* Contact Section Styling */
+/* Contact Section Wrapper */
 #contact {
-    padding: 50px 20px;
-    text-align: center;
+     padding-top: 20px !important;
     background-color: var(--bg-dark);
+    text-align: center;
+    margin-top: 40px; /* matches other sections */
 }
 
+/* Inner layout */
 .contact-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 25px;
 }
 
-h1 {
+/* Title Styling */
+.contact-title {
+    font-size: 32px;
+    font-family: Arial, Helvetica, sans-serif;
+    letter-spacing: 0.5px;
+    margin: 0 0 10px 0; /* remove negative margin, perfect spacing */
     color: var(--primary-color);
-    font-size: 36px;
-    margin-top: 40px;
 }
 
+#contact .contact-title {
+    margin-top: 0 !important;
+}
+
+/* Contact details box */
 .contact-details {
     background-color: var(--bg-dark);
     width: 600px;
     max-width: 100%;
     padding: 20px;
     border: none;
-    margin: 20px;
     display: flex;
     align-items: center;
     flex-direction: column;
 }
 
-.contact-details p {
-    margin: 10px 0;
-}
-
-.contact-details a {
-    margin: 10px 0;
-}
-
+/* Text spacing */
+.contact-details p,
+.contact-details a,
 .contact-details button {
     margin: 10px 0;
 }
 
+/* Email link */
 .contact-email {
     color: #007BFF;
     text-decoration: none;
@@ -773,6 +834,7 @@ h1 {
     text-decoration: underline;
 }
 
+/* Buttons below form */
 .contact-buttons {
     display: flex;
     justify-content: center;
@@ -780,13 +842,13 @@ h1 {
     flex-wrap: wrap;
 }
 
+/* Buttons general */
 button {
     background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 5px;
     padding: 10px 15px;
-    margin: 5px;
     cursor: pointer;
     font-size: 16px;
     transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
@@ -802,6 +864,7 @@ button i {
     margin-right: 5px;
 }
 
+/* Contact Form Box */
 .contact-form {
     max-width: 600px;
     width: 100%;
@@ -809,9 +872,12 @@ button i {
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    margin-top: 10px; /* clean spacing */
 }
 
-.contact-form input, .contact-form textarea {
+/* Form Inputs */
+.contact-form input,
+.contact-form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -827,6 +893,7 @@ button i {
     box-shadow: 0 0 0 3px rgba(120,212,197,0.25);
 }
 
+/* Labels */
 .contact-form label {
     display: block;
     margin-bottom: 5px;
@@ -835,10 +902,12 @@ button i {
     text-align: left;
 }
 
+/* Checkbox */
 .contact-form input[type="checkbox"] {
     width: auto;
 }
 
+/* Submit Button */
 .contact-form button {
     width: 100%;
     padding: 12px;
@@ -857,6 +926,7 @@ button i {
     transform: translateY(-1px);
     box-shadow: 0 8px 22px rgba(0,0,0,0.18);
 }
+
 
 .privacy-policy {
     max-width: 600px;
@@ -939,6 +1009,77 @@ html {
     margin-top: 10px;
     text-align: center;
 }
+
+/* ----------------------------------------- */
+/* FIX: Remove extra space ABOVE section titles */
+/* ----------------------------------------- */
+
+/* All section titles inside sections */
+section h1,
+section h2,
+section h3 {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Remove huge space before Connect with Us */
+#contact {
+    padding-top: 10px !important;
+    margin-top: 20px !important;
+}
+
+#contact .contact-title {
+    margin-top: 0 !important;
+}
+
+/* Remove huge space before Free Courses */
+.free-course-section,
+#free-courses {
+    margin-top: 20px !important;
+}
+
+/* Remove huge space before Paid Courses */
+.paid-course-section,
+#paid-courses {
+    margin-top: 20px !important;
+}
+
+/* Remove space before Latest Blogs */
+#latest-blogs,
+.blog-section {
+    margin-top: 20px !important;
+}
+
+
+/* ----------------------------------------- */
+/* FIX: Remove extra space BELOW cards/sliders */
+/* ----------------------------------------- */
+
+/* Reduce padding UNDER all swiper sliders */
+.swiper {
+    padding-bottom: 25px !important;
+    margin-bottom: 0 !important;
+}
+
+/* Remove extra spacing under cards */
+.card {
+    margin-bottom: 10px !important;
+}
+
+/* Remove extra gap under pagination dots */
+.swiper-pagination {
+    margin-top: -10px !important;
+}
+
+
+/* ----------------------------------------- */
+/* FIX: Remove extra spacing between sections */
+/* ----------------------------------------- */
+section {
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
     </style>
 </head>
 <body>
@@ -979,16 +1120,20 @@ html {
 
     <!-- Hero Section -->
     <section id="home" class="hero reveal">
-        <h1>Welcome to SciAstra</h1>
-        <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
-        <!-- Optional CTA button if you want -->
-        <!-- <a href="#free-courses" class="hero-btn">Explore Courses</a> -->
-    </section>
+    <h1>Welcome to SciAstra</h1>
+    <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
+
+    <div class="hero-buttons">
+        <a href="#blogs" class="hero-btn">Explore Blogs</a>
+        <a href="#free-courses" class="hero-btn">View Courses</a>
+    </div>
+</section>
+
 
     <!-- Blogs Section -->
-    <section id="blogs" class="reveal" style="font-family: 'DM Serif Display', serif; letter-spacing: 0.1rem; font-size: 28px; font-weight: 400; font-style: normal; position: relative; top: 80px;">
-        <h1 style="text-align: center; font-family: Arial, Helvetica, sans-serif; position: relative; top: -20px;">Latest Blogs</h1>
-        <div class="swiper blogs-swiper">
+    <section id="blogs" class="reveal blog-section">
+    <h3 class="blogs-title">Latest Blogs</h3>
+    <div class="swiper blogs-swiper">
           <div class="swiper-wrapper">
             <% blogs.forEach(blog => { %>
               <div class="swiper-slide">
@@ -1018,9 +1163,9 @@ html {
       </section>
 
       <!-- Free Courses Section -->
-      <section id="free-courses" class="reveal" style="font-family:Arial, Helvetica, sans-serif; letter-spacing: 0.1rem; font-size: 28px; font-weight: 400; font-style: normal; margin-top: 120px;">
-        <h3 style="text-align: center; font-family: Arial, Helvetica, sans-serif; position: relative; top: -10px;">Free Courses</h3>
-        <div class="swiper free-courses-swiper">
+      <section id="free-courses" class="reveal free-course-section">
+    <h3 class="free-course-title">Free Courses</h3>
+    <div class="swiper free-courses-swiper">
           <div class="swiper-wrapper">
             <% freeCourses.forEach(course => { %>
               <div class="swiper-slide">
@@ -1048,9 +1193,9 @@ html {
       </section>
      
       <!-- Paid Courses Section -->
-      <section id="paid-courses" class="reveal" style="font-family:Arial, Helvetica, sans-serif; letter-spacing: 0.1rem; font-size: 28px; font-weight: 400; font-style: normal; margin-top: 80px;">
-        <h3 style="text-align: center; font-family: Arial, Helvetica, sans-serif; position: relative; top: -60px;">Paid Courses</h3>
-        <div class="swiper paid-courses-swiper">
+       <section id="paid-courses" class="reveal paid-course-section">
+    <h3 class="paid-course-title">Paid Courses</h3>
+    <div class="swiper paid-courses-swiper">
           <div class="swiper-wrapper">
             <% paidCourses.forEach(course => { %>
               <div class="swiper-slide">
@@ -1192,8 +1337,8 @@ html {
      
       <section id="contact" class="reveal">
         <div class="contact-section">
-            <h1 style="margin-bottom: -25px;">Connect with Us</h1>
-            <div class="contact-form" style="margin-top: 30px;">
+    <h1 class="contact-title">Connect with Us</h1>
+    <div class="contact-form">
                 <!-- Formspree form (logic preserved, handled via JS below to show popup) -->
                 <form action="https://formspree.io/f/mkgdbqaw" method="post">
                     <label for="fname">Your Name</label>

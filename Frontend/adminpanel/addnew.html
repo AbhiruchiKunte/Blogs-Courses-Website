@@ -13,7 +13,7 @@
         /* Modernized Color Palette & Base Styles */
         :root {
             --primary-color: #0B192C; /* Deep Blue */
-            --secondary-color: #00A38D; /* Vibrant Teal/Cyan Accent */
+            --secondary-color: #0B192C; 
             --text-color: #444;
             --bg-light: #ffffff;
             --bg-dark: #f0f3f8; /* Light gray background for contrast */
@@ -200,146 +200,142 @@
             transform: translateY(-1px);
         }
         
-        /* --- FOOTER STYLINGS --- */
-        .footer {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 4rem 2rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            margin-top: 40px;
-            width: 100%; /* Ensure full width */
-        }
+        /* Footer */
+.footer {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 4rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    height: auto;
+}
 
-        .footer a { 
-            text-decoration: none; 
-            color: white; 
-            transition: color 0.3s ease; 
-        }
+.footer a {
+    text-decoration: none;
+    color: white;
+    transition: color var(--transition-base);
+}
 
-        .footer a:hover { 
-            color: var(--secondary-color); 
-        }
+.footer a:hover {
+    color: var(--secondary-color);
+}
 
-        #mail_id { 
-            font-size: 1.1rem; 
-            margin-bottom: 20px; 
-            font-weight: 600;
-        }
+#mail_id {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
 
-        #three_div { 
-            display: flex; 
-            gap: 25px; /* Increased gap for better spacing */
-            margin-bottom: 30px;
-        }
-        
-        .social_icon { 
-            font-size: 28px; /* Slightly larger icons */
-            color: #fff; 
-            transition: color 0.3s, transform 0.3s; 
-        }
+#three_div {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
-        .social_icon:hover { 
-            color: var(--secondary-color); 
-            transform: scale(1.15); /* Slightly less aggressive scale */
-        }
+.social_icon {
+    font-size: 24px;
+    color: #fff;
+    transition: color 0.3s, transform 0.3s;
+}
 
-        .two_footer { 
-            display: flex; 
-            justify-content: space-between; 
-            width: 90%; 
-            max-width: 1100px; /* Limit max width on large screens */
-            margin-top: 2rem; 
-            flex-wrap: wrap; 
-        }
+.social_icon:hover {
+    color: var(--secondary-color);
+    transform: scale(1.2);
+}
 
-        .left, .mid, .right { 
-            width: 30%; /* Equal width for desktop */
-            text-align: left; 
-            padding: 10px;
-        }
+/* Footer Sections */
+.two_footer {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
 
-        .left h2, .mid h2, .right h2 { 
-            font-size: 1.4rem; /* Adjusted title size */
-            margin-bottom: 1.2rem; 
-            color: #fff; 
-            font-weight: 700;
-            border-bottom: 2px solid var(--secondary-color);
-            display: inline-block;
-            padding-bottom: 5px;
-        }
-        
-        #sub_link { 
-            display: block; 
-            color: #ccc; /* Lighter color for sub-links */
-            text-decoration: none; 
-            margin-bottom: 12px; 
-            font-size: 1rem; 
-            font-weight: 400;
-        }
+.left{
+    width: 30%;
+    text-align: left;
+}
+.mid{
+    width: 30%;
+    text-align: center;
+}
+.right{
+    width: 30%;
+    text-align: right;
+}
 
-        #sub_link:hover { 
-            color: var(--secondary-color); 
-            text-decoration: underline;
-        }
-        
-        /* --- RESPONSIVE FOOTER FIXES --- */
-        @media (max-width: 768px) {
-            .navbar { padding: 15px 15px; }
-            .navbar .logo { font-size: 1.8em; }
-            .nav-links li { margin-left: 10px; }
-            .nav-links a { font-size: 14px; padding: 5px 8px; }
+.left h2, .mid h2, .right h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
 
-            .welcome-message h2 { 
-                margin-top: 0 !important; /* Resetting the problematic margin */
-                font-size: 1.5em;
-            }
-            .blog-content { 
-                padding: 15px; 
-                gap: 25px;
-            }
-            .admin-blog-upload, .form-container { 
-                max-width: 100%; 
-            }
+#sub_link {
+    display: block;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
 
-            .footer {
-                padding: 3rem 1rem;
-            }
-            
-            .two_footer { 
-                flex-direction: column; 
-                align-items: center; 
-                width: 100%;
-                gap: 20px;
-                margin-top: 1.5rem;
-            }
-            
-            .left, .mid, .right { 
-                width: 90%; /* Full width for mobile */
-                text-align: center; /* Center alignment for all blocks */
-                margin-bottom: 10px;
-            }
-            
-            .left h2, .mid h2, .right h2 { 
-                border-bottom: none; /* Remove border on mobile for cleaner look */
-                display: block;
-            }
+#sub_link:hover {
+    color: var(--secondary-color);
+}
 
-            /* Clean up the inline-block border for mobile links */
-            .left h2, .mid h2, .right h2 {
-                display: block;
-                margin-bottom: 0.5rem;
-            }
-            
-            #sub_link { 
-                margin-bottom: 5px; 
-            }
-            
-            /* The 'mid' and 'right' sections were overlapping due to negative margins, 
-               which are now removed for a clean column stack. */
-        }
+/* Footer small screens */
+@media (max-width: 768px) {
+    .footer {
+        height: auto;
+        padding: 3rem 1.5rem;
+    }
+
+    .two_footer {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-top: 1.5rem;
+    }
+
+    .left, .mid, .right {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 375px) {
+    #mail_id {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .social_icon {
+        font-size: 18px;
+    }
+
+    .left h2, .mid h2, .right h2 {
+        font-size: 1rem;
+        margin-bottom: 0.6rem;
+    }
+
+    #sub_link {
+        font-size: 0.8rem;
+    }
+}
+
+/* For 320px screens */
+@media (max-width: 320px) {
+    .left h2, .mid h2, .right h2 {
+        font-size: 0.9rem;
+    }
+
+    .left a, .mid a, .right a {
+        font-size: 0.75rem;
+    }
+}
         
         /* Modal Styles - unchanged and fine */
         .overlay {
@@ -555,39 +551,42 @@
     };
 </script>
 
-<footer class="footer">
-    <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
-    <div id="three_div">
-    <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
-    <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i class="fab fa-instagram social_icon"></i></a>
-    <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i class="fab fa-linkedin social_icon"></i></a>
-    <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i class="fab fa-telegram social_icon"></i></a>
-    <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i class="fab fa-whatsapp social_icon"></i></a>
-</div>
+<!-- Footer -->
+      <div class="footer reveal">
+        <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
+        <div id="three_div">
+            <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i class="fab fa-instagram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i class="fab fa-linkedin social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i class="fab fa-telegram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i class="fab fa-whatsapp social_icon"></i></a>
+        </div>
+        <div class="two_footer">
+            <div class="left">
+                <h2 id="title">SciAstra</h2>
+                <a id="sub_link" href="../mission/">Mission</a>
+                <a id="sub_link" href="../selections/">Selections</a>
+                <a id="sub_link" href="../teams/">Team</a>
+            </div>
+            <div class="mid">
+                <h2 id="title">Institutes</h2>
+                <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
+                <a id="sub_link" href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
+                <a id="sub_link" href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
+                <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
+                <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
+                <a id="sub_link" href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
+                <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
+            </div>
+            <div class="right">
+                <h2 id="title">Links</h2>
+                <a id="sub_link" href="#free-courses">Our Courses</a>
+                <a id="sub_link" href="#blogs">Blogs</a>
+                <a id="sub_link" href="#contact">Contact Us</a>
+            </div>
+        </div>
+      </div>
 
-<div class="two_footer">
-    <div class="left">
-        <h2 id="title">SciAstra</h2>
-        <a id="sub_link" href="../mission/">Mission</a>
-        <a id="sub_link" href="../selections/">Selections</a>
-        <a id="sub_link" href="../teams/">Team</a>
-    </div>
-    
-    <div class="mid">
-        <h2 id="title">Address</h2>
-        <a id="sub_link" href="#">123 Stellar St.</a>
-        <a id="sub_link" href="#">Mumbai City, 400321</a>
-        <a id="sub_link" href="#">Maharashtra</a>
-    </div>
-    
-    <div class="right">
-        <h2 id="title">Quick links</h2>
-        <a id="sub_link" href="./courses.html">Our Courses</a>
-        <a id="sub_link" href="./blog.html">Blogs</a>
-        <a id="sub_link" href="./contact.html">Contact Us</a>
-    </div>
-</div>
-</footer>
 
 </body>
 </html>
