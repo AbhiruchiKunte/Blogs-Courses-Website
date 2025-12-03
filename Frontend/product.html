@@ -13,7 +13,8 @@
 		<div style="display:inline-block">
 			<img src="https://cdn.pixabay.com/photo/2014/04/03/10/55/t-shirt-311732_960_720.png" alt="" width="100px" height="100px">
 			<p>Shirt</p>
-			<p><b>Amount:- Rs. 500</b></p>
+			<p><b>Amount:- Rs.
+500</b></p>
 			<form class="pay-form">
 				<input type="hidden" name="name" value="Shirt">
 				<input type="hidden" name="amount" value="500">
@@ -25,7 +26,8 @@
 		<div style="display:inline-block">
 			<img src="https://cdn.pixabay.com/photo/2013/07/12/18/20/shoes-153310_960_720.png" alt="" width="100px" height="100px">
 			<p>Shoes</p>
-			<p><b>Amount:- Rs. 1500</b></p>
+			<p><b>Amount:- Rs.
+1500</b></p>
 			<form class="pay-form">
 				<input type="hidden" name="name" value="Shoes">
 				<input type="hidden" name="amount" value="1500">
@@ -38,7 +40,6 @@
 
 </html>
 
-<!--Inside index.html -->
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
 
@@ -64,7 +65,7 @@ $(document).ready(function(){
 						"order_id": ""+res.order_id+"",
 						"handler": function (response){
 							alert("Payment Succeeded");
-							// window.open("/","_self")
+ // window.open("/","_self")
 						},
 						"prefill": {
 							"contact":""+res.contact+"",
@@ -86,7 +87,7 @@ $(document).ready(function(){
 				}
 				else{
 					alert(res.msg);
-				}
+ }
 			}
 		})
 

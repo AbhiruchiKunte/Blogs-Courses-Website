@@ -5,8 +5,7 @@ import path from 'path';
 import fs from 'fs';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import { fileURLToPath } from 'url'; // NEW: For ES Modules __dirname equivalent
-
+import { fileURLToPath } from 'url';
 import Blog from './models/Blog.js'; 
 import Course from './models/Course.js'; 
 import paymentRoute from './routes/paymentRoute.js'; 
@@ -19,74 +18,52 @@ app.use(cors());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-console.log('Views directory path:', path.join(__dirname, '../Frontend/views'));
-
-// Set the view engine and views directory
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../Frontend/views'));
-
+// Serve static files from Frontend/public
 app.use(express.static(path.join(__dirname, '../Frontend/public')));
 app.use(express.urlencoded({ extended: true }));
 
+// Serve index.html as the home page
+app.get('/', (req, res) => {
+    // Assuming you moved index.html from views/ to Frontend/ (or the views folder acts as the root)
+    res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
+});
 
-// MongoDB/Mongoose Connection
+// Serve product.html
+app.get('/product.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'product.html'));
+});
+
+// Serve success.html
+app.get('/success.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'success.html'));
+});
+
+// Serve admin panel (addnew.html)
+app.get('/addnew.html', (req, res) => {
+    res.sendFile(path.join(__dirname, '../Frontend', 'addnew.html'));
+});
+
+// --------------------------------------------------------
+// DATABASE CONNECTION
+// --------------------------------------------------------
+
 const mongoUri = process.env.MONGODB_URI;
 
 mongoose.connect(mongoUri)
     .then(() => console.log('Connected to MongoDB!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Export app for potential testing/server setup (If the server is started here, this export might not be necessary)
-// export default app; // Option 1: Default export (if another file imports and runs the server)
 
-app.get('/', async (req, res) => {
-    try {
-        // Fetch Blogs from MongoDB
-        const blogResults = await Blog.find({}).select('Blog_img Blog_title Blog_description blog_link createdAt').lean();
-        const blogs = blogResults.map(blog => ({
-            Blog_title: blog.Blog_title,
-            Blog_description: blog.Blog_description,
-            // Convert Buffer data back to base64 string for EJS
-            Blog_img: `data:image/jpeg;base64,${blog.Blog_img.toString('base64')}`,
-            created_at: blog.createdAt, // Use Mongoose's createdAt field
-            blog_link: blog.blog_link
-        }));
+// --------------------------------------------------------
+// PAYMENT ROUTES (Uses existing paymentRoute)
+// --------------------------------------------------------
 
-        // Fetch Free Courses from MongoDB
-        const freeCourseResults = await Course.find({ price: 0 }).select('course_img coursename price link').lean();
-        const freeCourses = freeCourseResults.map(course => ({
-            coursename: course.coursename,
-            price: course.price,
-            link: course.link,
-            // Convert Buffer data back to base64 string for EJS
-            course_img: `data:image/jpeg;base64,${course.course_img.toString('base64')}`
-        }));
-
-        // Fetch Paid Courses from MongoDB
-        const paidCourseResults = await Course.find({ price: { $gt: 0 } }).select('course_img coursename price link').lean();
-        const paidCourses = paidCourseResults.map(course => ({
-            coursename: course.coursename,
-            price: course.price,
-            link: course.link,
-            // Convert Buffer data back to base64 string for EJS
-            course_img: `data:image/jpeg;base64,${course.course_img.toString('base64')}`
-        }));
-
-        // Render the data
-        res.render('index', { blogs, freeCourses, paidCourses });
-    } catch (err) {
-        console.error('Error fetching data:', err);
-        res.status(500).send('Internal Server Error');
-    }
-});
-
-// Import and use payment routes
 app.use('/', paymentRoute);
 
-// Serve admin panel
-app.get('/adminpanel', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/adminpanel', 'addnew.html'));
-});
+
+// --------------------------------------------------------
+// EXISTING DATA SUBMISSION LOGIC (POST routes preserved)
+// --------------------------------------------------------
 
 // Route for adding a new course
 app.post('/add-course', (req, res) => {
