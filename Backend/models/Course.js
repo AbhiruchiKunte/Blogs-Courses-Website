@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const CourseSchema = new mongoose.Schema({
     course_img: {
-        type: Buffer, // Storing image binary data, consistent with old MySQL approach
+        type: Buffer,
         required: true
     },
     coursename: {
@@ -23,8 +23,8 @@ const CourseSchema = new mongoose.Schema({
         type: String, 
         required: true
     }
-}, { timestamps: true }); // Mongoose automatically adds `createdAt` (equivalent to created_at)
+}, { timestamps: true });
 
 const Course = mongoose.model('Course', CourseSchema);
 
-module.exports = Course;   
+export default Course;

@@ -1,26 +1,35 @@
-const express = require('express');
-const payment_route = express();
-const bodyParser = require('body-parser');
-payment_route.use(bodyParser.json());
-payment_route.use(bodyParser.urlencoded({ extended: false }));
+import express from 'express';
+import bodyParser from 'body-parser';
+import path from 'path';
+import { fileURLToPath } from 'url'; // NEW: For ES Modules __dirname equivalent
 
-const path = require('path');
-payment_route.set('view engine', 'ejs');
-payment_route.set('views', path.join(__dirname, '../views'));
+// NEW: Import from controller using ES Module named imports
+import { renderProductPage, createOrder } from '../controllers/paymentController.js';
 
-const paymentController = require('../controllers/paymentController');
+const router = express.Router();
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
 
-payment_route.get('/index', (req, res) => {
+// ES Module equivalent of __dirname (if needed)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// NOTE: Do NOT call router.set('view engine', ...) — that's for the app instance.
+// The app (in app.js) should set view engine and views directory.
+
+router.get('/index', (req, res) => {
     res.render('index');
 });
 
-payment_route.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.render('index');
 });
 
-payment_route.get('/product', paymentController.renderProductPage);
+// Use imported functions directly
+router.get('/product', renderProductPage);
 
 // Route for creating order
-payment_route.post('/createOrder', paymentController.createOrder);
+router.post('/createOrder', createOrder);
 
-module.exports = payment_route;
+// NEW: Export the router using ES Module syntax
+export default router;

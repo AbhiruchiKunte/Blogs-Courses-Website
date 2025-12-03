@@ -1,16 +1,23 @@
-require('dotenv').config();
-const express = require('express');
-const formidable = require('formidable');
-const path = require('path');
-const fs = require('fs');
-const mongoose = require('mongoose'); // NEW: MongoDB/Mongoose dependency
+import dotenv from 'dotenv';
+import express from 'express';
+import formidable from 'formidable';
+import path from 'path';
+import fs from 'fs';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { fileURLToPath } from 'url'; // NEW: For ES Modules __dirname equivalent
 
+import Blog from './models/Blog.js'; 
+import Course from './models/Course.js'; 
+import paymentRoute from './routes/paymentRoute.js'; 
+
+dotenv.config();
 const app = express();
-const http = require('http').Server(app);
+app.use(cors());
 
-// NEW: Import Mongoose Models
-const Blog = require('./models/Blog'); 
-const Course = require('./models/Course');
+// ES Module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 console.log('Views directory path:', path.join(__dirname, '../Frontend/views'));
 
@@ -22,18 +29,19 @@ app.use(express.static(path.join(__dirname, '../Frontend/public')));
 app.use(express.urlencoded({ extended: true }));
 
 
-// NEW: MongoDB/Mongoose Connection
+// MongoDB/Mongoose Connection
 const mongoUri = process.env.MONGODB_URI;
 
 mongoose.connect(mongoUri)
     .then(() => console.log('Connected to MongoDB!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
-module.exports = { app }; // NEW: Export only the app
+
+// Export app for potential testing/server setup (If the server is started here, this export might not be necessary)
+// export default app; // Option 1: Default export (if another file imports and runs the server)
 
 app.get('/', async (req, res) => {
     try {
-
-        // NEW: Fetch Blogs from MongoDB
+        // Fetch Blogs from MongoDB
         const blogResults = await Blog.find({}).select('Blog_img Blog_title Blog_description blog_link createdAt').lean();
         const blogs = blogResults.map(blog => ({
             Blog_title: blog.Blog_title,
@@ -44,8 +52,7 @@ app.get('/', async (req, res) => {
             blog_link: blog.blog_link
         }));
 
-
-        // NEW: Fetch Free Courses from MongoDB
+        // Fetch Free Courses from MongoDB
         const freeCourseResults = await Course.find({ price: 0 }).select('course_img coursename price link').lean();
         const freeCourses = freeCourseResults.map(course => ({
             coursename: course.coursename,
@@ -55,7 +62,7 @@ app.get('/', async (req, res) => {
             course_img: `data:image/jpeg;base64,${course.course_img.toString('base64')}`
         }));
 
-        // NEW: Fetch Paid Courses from MongoDB
+        // Fetch Paid Courses from MongoDB
         const paidCourseResults = await Course.find({ price: { $gt: 0 } }).select('course_img coursename price link').lean();
         const paidCourses = paidCourseResults.map(course => ({
             coursename: course.coursename,
@@ -74,7 +81,6 @@ app.get('/', async (req, res) => {
 });
 
 // Import and use payment routes
-const paymentRoute = require('./routes/paymentRoute');
 app.use('/', paymentRoute);
 
 // Serve admin panel
@@ -92,15 +98,22 @@ app.post('/add-course', (req, res) => {
         fs.mkdirSync(form.uploadDir);
     }
 
+    // formidable v3 returns fields and files as arrays/single values
     form.parse(req, (err, fields, files) => {
         if (err) {
             console.error('Form parsing error:', err);
             return res.status(500).send('Error parsing form data');
         }
 
-        // Handle formidable v3 file structure
+        // Handle formidable v3 file structure (files.courseImage is an array in v3)
         const courseImageFile = files.courseImage ? files.courseImage[0] : null;
         
+        // Handle formidable v3 fields structure (fields are arrays in v3)
+        const coursename = fields.coursename ? fields.coursename[0] : undefined;
+        const price = fields.price ? fields.price[0] : undefined;
+        const course_type = fields.coursetype ? fields.coursetype[0] : undefined;
+        const link = fields.courselink ? fields.courselink[0] : undefined;
+
         if (courseImageFile && courseImageFile.size > 0) {
             if (courseImageFile.size > 5000000) { 
                 console.error('Image size exceeds limit:', courseImageFile.size);
@@ -124,15 +137,17 @@ app.post('/add-course', (req, res) => {
                     }
                     
                     try {
-                        // NEW: Mongoose insert
+                        // Mongoose insert
                         await Course.create({
-                            course_img: data,                          
-                            coursename: fields.coursename[0],             
-                            price: fields.price[0],
-                            course_type: fields.coursetype[0],
-                            link: fields.courselink[0]
+                            course_img: data,                      
+                            coursename: coursename,               
+                            price: price,
+                            course_type: course_type,
+                            link: link
                         });
                         
+                        // Respond to the client on success
+                        res.status(200).json({ success: true, message: 'Course added successfully' });
 
                     } catch (dbError) {
                         console.error('Database insertion error:', dbError);
@@ -165,8 +180,15 @@ app.post('/add-blog', (req, res) => {
             return res.status(500).send('Error parsing form data');
         }
 
-        // Handle formidable v3 file structure
+        // Handle formidable v3 file structure (files.BlogImage is an array in v3)
         const blogImageFile = files.BlogImage ? files.BlogImage[0] : null;
+
+        // Handle formidable v3 fields structure (fields are arrays in v3)
+        const BlogTitle = fields.BlogTitle ? fields.BlogTitle[0] : undefined;
+        const BlogDescription = fields.BlogDescription ? fields.BlogDescription[0] : undefined;
+        const BlogCategory = fields.BlogCategory ? fields.BlogCategory[0] : undefined;
+        const blog_link = fields.bloglink ? fields.bloglink[0] : undefined;
+
 
         if (blogImageFile && blogImageFile.size > 0) {
             if (blogImageFile.size > 5000000) { 
@@ -191,15 +213,17 @@ app.post('/add-blog', (req, res) => {
                     }
 
                     try {
-                        // NEW: Mongoose insert
+                        // Mongoose insert
                         await Blog.create({
-                            Blog_title: fields.BlogTitle[0],           
-                            Blog_description: fields.BlogDescription[0],      
+                            Blog_title: BlogTitle,           
+                            Blog_description: BlogDescription,  
                             Blog_img: data, 
-                            category: fields.BlogCategory[0],
-                            blog_link: fields.bloglink[0]
+                            category: BlogCategory,
+                            blog_link: blog_link
                         });
-                    
+                        
+                        // Respond to the client on success
+                        res.status(200).json({ success: true, message: 'Blog added successfully' });
 
                     } catch (dbError) {
                         console.error('Database insertion error:', dbError);
@@ -213,8 +237,9 @@ app.post('/add-blog', (req, res) => {
         }
     });
 });
+
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000; // Added default port
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

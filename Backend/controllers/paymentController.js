@@ -1,4 +1,7 @@
-const Razorpay = require('razorpay');
+import Razorpay from 'razorpay';
+import dotenv from 'dotenv';
+dotenv.config();
+
 const { RAZORPAY_ID_KEY, RAZORPAY_SECRET_KEY } = process.env;
 
 const razorpayInstance = new Razorpay({
@@ -46,7 +49,8 @@ const createOrder = async (req, res) => {
     }
 };
 
-module.exports = {
+// NEW: Export named functions using ES Module syntax
+export {
     renderProductPage,
     createOrder
 };

@@ -1,8 +1,0 @@
-# Ignore node modules and environment files
-
-/node_modules
-.env
-/uploads
-
-/migrate.js
-/migration_data

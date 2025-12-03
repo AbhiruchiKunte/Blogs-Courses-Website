@@ -1,0 +1,12 @@
+# Ignore node modules and environment files
+
+node_modules
+.env
+uploads
+
+# Ignore database migration scripts
+migrate.js
+
+# Ignore configuration/Admin files
+Frontend/adminConfig.js
+Frontend/create-config.mjs
