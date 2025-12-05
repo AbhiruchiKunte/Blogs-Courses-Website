@@ -1,9 +1,17 @@
 {
   "version": 2,
+  "public": true,
   "builds": [
-    { "src": "Backend/app.js", "use": "@vercel/node" }
+    { "src": "Frontend/**/*", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "Backend/app.js" }
+    { "src": "/", "dest": "/Frontend/index.html" },
+    { "src": "/addnew.html", "dest": "/Frontend/addnew.html" },
+    { "src": "/product.html", "dest": "/Frontend/product.html" },
+    { "src": "/success.html", "dest": "/Frontend/success.html" },
+
+    { "src": "/public/(.*)", "dest": "/Frontend/public/$1" },
+
+    { "src": "/(.*)", "dest": "/Frontend/$1" }
   ]
 }

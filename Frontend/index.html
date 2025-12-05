@@ -1023,6 +1023,14 @@ html {
     text-align: center;
 }
 
+#formSuccessModal .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* centers items horizontally */
+    justify-content: center;
+}
+
+
 /* All section titles inside sections */
 section h1,
 section h2,
@@ -1081,351 +1089,567 @@ section {
 }
     </style>
 </head>
+
 <body>
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="logo">SciAstra</div>
-    <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#blogs">Blog</a></li>
-      <li><a href="#free-courses">Courses</a></li>
-      <li><a href="#contact">Contact</a></li>
-      <li><a href="#" onclick="showAdminModal()">Add New</a></li>
-    </ul>
-  </div>
-
-  <!-- Admin modal -->
-  <div id="adminModal">
-    <div class="modal-content">
-      <h3>Admin Panel</h3>
-      <label for="username">Username:</label><br>
-      <input type="text" id="username" placeholder="Enter username"><br>
-      <label for="password">Password:</label><br>
-      <input type="password" id="password" placeholder="Enter password"><br>
-      <button onclick="validateAdmin()">Submit</button>
-      <button onclick="closeModal()">Cancel</button>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo">SciAstra</div>
+        <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#blogs">Blog</a></li>
+            <li><a href="#free-courses">Courses</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#" onclick="showAdminModal()">Add New</a></li>
+        </ul>
     </div>
-  </div>
 
-  <!-- Success modal -->
-  <div id="formSuccessModal">
-    <div class="modal-content">
-      <h3>Thank you!</h3>
-      <p>Your message has been sent successfully. We will get back to you soon.</p>
-      <button onclick="closeFormModal()">Close</button>
+    <!--Modal for admin login-->
+    <div id="adminModal">
+        <div class="modal-content">
+            <h3>Admin Panel</h3>
+            <label for="username">Username:</label><br>
+            <input type="text" id="username" placeholder="Enter username"><br>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" placeholder="Enter password"><br>
+            <button onclick="validateAdmin()">Submit</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
     </div>
-  </div>
 
-  <!-- Hero -->
-  <section id="home" class="hero reveal">
-    <h1>Welcome to SciAstra</h1>
-    <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
-    <div class="hero-buttons">
-      <a href="#blogs" class="hero-btn">Explore Blogs</a>
-      <a href="#free-courses" class="hero-btn">View Courses</a>
+    <!-- Success modal for contact form -->
+    <div id="formSuccessModal">
+        <div class="modal-content">
+            <h3>Thank you!</h3>
+            <p>Your message has been sent successfully. We will get back to you soon.</p>
+            <button onclick="closeFormModal()">Close</button>
+        </div>
     </div>
-  </section>
 
-  <!-- Blogs -->
-  <section id="blogs" class="reveal blog-section">
-    <h3 class="blogs-title">Latest Blogs</h3>
-    <div class="swiper blogs-swiper">
-      <div class="swiper-wrapper" id="blogs-wrapper"></div>
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
+    <!-- Hero Section -->
+    <section id="home" class="hero reveal">
+        <h1>Welcome to SciAstra</h1>
+        <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
+
+        <div class="hero-buttons">
+            <a href="#blogs" class="hero-btn">Explore Blogs</a>
+            <a href="#free-courses" class="hero-btn">View Courses</a>
+        </div>
+    </section>
+
+    <!-- Blogs Section -->
+    <section id="blogs" class="reveal blog-section">
+        <h3 class="blogs-title">Latest Blogs</h3>
+        <div class="swiper blogs-swiper">
+            <div class="swiper-wrapper" id="blogs-wrapper">
+                <!-- Blog slides will be injected here -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+
+    <!-- Free Courses Section -->
+    <section id="free-courses" class="reveal free-course-section">
+        <h3 class="free-course-title">Free Courses</h3>
+        <div class="swiper free-courses-swiper">
+            <div class="swiper-wrapper" id="free-courses-wrapper">
+                <!-- Free course slides injected here -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+     
+    <!-- Paid Courses Section -->
+    <section id="paid-courses" class="reveal paid-course-section">
+        <h3 class="paid-course-title">Paid Courses</h3>
+        <div class="swiper paid-courses-swiper">
+            <div class="swiper-wrapper" id="paid-courses-wrapper">
+                <!-- Paid course slides injected here -->
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </section>
+     
+    <!-- Swiper JS Script -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+      // We'll initialize Swiper AFTER we load data
+      const swipers = ['blogs-swiper', 'free-courses-swiper', 'paid-courses-swiper'];
+      const swiperInstances = {};
+
+      function initSwipers() {
+        swipers.forEach(swiperClass => {
+          if (!swiperInstances[swiperClass]) {
+            swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
+              slidesPerView: 4,
+              spaceBetween: 40,
+              slidesPerGroup: 4,
+              loop: true,
+              loopFillGroupWithBlank: true,
+              pagination: {
+                el: `.${swiperClass} .swiper-pagination`,
+                clickable: true,
+                dynamicBullets: true,
+              },
+              navigation: {
+                nextEl: `.${swiperClass} .swiper-button-next`,
+                prevEl: `.${swiperClass} .swiper-button-prev`,
+              },
+              breakpoints: {
+                1300: {
+                  slidesPerView: 4,
+                  slidesPerGroup: 4,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 3,
+                  slidesPerGroup: 3,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 2,
+                  slidesPerGroup: 2,
+                  spaceBetween: 16,
+                },
+                480: {
+                  slidesPerView: 1,
+                  slidesPerGroup: 1,
+                  spaceBetween: 12,
+                },
+                375: {
+                  slidesPerView: 1,
+                  slidesPerGroup: 1,
+                  spaceBetween: 10,
+                },
+                320: {
+                  slidesPerView: 1,
+                  slidesPerGroup: 1,
+                  spaceBetween: 8,
+                }
+              },
+            });
+          } else {
+            swiperInstances[swiperClass].update();
+          }
+        });
+      }
+    </script>
+
+    <!-- Razorpay checkout & order -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      function enrollNow(coursename, price, link) {
+          fetch('/createOrder', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  amount: price,
+                  name: coursename,
+                  description: 'Course Payment'
+              })
+          })
+          .then(response => response.json())
+          .then(data => {
+              if (data.success) {
+                  var options = {
+                      key: data.key_id,
+                      amount: data.amount,
+                      currency: 'INR',
+                      name: data.name,
+                      description: data.description,
+                      image: 'https://www.example.com/logo.png',
+                      order_id: data.order_id,
+                      handler: function (response) {
+                          // Payment successful
+                          alert('Payment successful! Redirecting to your course...');
+                          window.location.href = link; // Redirect to the course URL
+                      },
+                      prefill: {
+                          name: data.name,
+                          email: data.email,
+                          contact: data.contact
+                      },
+                      notes: {
+                          address: 'Blogs & Courses website'
+                      },
+                      theme: {
+                          color: '#007bff'
+                      }
+                  };
+                  var rzp1 = new Razorpay(options);
+                  rzp1.open();
+              } else {
+                  alert('Order creation failed. Please try again!');
+              }
+          })
+          .catch(error => console.error('Error:', error));
+      }
+    </script>
+     
+    <section id="contact" class="reveal">
+        <div class="contact-section">
+            <h1 class="contact-title">Connect with Us</h1>
+            <div class="contact-form">
+                <!-- Formspree form (logic preserved, handled via JS below to show popup) -->
+                <form action="https://formspree.io/f/mkgdbqaw" method="post">
+                    <label for="fname">Your Name</label>
+                    <input type="text" id="fname" name="fullname" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="4"></textarea>
+
+                    <label>
+                        <input type="checkbox" name="consent" required> I authorize SciAstra to contact me with updates and notifications.
+                    </label>
+
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
+            <div class="contact-buttons">
+                <button onclick="window.location.href='mailto:support@sciastra.com'">
+                    <i class="fas fa-envelope"></i> Email Us Now
+                </button>
+                <button onclick="window.location.href='tel:+919876543210'">
+                    <i class="fas fa-phone-alt"></i> Call Us Now
+                </button>
+            </div>
+        </div>
+
+        <div class="privacy-policy">
+            <h2>Privacy Policy</h2>
+            <p>SciAstra has framed this Privacy Policy in order to demonstrate our firm commitment to your privacy. This document outlines our policies and practices with respect to information gathering, dissemination, and protection.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <div class="footer reveal">
+        <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
+        <div id="three_div">
+            <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i class="fab fa-instagram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i class="fab fa-linkedin social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i class="fab fa-telegram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i class="fab fa-whatsapp social_icon"></i></a>
+        </div>
+        <div class="two_footer">
+            <div class="left">
+                <h2 id="title">SciAstra</h2>
+                <a id="sub_link" href="../mission/">Mission</a>
+                <a id="sub_link" href="../selections/">Selections</a>
+                <a id="sub_link" href="../teams/">Team</a>
+            </div>
+            <div class="mid">
+                <h2 id="title">Institutes</h2>
+                <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
+                <a id="sub_link" href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
+                <a id="sub_link" href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
+                <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
+                <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
+                <a id="sub_link" href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
+                <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
+            </div>
+            <div class="right">
+                <h2 id="title">Links</h2>
+                <a id="sub_link" href="#free-courses">Our Courses</a>
+                <a id="sub_link" href="#blogs">Blogs</a>
+                <a id="sub_link" href="#contact">Contact Us</a>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- Free courses -->
-  <section id="free-courses" class="reveal free-course-section">
-    <h3 class="free-course-title">Free Courses</h3>
-    <div class="swiper free-courses-swiper">
-      <div class="swiper-wrapper" id="free-courses-wrapper"></div>
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
-  </section>
+    <!-- Main script: existing logic + new API fetching -->
+    <script>
+      const API_BASE_URL = "https://edufusion-blogs.onrender.com";
 
-  <!-- Paid courses -->
-  <section id="paid-courses" class="reveal paid-course-section">
-    <h3 class="paid-course-title">Paid Courses</h3>
-    <div class="swiper paid-courses-swiper">
-      <div class="swiper-wrapper" id="paid-courses-wrapper"></div>
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-prev"></div>
-      <div class="swiper-button-next"></div>
-    </div>
-  </section>
-
-  <!-- Scripts: Swiper, Razorpay, and main JS -->
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
-  <!-- Optional: if you want frontend to use Render backend while testing locally,
-       set window.API_BASE_URL = 'https://edufusion-blogs.onrender.com' before main script.
-       For production when served from same origin keep it empty (default). -->
-  <!-- <script>window.API_BASE_URL = 'https://edufusion-blogs.onrender.com';</script> -->
-
-  <script>
-    // Use same-origin by default; if you need to point to remote backend set window.API_BASE_URL first.
-    const API_BASE_URL = (window.API_BASE_URL || '').replace(/\/$/, ''); // no trailing slash
-
-    // Swiper instances holder
-    const swiperInstances = {};
-
-    function initSwipers() {
-      const swipers = ['blogs-swiper','free-courses-swiper','paid-courses-swiper'];
-      swipers.forEach(swiperClass => {
-        if (!swiperInstances[swiperClass]) {
-          swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
-            slidesPerView: 4,
-            spaceBetween: 40,
-            slidesPerGroup: 4,
-            loop: true,
-            loopFillGroupWithBlank: true,
-            pagination: { el: `.${swiperClass} .swiper-pagination`, clickable: true, dynamicBullets: true },
-            navigation: {
-              nextEl: `.${swiperClass} .swiper-button-next`,
-              prevEl: `.${swiperClass} .swiper-button-prev`,
-            },
-            breakpoints: {
-              1300: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 30 },
-              1024: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 20 },
-              768:  { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
-              480:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 12 },
-              375:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
-              320:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 8 }
-            },
-          });
+      function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        const menuToggle = document.querySelector('.menu-toggle');
+       
+        navLinks.classList.toggle('show');
+       
+        if (navLinks.classList.contains('show')) {
+            menuToggle.textContent = "✖";
         } else {
-          swiperInstances[swiperClass].update();
+            menuToggle.textContent = "☰";
         }
+      }
+
+      const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
+
+      scrollLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            const targetId = link.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+
+            if (targetElement) {
+                const offset = 100;
+
+                window.scrollTo({
+                    top: targetElement.offsetTop - offset,
+                    behavior: 'smooth'
+                });
+            }
+
+            // Close mobile menu after click
+            const navLinks = document.querySelector('.nav-links');
+            const menuToggle = document.querySelector('.menu-toggle');
+            if (navLinks.classList.contains('show')) {
+                navLinks.classList.remove('show');
+                menuToggle.textContent = "☰";
+            }
+        });
       });
-    }
 
-    // helper: fetch JSON with better error message
-    async function fetchJSON(url) {
-      const res = await fetch(url);
-      if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-      return res.json();
-    }
+      //predefined admin credentials (you can later swap to env-based config)
+      const adminUsername = "Admin";
+      const adminPassword = "Admin@123";
 
-    function renderBlogs(blogs) {
-      const wrapper = document.getElementById('blogs-wrapper');
-      if (!wrapper) return;
-      wrapper.innerHTML = '';
-      blogs.forEach(blog => {
-        const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : '';
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
-        slide.innerHTML = `
-          <div class="card">
-            <a href="${blog.blog_link || '#'}" style="text-decoration:none;color:black;">
+      function showAdminModal() {
+          document.getElementById("adminModal").style.display = "flex";
+      }
+
+      function validateAdmin() {
+          const username = document.getElementById("username").value;
+          const password = document.getElementById("password").value;
+
+          if (username === adminUsername && password === adminPassword) {
+              alert("Access Granted!");
+              window.location.href = "/addnew.html"; // Redirect to Addnew.html
+          } else {
+              alert("Invalid Username or Password.");
+          }
+      }
+
+      function closeModal() {
+          document.getElementById("adminModal").style.display = "none";
+      }
+
+      function closeFormModal() {
+          document.getElementById("formSuccessModal").style.display = "none";
+      }
+
+      function showFormModal() {
+          document.getElementById("formSuccessModal").style.display = "flex";
+      }
+
+      window.onclick = function(event) {
+          const adminModal = document.getElementById("adminModal");
+          const formModal = document.getElementById("formSuccessModal");
+
+          if (event.target === adminModal) {
+              adminModal.style.display = "none";
+          }
+          if (event.target === formModal) {
+              formModal.style.display = "none";
+          }
+      }
+
+      // Alert for Selecting a Course in Explore Our Courses
+      function selectCourse(courseTitle, coursePrice) {
+        alert(`You have selected the ${courseTitle} course. The total price is $${coursePrice}. Proceeding to payment.`);
+      }
+
+      function purchaseCourse(courseName) {
+        alert(`You have selected the free course: ${courseName}.`);
+      }
+
+      // --- New: helper to fetch JSON from backend ---
+      async function fetchJSON(url) {
+        const res = await fetch(url);
+        if (!res.ok) {
+          throw new Error(`Failed to fetch ${url}: ${res.status}`);
+        }
+        return res.json();
+      }
+
+      // --- New: render functions for blogs / courses ---
+
+      function renderBlogs(blogs) {
+        const wrapper = document.getElementById("blogs-wrapper");
+        if (!wrapper) return;
+        wrapper.innerHTML = "";
+
+        blogs.forEach(blog => {
+          const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : "";
+          const slide = document.createElement("div");
+          slide.className = "swiper-slide";
+          slide.innerHTML = `
+            <div class="card">
+              <a href="${blog.blog_link}" style="text-decoration: none; color:black;">
+                <div class="card-content">
+                  <div class="image">
+                    <img src="${blog.imageUrl}" alt="${blog.Blog_title || blog.title || ''}" />
+                  </div>
+                  <div class="name-profession">
+                    <span class="name">${blog.Blog_title || blog.title || ''}</span>
+                  </div>
+                  <div class="card-description">
+                    <p>${blog.Blog_description || blog.description || ''}</p>
+                  </div>
+                  <p class="created-at">Published at: ${publishedAt}</p>
+                </div>
+              </a>
+            </div>
+          `;
+          wrapper.appendChild(slide);
+        });
+
+        if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
+          window.swiperInstances["blogs-swiper"].update();
+        }
+      }
+
+      function renderFreeCourses(courses) {
+        const wrapper = document.getElementById("free-courses-wrapper");
+        if (!wrapper) return;
+        wrapper.innerHTML = "";
+
+        courses.forEach(course => {
+          const slide = document.createElement("div");
+          slide.className = "swiper-slide";
+          slide.innerHTML = `
+            <div class="card">
               <div class="card-content">
                 <div class="image">
-                  <img src="${blog.imageUrl}" alt="${(blog.Blog_title||'')}" />
+                  <img src="${course.imageUrl}" alt="${course.coursename}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
                 </div>
                 <div class="name-profession">
-                  <span class="name">${blog.Blog_title || ''}</span>
+                  <span class="name">${course.coursename}</span>
                 </div>
-                <div class="card-description"><p>${blog.Blog_description || ''}</p></div>
-                <p class="created-at">Published at: ${publishedAt}</p>
+                <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free</p>
+                <div class="button" style="position: relative; top: -20px;">
+                  <button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button>
+                </div>
               </div>
-            </a>
-          </div>
-        `;
-        wrapper.appendChild(slide);
-      });
-      if (swiperInstances['blogs-swiper']) swiperInstances['blogs-swiper'].update();
-    }
-
-    function renderFreeCourses(courses) {
-      const wrapper = document.getElementById('free-courses-wrapper');
-      if (!wrapper) return;
-      wrapper.innerHTML = '';
-      courses.forEach(course => {
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
-        slide.innerHTML = `
-          <div class="card">
-            <div class="card-content">
-              <div class="image"><img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;" /></div>
-              <div class="name-profession"><span class="name">${course.coursename}</span></div>
-              <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;margin-bottom:50px;">Price: Free</p>
-              <div class="button" style="position:relative;top:-20px;"><button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button></div>
             </div>
-          </div>
-        `;
-        wrapper.appendChild(slide);
-      });
-      if (swiperInstances['free-courses-swiper']) swiperInstances['free-courses-swiper'].update();
-    }
+          `;
+          wrapper.appendChild(slide);
+        });
 
-    function renderPaidCourses(courses) {
-      const wrapper = document.getElementById('paid-courses-wrapper');
-      if (!wrapper) return;
-      wrapper.innerHTML = '';
-      courses.forEach(course => {
-        const slide = document.createElement('div');
-        slide.className = 'swiper-slide';
-        slide.innerHTML = `
-          <div class="card">
-            <div class="card-content">
-              <div class="image"><img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;" /></div>
-              <div class="name-profession"><span class="name">${course.coursename}</span></div>
-              <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;">Price: ₹${course.price}</p>
-              <div class="button" style="margin-top:30px;"><button class="message-button" onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">Enroll Now</button></div>
+        if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
+          window.swiperInstances["free-courses-swiper"].update();
+        }
+      }
+
+      function renderPaidCourses(courses) {
+        const wrapper = document.getElementById("paid-courses-wrapper");
+        if (!wrapper) return;
+        wrapper.innerHTML = "";
+
+        courses.forEach(course => {
+          const slide = document.createElement("div");
+          slide.className = "swiper-slide";
+          slide.innerHTML = `
+            <div class="card">
+              <div class="card-content">
+                <div class="image">
+                  <img src="${course.imageUrl}" alt="${course.coursename}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                </div>
+                <div class="name-profession">
+                  <span class="name">${course.coursename}</span>
+                </div>
+                <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
+                <div class="button" style="margin-top: 30px;">
+                    <button class="message-button"
+                        onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">
+                        Enroll Now
+                    </button>
+                </div>
+              </div>
             </div>
-          </div>
-        `;
-        wrapper.appendChild(slide);
-      });
-      if (swiperInstances['paid-courses-swiper']) swiperInstances['paid-courses-swiper'].update();
-    }
-
-    async function loadDataFromBackend() {
-      try {
-        // relative endpoints by default; prefix if API_BASE_URL set
-        const prefix = API_BASE_URL || '';
-        const [blogs, freeCourses, paidCourses] = await Promise.all([
-          fetchJSON(`${prefix}/api/blogs`),
-          fetchJSON(`${prefix}/api/courses?type=free`),
-          fetchJSON(`${prefix}/api/courses?type=paid`)
-        ]);
-
-        renderBlogs(blogs);
-        renderFreeCourses(freeCourses);
-        renderPaidCourses(paidCourses);
-
-        // init swipers after DOM injection
-        initSwipers();
-      } catch (err) {
-        console.error('Error loading data from backend:', err);
-      }
-    }
-
-    // ============================================
-    // existing scripts (menu, admin modal, form)
-    // ============================================
-    function toggleMenu() {
-      const navLinks = document.querySelector('.nav-links');
-      const menuToggle = document.querySelector('.menu-toggle');
-      navLinks.classList.toggle('show');
-      menuToggle.textContent = navLinks.classList.contains('show') ? '✖' : '☰';
-    }
-
-    const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
-    scrollLinks.forEach(link => {
-      link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const targetId = link.getAttribute('href').substring(1);
-          const targetElement = document.getElementById(targetId);
-          if (targetElement) {
-              const offset = 100;
-              window.scrollTo({ top: targetElement.offsetTop - offset, behavior: 'smooth' });
-          }
-          const navLinks = document.querySelector('.nav-links');
-          const menuToggle = document.querySelector('.menu-toggle');
-          if (navLinks.classList.contains('show')) {
-              navLinks.classList.remove('show');
-              menuToggle.textContent = "☰";
-          }
-      });
-    });
-
-    const adminUsername = "Admin";
-    const adminPassword = "Admin@123";
-
-    function showAdminModal() { document.getElementById("adminModal").style.display = "flex"; }
-    function validateAdmin() {
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
-      if (username === adminUsername && password === adminPassword) {
-        alert("Access Granted!");
-        window.location.href = "/addnew.html";
-      } else {
-        alert("Invalid Username or Password.");
-      }
-    }
-    function closeModal(){ document.getElementById("adminModal").style.display = "none"; }
-    function closeFormModal(){ document.getElementById("formSuccessModal").style.display = "none"; }
-    function showFormModal(){ document.getElementById("formSuccessModal").style.display = "flex"; }
-
-    window.onclick = function(event) {
-      const adminModal = document.getElementById("adminModal");
-      const formModal = document.getElementById("formSuccessModal");
-      if (event.target === adminModal) adminModal.style.display = "none";
-      if (event.target === formModal) formModal.style.display = "none";
-    }
-
-    // Razorpay enrollNow preserved
-    function enrollNow(coursename, price, link) {
-      fetch('/createOrder', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ amount: price, name: coursename, description: 'Course Payment' })
-      })
-      .then(r => r.json())
-      .then(data => {
-        if (data.success) {
-          const options = {
-            key: data.key_id,
-            amount: data.amount,
-            currency: 'INR',
-            name: data.name,
-            description: data.description,
-            image: 'https://www.example.com/logo.png',
-            order_id: data.order_id,
-            handler: function(response){ alert('Payment successful! Redirecting...'); window.location.href = link; },
-            prefill: { name: data.name, email: data.email, contact: data.contact },
-            notes: { address: 'Blogs & Courses website' },
-            theme: { color: '#007bff' }
-          };
-          const rzp1 = new Razorpay(options);
-          rzp1.open();
-        } else alert('Order creation failed. Please try again!');
-      })
-      .catch(err => console.error('Error:', err));
-    }
-
-    // Formspree AJAX submit + show popup
-    document.addEventListener('DOMContentLoaded', function () {
-      const contactForm = document.querySelector('.contact-form form');
-      if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
-          e.preventDefault();
-          const formData = new FormData(contactForm);
-          fetch(contactForm.action, { method: contactForm.method, body: formData, headers: { 'Accept': 'application/json' } })
-            .then(response => {
-              if (response.ok) {
-                contactForm.reset();
-                showFormModal();
-              } else {
-                return response.json().then(data => { throw new Error(data.error || 'Form submission failed'); });
-              }
-            })
-            .catch(() => alert('There was a problem submitting the form. Please try again.'));
+          `;
+          wrapper.appendChild(slide);
         });
+
+        if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
+          window.swiperInstances["paid-courses-swiper"].update();
+        }
       }
 
-      // reveal animation
-      const revealEls = document.querySelectorAll('.reveal');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15 });
-      revealEls.forEach(el => observer.observe(el));
+      // --- New: load all data from backend ---
+      async function loadDataFromBackend() {
+        try {
+          const [blogs, freeCourses, paidCourses] = await Promise.all([
+            fetchJSON(`${API_BASE_URL}/api/blogs`),
+            fetchJSON(`${API_BASE_URL}/api/courses?type=free`),
+            fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
+          ]);
 
-      // Load backend data (blogs & courses)
-      loadDataFromBackend();
-    });
-  </script>
+          renderBlogs(blogs);
+          renderFreeCourses(freeCourses);
+          renderPaidCourses(paidCourses);
+
+          // Initialize / update Swipers once data is in DOM
+          initSwipers();
+        } catch (err) {
+          console.error("Error loading data from backend:", err);
+        }
+      }
+
+      // Handle contact form submission with Formspree (AJAX) + show popup
+      document.addEventListener('DOMContentLoaded', function () {
+        const contactForm = document.querySelector('.contact-form form');
+        if (contactForm) {
+            contactForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const formData = new FormData(contactForm);
+
+                fetch(contactForm.action, {
+                    method: contactForm.method,
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        contactForm.reset();
+                        showFormModal();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.error || 'Form submission failed');
+                        });
+                    }
+                })
+                .catch(() => {
+                    alert('There was a problem submitting the form. Please try again.');
+                });
+            });
+        }
+
+        // Scroll reveal animation
+        const revealEls = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+
+        revealEls.forEach(el => observer.observe(el));
+
+        // 🔥 Load blogs & courses from backend
+        loadDataFromBackend();
+      });
+    </script>
 </body>
 </html>
