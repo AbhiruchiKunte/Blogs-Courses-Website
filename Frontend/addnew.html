@@ -481,76 +481,6 @@
     </div>
 </div>
 
-
-<script>
-    // Handles showing the modal and resetting the form
-    function showModal(message, formId) {
-        const modal = document.getElementById("successModal");
-        const modalText = document.getElementById("modalMessage");
-        modalText.textContent = message;
-        modal.classList.add("show");
-        
-        // Timeout to hide the modal and reset the form
-        setTimeout(() => {
-            closeModal();
-            const formElement = document.getElementById(formId);
-            if (formElement) {
-                formElement.reset(); // Resets the form fields
-            }
-        }, 3000);
-    }
-
-    // Close the modal
-    function closeModal() {
-        const modal = document.getElementById("successModal");
-        modal.classList.remove("show");
-    }
-
-    // New generic function to handle form submission via AJAX (fetch)
-    async function handleFormSubmission(event, formId, successMessage) {
-        event.preventDefault(); // Stop the default page reload
-        const form = document.getElementById(formId);
-        const url = form.action;
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData,
-            });
-            
-            // Check if the response status is 200-299
-            if (response.ok) {
-                const result = await response.json();
-                
-                if (result.success) {
-                    // On successful response from server, show the modal and trigger form reset
-                    showModal(successMessage, formId);
-                } else {
-                    // Handle application-level error (e.g., database error)
-                    alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
-                }
-            } else {
-                // Handle HTTP errors (e.g., 400 Bad Request, 500 Internal Server Error)
-                const errorResult = await response.json();
-                alert(`Error: ${errorResult.message || response.statusText}`);
-            }
-        } catch (error) {
-            console.error('Network or Parsing Error:', error);
-            alert('An unexpected network error occurred during submission.');
-        }
-    }
-
-    // Attach the new submission handler to the forms
-    document.getElementById("upload-form").onsubmit = function (event) {
-        handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
-    };
-
-    document.getElementById("courseForm").onsubmit = function (event) {
-        handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
-    };
-</script>
-
 <!-- Footer -->
       <div class="footer reveal">
         <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
@@ -587,6 +517,82 @@
         </div>
       </div>
 
+      <script>
+    // Handles showing the modal and resetting the form
+    function showModal(message, formId) {
+        const modal = document.getElementById("successModal");
+        const modalText = document.getElementById("modalMessage");
+        modalText.textContent = message;
+        modal.classList.add("show");
+        
+        // Timeout to hide the modal and reset the form
+        setTimeout(() => {
+            closeModal();
+            const formElement = document.getElementById(formId);
+            if (formElement) {
+                formElement.reset(); // Resets the form fields
+            }
+        }, 3000);
+    }
+
+    // Close the modal
+    function closeModal() {
+        const modal = document.getElementById("successModal");
+        modal.classList.remove("show");
+    }
+
+    // New generic function to handle form submission via AJAX (fetch)
+    async function handleFormSubmission(event, formId, successMessage) {
+  event.preventDefault();
+  const form = document.getElementById(formId);
+  const url = form.action;
+  const formData = new FormData(form);
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    // Try to parse JSON safely
+    let payload;
+    const contentType = response.headers.get('content-type') || '';
+
+    if (contentType.includes('application/json')) {
+      payload = await response.json();
+    } else {
+      // fallback: attempt JSON parse, otherwise get text
+      const txt = await response.text();
+      try { payload = JSON.parse(txt); }
+      catch (e) { payload = { success: false, message: txt || response.statusText }; }
+    }
+
+    if (response.ok) {
+      // server returned 2xx (and payload parsed)
+      if (payload && payload.success) {
+        showModal(successMessage, formId);
+      } else {
+        alert(`Submission failed: ${payload.message || 'Unknown server response'}`);
+      }
+    } else {
+      // non-2xx
+      alert(`Error ${response.status}: ${payload.message || payload || response.statusText}`);
+    }
+  } catch (error) {
+    // network or unexpected parse error
+    console.error('Network or Parsing Error:', error);
+    alert('An unexpected network error occurred during submission. See console for details.');
+  }
+}
+    // Attach the new submission handler to the forms
+    document.getElementById("upload-form").onsubmit = function (event) {
+        handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
+    };
+
+    document.getElementById("courseForm").onsubmit = function (event) {
+        handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
+    };
+</script>
 
 </body>
 </html>

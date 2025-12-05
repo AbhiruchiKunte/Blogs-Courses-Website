@@ -1176,124 +1176,6 @@ section {
         </div>
     </section>
      
-    <!-- Swiper JS Script -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-      // We'll initialize Swiper AFTER we load data
-      const swipers = ['blogs-swiper', 'free-courses-swiper', 'paid-courses-swiper'];
-      const swiperInstances = {};
-
-      function initSwipers() {
-        swipers.forEach(swiperClass => {
-          if (!swiperInstances[swiperClass]) {
-            swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
-              slidesPerView: 4,
-              spaceBetween: 40,
-              slidesPerGroup: 4,
-              loop: true,
-              loopFillGroupWithBlank: true,
-              pagination: {
-                el: `.${swiperClass} .swiper-pagination`,
-                clickable: true,
-                dynamicBullets: true,
-              },
-              navigation: {
-                nextEl: `.${swiperClass} .swiper-button-next`,
-                prevEl: `.${swiperClass} .swiper-button-prev`,
-              },
-              breakpoints: {
-                1300: {
-                  slidesPerView: 4,
-                  slidesPerGroup: 4,
-                  spaceBetween: 30,
-                },
-                1024: {
-                  slidesPerView: 3,
-                  slidesPerGroup: 3,
-                  spaceBetween: 20,
-                },
-                768: {
-                  slidesPerView: 2,
-                  slidesPerGroup: 2,
-                  spaceBetween: 16,
-                },
-                480: {
-                  slidesPerView: 1,
-                  slidesPerGroup: 1,
-                  spaceBetween: 12,
-                },
-                375: {
-                  slidesPerView: 1,
-                  slidesPerGroup: 1,
-                  spaceBetween: 10,
-                },
-                320: {
-                  slidesPerView: 1,
-                  slidesPerGroup: 1,
-                  spaceBetween: 8,
-                }
-              },
-            });
-          } else {
-            swiperInstances[swiperClass].update();
-          }
-        });
-      }
-    </script>
-
-    <!-- Razorpay checkout & order -->
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-      function enrollNow(coursename, price, link) {
-          fetch('/createOrder', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                  amount: price,
-                  name: coursename,
-                  description: 'Course Payment'
-              })
-          })
-          .then(response => response.json())
-          .then(data => {
-              if (data.success) {
-                  var options = {
-                      key: data.key_id,
-                      amount: data.amount,
-                      currency: 'INR',
-                      name: data.name,
-                      description: data.description,
-                      image: 'https://www.example.com/logo.png',
-                      order_id: data.order_id,
-                      handler: function (response) {
-                          // Payment successful
-                          alert('Payment successful! Redirecting to your course...');
-                          window.location.href = link; // Redirect to the course URL
-                      },
-                      prefill: {
-                          name: data.name,
-                          email: data.email,
-                          contact: data.contact
-                      },
-                      notes: {
-                          address: 'Blogs & Courses website'
-                      },
-                      theme: {
-                          color: '#007bff'
-                      }
-                  };
-                  var rzp1 = new Razorpay(options);
-                  rzp1.open();
-              } else {
-                  alert('Order creation failed. Please try again!');
-              }
-          })
-          .catch(error => console.error('Error:', error));
-      }
-    </script>
-     
     <section id="contact" class="reveal">
         <div class="contact-section">
             <h1 class="contact-title">Connect with Us</h1>
@@ -1370,286 +1252,385 @@ section {
             </div>
         </div>
     </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
-    <!-- Main script: existing logic + new API fetching -->
-    <script>
-      const API_BASE_URL = "https://edufusion-blogs.onrender.com";
+<script>
+/* -------------------
+   GLOBALS & HELPERS
+   ------------------- */
+const API_BASE_URL = "https://edufusion-blogs.onrender.com"; // backend base URL
+window.swiperInstances = window.swiperInstances || {};       // ensure global object
 
-      function toggleMenu() {
-        const navLinks = document.querySelector('.nav-links');
-        const menuToggle = document.querySelector('.menu-toggle');
-       
-        navLinks.classList.toggle('show');
-       
-        if (navLinks.classList.contains('show')) {
-            menuToggle.textContent = "✖";
+// Safe response parser: try JSON, otherwise return text fallback
+async function parseResponseSafely(response) {
+  const ct = (response.headers.get('content-type') || '').toLowerCase();
+  try {
+    if (ct.includes('application/json')) {
+      return await response.json();
+    } else {
+      // try parse text -> maybe it's JSON as text, else fallback to raw text
+      const txt = await response.text();
+      try { return JSON.parse(txt); }
+      catch (e) { return { success: false, message: txt || response.statusText }; }
+    }
+  } catch (err) {
+    console.error('Error parsing response safely:', err);
+    return { success: false, message: 'Unable to parse server response' };
+  }
+}
+
+/* -------------------
+   SWIPER INITIALIZATION
+   ------------------- */
+const swipers = ['blogs-swiper', 'free-courses-swiper', 'paid-courses-swiper'];
+
+function initSwipers() {
+  swipers.forEach(swiperClass => {
+    // if already created, just update
+    if (window.swiperInstances[swiperClass]) {
+      try { window.swiperInstances[swiperClass].update(); }
+      catch(e){ console.warn('Swiper update failed for', swiperClass, e); }
+      return;
+    }
+
+    // create a new instance
+    try {
+      window.swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
+        slidesPerView: 4,
+        spaceBetween: 40,
+        slidesPerGroup: 4,
+        loop: true,
+        loopFillGroupWithBlank: true,
+        pagination: {
+          el: `.${swiperClass} .swiper-pagination`,
+          clickable: true,
+          dynamicBullets: true,
+        },
+        navigation: {
+          nextEl: `.${swiperClass} .swiper-button-next`,
+          prevEl: `.${swiperClass} .swiper-button-prev`,
+        },
+        breakpoints: {
+          1300: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 30 },
+          1024: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 20 },
+          768:  { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
+          480:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 12 },
+          375:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+          320:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 8 }
+        }
+      });
+    } catch (e) {
+      console.warn('Failed to initialize swiper', swiperClass, e);
+    }
+  });
+}
+
+/* -------------------
+   RAZORPAY: ENROLL (fixed for production)
+   ------------------- */
+function enrollNow(coursename, price, link) {
+  // price should be in rupees on UI; backend will multiply by 100
+  fetch(`${API_BASE_URL}/createOrder`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      amount: price,
+      name: coursename,
+      description: 'Course Payment'
+    })
+  })
+  .then(async (res) => {
+    const data = await parseResponseSafely(res);
+    if (!res.ok) {
+      console.error('Order creation HTTP error:', res.status, data);
+      alert(`Order creation failed: ${data.message || res.statusText}`);
+      return null;
+    }
+    return data;
+  })
+  .then(data => {
+    if (!data) return;
+    if (data.success) {
+      const options = {
+        key: data.key_id,
+        amount: data.amount,
+        currency: 'INR',
+        name: data.name,
+        description: data.description,
+        image: 'https://www.example.com/logo.png',
+        order_id: data.order_id,
+        handler: function (response) {
+          alert('Payment successful! Redirecting to your course...');
+          if (link) window.location.href = link;
+        },
+        prefill: {
+          name: data.name,
+          email: data.email,
+          contact: data.contact
+        },
+        notes: {
+          address: 'Blogs & Courses website'
+        },
+        theme: { color: '#007bff' }
+      };
+      const rzp1 = new Razorpay(options);
+      rzp1.on('payment.failed', function(response){
+        console.error('Payment failed callback', response);
+        alert('Payment failed. Please try again.');
+      });
+      rzp1.open();
+    } else {
+      alert(data.msg || data.message || 'Order creation failed. Please try again.');
+    }
+  })
+  .catch(err => {
+    console.error('Error in enrollNow:', err);
+    alert('An error occurred while creating the order. Check console for details.');
+  });
+}
+
+/* -------------------
+   NAV & ADMIN MODAL
+   ------------------- */
+function toggleMenu() {
+  const navLinks = document.querySelector('.nav-links');
+  const menuToggle = document.querySelector('.menu-toggle');
+  navLinks.classList.toggle('show');
+  menuToggle.textContent = navLinks.classList.contains('show') ? "✖" : "☰";
+}
+
+const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
+scrollLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    if (targetElement) {
+      const offset = 100;
+      window.scrollTo({ top: targetElement.offsetTop - offset, behavior: 'smooth' });
+    }
+    const nav = document.querySelector('.nav-links');
+    const menuToggle = document.querySelector('.menu-toggle');
+    if (nav && nav.classList.contains('show')) {
+      nav.classList.remove('show');
+      if (menuToggle) menuToggle.textContent = "☰";
+    }
+  });
+});
+
+// admin modal (preserved logic)
+const adminUsername = "Admin";
+const adminPassword = "Admin@123";
+
+function showAdminModal() { document.getElementById("adminModal").style.display = "flex"; }
+function validateAdmin() {
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+  if (username === adminUsername && password === adminPassword) {
+    alert("Access Granted!");
+    window.location.href = "/addnew.html";
+  } else alert("Invalid Username or Password.");
+}
+function closeModal() { document.getElementById("adminModal").style.display = "none"; }
+
+/* -------------------
+   FETCH HELPERS
+   ------------------- */
+async function fetchJSON(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+  return res.json();
+}
+
+/* -------------------
+   RENDER FUNCTIONS (safe swiper updates)
+   ------------------- */
+function renderBlogs(blogs) {
+  const wrapper = document.getElementById("blogs-wrapper");
+  if (!wrapper) return;
+  wrapper.innerHTML = "";
+
+  blogs.forEach(blog => {
+    const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : "";
+    const slide = document.createElement("div");
+    slide.className = "swiper-slide";
+    slide.innerHTML = `
+      <div class="card">
+        <a href="${blog.blog_link}" style="text-decoration: none; color:black;">
+          <div class="card-content">
+            <div class="image">
+              <img src="${blog.imageUrl}" alt="${(blog.Blog_title || blog.title || '')}" />
+            </div>
+            <div class="name-profession">
+              <span class="name">${blog.Blog_title || blog.title || ''}</span>
+            </div>
+            <div class="card-description">
+              <p>${blog.Blog_description || blog.description || ''}</p>
+            </div>
+            <p class="created-at">Published at: ${publishedAt}</p>
+          </div>
+        </a>
+      </div>`;
+    wrapper.appendChild(slide);
+  });
+
+  // safe update
+  if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
+    try { window.swiperInstances["blogs-swiper"].update(); }
+    catch (e) { console.warn('blogs-swiper update failed:', e); }
+  }
+}
+
+function renderFreeCourses(courses) {
+  const wrapper = document.getElementById("free-courses-wrapper");
+  if (!wrapper) return;
+  wrapper.innerHTML = "";
+
+  courses.forEach(course => {
+    const slide = document.createElement("div");
+    slide.className = "swiper-slide";
+    slide.innerHTML = `
+      <div class="card">
+        <div class="card-content">
+          <div class="image">
+            <img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
+          </div>
+          <div class="name-profession">
+            <span class="name">${course.coursename}</span>
+          </div>
+          <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;margin-bottom:50px;">Price: Free</p>
+          <div class="button" style="position:relative;top:-20px;">
+            <button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button>
+          </div>
+        </div>
+      </div>`;
+    wrapper.appendChild(slide);
+  });
+
+  if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
+    try { window.swiperInstances["free-courses-swiper"].update(); }
+    catch (e) { console.warn('free-courses-swiper update failed:', e); }
+  }
+}
+
+function renderPaidCourses(courses) {
+  const wrapper = document.getElementById("paid-courses-wrapper");
+  if (!wrapper) return;
+  wrapper.innerHTML = "";
+
+  courses.forEach(course => {
+    const slide = document.createElement("div");
+    slide.className = "swiper-slide";
+    slide.innerHTML = `
+      <div class="card">
+        <div class="card-content">
+          <div class="image">
+            <img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
+          </div>
+          <div class="name-profession">
+            <span class="name">${course.coursename}</span>
+          </div>
+          <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;">Price: ₹${course.price}</p>
+          <div class="button" style="margin-top:30px;">
+            <button class="message-button" onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">Enroll Now</button>
+          </div>
+        </div>
+      </div>`;
+    wrapper.appendChild(slide);
+  });
+
+  if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
+    try { window.swiperInstances["paid-courses-swiper"].update(); }
+    catch (e) { console.warn('paid-courses-swiper update failed:', e); }
+  }
+}
+
+/* -------------------
+   LOAD DATA
+   ------------------- */
+async function loadDataFromBackend() {
+  try {
+    const [blogs, freeCourses, paidCourses] = await Promise.all([
+      fetchJSON(`${API_BASE_URL}/api/blogs`),
+      fetchJSON(`${API_BASE_URL}/api/courses?type=free`),
+      fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
+    ]);
+
+    renderBlogs(blogs || []);
+    renderFreeCourses(freeCourses || []);
+    renderPaidCourses(paidCourses || []);
+
+    // Initialize swipers after DOM has slides
+    initSwipers();
+  } catch (err) {
+    console.error("Error loading data from backend:", err);
+  }
+}
+
+/* -------------------
+   CONTACT FORM (robust)
+   ------------------- */
+function showFormModal() { document.getElementById("formSuccessModal").style.display = "flex"; }
+function closeFormModal() { document.getElementById("formSuccessModal").style.display = "none"; }
+
+document.addEventListener('DOMContentLoaded', function () {
+  // contact form submit handler (AJAX) - robust parse
+  const contactForm = document.querySelector('.contact-form form');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(contactForm);
+
+      try {
+        const response = await fetch(contactForm.action, {
+          method: contactForm.method,
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        const payload = await parseResponseSafely(response);
+
+        if (response.ok && payload) {
+          contactForm.reset();
+          showFormModal();
         } else {
-            menuToggle.textContent = "☰";
+          alert(`Form submit failed: ${payload.message || response.statusText}`);
         }
+      } catch (err) {
+        console.error('Form submission error:', err);
+        alert('There was a problem submitting the form. Please try again.');
       }
+    });
+  }
 
-      const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
-
-      scrollLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-
-            const targetId = link.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                const offset = 100;
-
-                window.scrollTo({
-                    top: targetElement.offsetTop - offset,
-                    behavior: 'smooth'
-                });
-            }
-
-            // Close mobile menu after click
-            const navLinks = document.querySelector('.nav-links');
-            const menuToggle = document.querySelector('.menu-toggle');
-            if (navLinks.classList.contains('show')) {
-                navLinks.classList.remove('show');
-                menuToggle.textContent = "☰";
-            }
-        });
-      });
-
-      //predefined admin credentials (you can later swap to env-based config)
-      const adminUsername = "Admin";
-      const adminPassword = "Admin@123";
-
-      function showAdminModal() {
-          document.getElementById("adminModal").style.display = "flex";
+  // reveal animation
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
+    });
+  }, { threshold: 0.15 });
 
-      function validateAdmin() {
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
+  revealEls.forEach(el => observer.observe(el));
 
-          if (username === adminUsername && password === adminPassword) {
-              alert("Access Granted!");
-              window.location.href = "/addnew.html"; // Redirect to Addnew.html
-          } else {
-              alert("Invalid Username or Password.");
-          }
-      }
+  // Load backend content (blogs + courses)
+  loadDataFromBackend();
+});
 
-      function closeModal() {
-          document.getElementById("adminModal").style.display = "none";
-      }
+// modal close when clicking outside
+window.onclick = function(event) {
+  const adminModal = document.getElementById("adminModal");
+  const formModal = document.getElementById("formSuccessModal");
+  if (event.target === adminModal && adminModal) adminModal.style.display = "none";
+  if (event.target === formModal && formModal) formModal.style.display = "none";
+};
+</script>
 
-      function closeFormModal() {
-          document.getElementById("formSuccessModal").style.display = "none";
-      }
 
-      function showFormModal() {
-          document.getElementById("formSuccessModal").style.display = "flex";
-      }
-
-      window.onclick = function(event) {
-          const adminModal = document.getElementById("adminModal");
-          const formModal = document.getElementById("formSuccessModal");
-
-          if (event.target === adminModal) {
-              adminModal.style.display = "none";
-          }
-          if (event.target === formModal) {
-              formModal.style.display = "none";
-          }
-      }
-
-      // Alert for Selecting a Course in Explore Our Courses
-      function selectCourse(courseTitle, coursePrice) {
-        alert(`You have selected the ${courseTitle} course. The total price is $${coursePrice}. Proceeding to payment.`);
-      }
-
-      function purchaseCourse(courseName) {
-        alert(`You have selected the free course: ${courseName}.`);
-      }
-
-      // --- New: helper to fetch JSON from backend ---
-      async function fetchJSON(url) {
-        const res = await fetch(url);
-        if (!res.ok) {
-          throw new Error(`Failed to fetch ${url}: ${res.status}`);
-        }
-        return res.json();
-      }
-
-      // --- New: render functions for blogs / courses ---
-
-      function renderBlogs(blogs) {
-        const wrapper = document.getElementById("blogs-wrapper");
-        if (!wrapper) return;
-        wrapper.innerHTML = "";
-
-        blogs.forEach(blog => {
-          const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : "";
-          const slide = document.createElement("div");
-          slide.className = "swiper-slide";
-          slide.innerHTML = `
-            <div class="card">
-              <a href="${blog.blog_link}" style="text-decoration: none; color:black;">
-                <div class="card-content">
-                  <div class="image">
-                    <img src="${blog.imageUrl}" alt="${blog.Blog_title || blog.title || ''}" />
-                  </div>
-                  <div class="name-profession">
-                    <span class="name">${blog.Blog_title || blog.title || ''}</span>
-                  </div>
-                  <div class="card-description">
-                    <p>${blog.Blog_description || blog.description || ''}</p>
-                  </div>
-                  <p class="created-at">Published at: ${publishedAt}</p>
-                </div>
-              </a>
-            </div>
-          `;
-          wrapper.appendChild(slide);
-        });
-
-        if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
-          window.swiperInstances["blogs-swiper"].update();
-        }
-      }
-
-      function renderFreeCourses(courses) {
-        const wrapper = document.getElementById("free-courses-wrapper");
-        if (!wrapper) return;
-        wrapper.innerHTML = "";
-
-        courses.forEach(course => {
-          const slide = document.createElement("div");
-          slide.className = "swiper-slide";
-          slide.innerHTML = `
-            <div class="card">
-              <div class="card-content">
-                <div class="image">
-                  <img src="${course.imageUrl}" alt="${course.coursename}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
-                </div>
-                <div class="name-profession">
-                  <span class="name">${course.coursename}</span>
-                </div>
-                <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free</p>
-                <div class="button" style="position: relative; top: -20px;">
-                  <button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button>
-                </div>
-              </div>
-            </div>
-          `;
-          wrapper.appendChild(slide);
-        });
-
-        if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
-          window.swiperInstances["free-courses-swiper"].update();
-        }
-      }
-
-      function renderPaidCourses(courses) {
-        const wrapper = document.getElementById("paid-courses-wrapper");
-        if (!wrapper) return;
-        wrapper.innerHTML = "";
-
-        courses.forEach(course => {
-          const slide = document.createElement("div");
-          slide.className = "swiper-slide";
-          slide.innerHTML = `
-            <div class="card">
-              <div class="card-content">
-                <div class="image">
-                  <img src="${course.imageUrl}" alt="${course.coursename}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
-                </div>
-                <div class="name-profession">
-                  <span class="name">${course.coursename}</span>
-                </div>
-                <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
-                <div class="button" style="margin-top: 30px;">
-                    <button class="message-button"
-                        onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">
-                        Enroll Now
-                    </button>
-                </div>
-              </div>
-            </div>
-          `;
-          wrapper.appendChild(slide);
-        });
-
-        if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
-          window.swiperInstances["paid-courses-swiper"].update();
-        }
-      }
-
-      // --- New: load all data from backend ---
-      async function loadDataFromBackend() {
-        try {
-          const [blogs, freeCourses, paidCourses] = await Promise.all([
-            fetchJSON(`${API_BASE_URL}/api/blogs`),
-            fetchJSON(`${API_BASE_URL}/api/courses?type=free`),
-            fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
-          ]);
-
-          renderBlogs(blogs);
-          renderFreeCourses(freeCourses);
-          renderPaidCourses(paidCourses);
-
-          // Initialize / update Swipers once data is in DOM
-          initSwipers();
-        } catch (err) {
-          console.error("Error loading data from backend:", err);
-        }
-      }
-
-      // Handle contact form submission with Formspree (AJAX) + show popup
-      document.addEventListener('DOMContentLoaded', function () {
-        const contactForm = document.querySelector('.contact-form form');
-        if (contactForm) {
-            contactForm.addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                const formData = new FormData(contactForm);
-
-                fetch(contactForm.action, {
-                    method: contactForm.method,
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        contactForm.reset();
-                        showFormModal();
-                    } else {
-                        return response.json().then(data => {
-                            throw new Error(data.error || 'Form submission failed');
-                        });
-                    }
-                })
-                .catch(() => {
-                    alert('There was a problem submitting the form. Please try again.');
-                });
-            });
-        }
-
-        // Scroll reveal animation
-        const revealEls = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        revealEls.forEach(el => observer.observe(el));
-
-        // 🔥 Load blogs & courses from backend
-        loadDataFromBackend();
-      });
-    </script>
 </body>
 </html>

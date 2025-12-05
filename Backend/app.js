@@ -7,9 +7,9 @@ import fs from 'fs';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { fileURLToPath } from 'url';
-import Blog from './models/Blog.js'; 
-import Course from './models/Course.js'; 
-import paymentRoute from './routes/paymentRoute.js'; 
+import Blog from './models/Blog.js';
+import Course from './models/Course.js';
+import paymentRoute from './routes/paymentRoute.js';
 
 dotenv.config();
 const app = express();
@@ -52,7 +52,6 @@ const mongoUri = process.env.MONGODB_URI;
 mongoose.connect(mongoUri)
     .then(() => console.log('Connected to MongoDB!'))
     .catch(err => console.error('MongoDB Connection Error:', err));
-
 
 // --------------------------------------------------------
 // PAYMENT ROUTES (Uses existing paymentRoute)
@@ -172,37 +171,46 @@ app.post('/add-course', (req, res) => {
     form.parse(req, (err, fields, files) => {
         if (err) {
             console.error('Form parsing error:', err);
-            return res.status(500).send('Error parsing form data');
+            return res
+                .status(500)
+                .json({ success: false, message: 'Error parsing form data' });
         }
 
         const courseImageFile = files.courseImage ? files.courseImage[0] : null;
-        
+
         const coursename = fields.coursename ? fields.coursename[0] : undefined;
         const price = fields.price ? fields.price[0] : undefined;
         const course_type = fields.coursetype ? fields.coursetype[0] : undefined;
         const link = fields.courselink ? fields.courselink[0] : undefined;
 
         if (courseImageFile && courseImageFile.size > 0) {
-            if (courseImageFile.size > 5000000) { 
+            if (courseImageFile.size > 5000000) {
                 console.error('Image size exceeds limit:', courseImageFile.size);
-                return res.status(400).send('Image size exceeds 5MB limit');
+                return res
+                    .status(400)
+                    .json({ success: false, message: 'Image size exceeds 5MB limit' });
             }
+
             const oldPath = courseImageFile.filepath;
             const newFileName = Date.now() + '_' + courseImageFile.originalFilename;
             const newPath = path.join(form.uploadDir, newFileName);
 
-            fs.rename(oldPath, newPath, async (err) => { 
+            fs.rename(oldPath, newPath, async (err) => {
                 if (err) {
                     console.error('Error moving uploaded file:', err);
-                    return res.status(500).send('Internal Server Error');
+                    return res
+                        .status(500)
+                        .json({ success: false, message: 'Internal Server Error (moving file)' });
                 }
 
-                fs.readFile(newPath, async (err, data) => { 
+                fs.readFile(newPath, async (err, data) => {
                     if (err) {
                         console.error('Error reading image file:', err);
-                        return res.status(500).send('Internal Server Error');
+                        return res
+                            .status(500)
+                            .json({ success: false, message: 'Internal Server Error (reading file)' });
                     }
-                    
+
                     try {
                         await Course.create({
                             course_img: data,
@@ -211,18 +219,24 @@ app.post('/add-course', (req, res) => {
                             course_type: course_type,
                             link: link
                         });
-                        
-                        res.status(200).json({ success: true, message: 'Course added successfully' });
+
+                        return res
+                            .status(200)
+                            .json({ success: true, message: 'Course added successfully' });
 
                     } catch (dbError) {
                         console.error('Database insertion error:', dbError);
-                        return res.status(500).json({ success: false, message: 'Database error' });
+                        return res
+                            .status(500)
+                            .json({ success: false, message: 'Database error' });
                     }
                 });
             });
         } else {
             console.error('No course image uploaded or file size is 0');
-            return res.status(400).json({ success: false, message: 'No image uploaded' });
+            return res
+                .status(400)
+                .json({ success: false, message: 'No image uploaded' });
         }
     });
 });
@@ -240,7 +254,9 @@ app.post('/add-blog', (req, res) => {
     form.parse(req, (err, fields, files) => {
         if (err) {
             console.error('Form parsing error:', err);
-            return res.status(500).send('Error parsing form data');
+            return res
+                .status(500)
+                .json({ success: false, message: 'Error parsing form data' });
         }
 
         const blogImageFile = files.BlogImage ? files.BlogImage[0] : null;
@@ -251,24 +267,31 @@ app.post('/add-blog', (req, res) => {
         const blog_link = fields.bloglink ? fields.bloglink[0] : undefined;
 
         if (blogImageFile && blogImageFile.size > 0) {
-            if (blogImageFile.size > 5000000) { 
+            if (blogImageFile.size > 5000000) {
                 console.error('Image size exceeds limit:', blogImageFile.size);
-                return res.status(400).send('Image size exceeds 5MB limit');
+                return res
+                    .status(400)
+                    .json({ success: false, message: 'Image size exceeds 5MB limit' });
             }
+
             const oldPath = blogImageFile.filepath;
             const newFileName = Date.now() + '_' + blogImageFile.originalFilename;
             const newPath = path.join(form.uploadDir, newFileName);
 
-            fs.rename(oldPath, newPath, async (err) => { 
+            fs.rename(oldPath, newPath, async (err) => {
                 if (err) {
                     console.error('Error moving uploaded file:', err);
-                    return res.status(500).send('Internal Server Error');
+                    return res
+                        .status(500)
+                        .json({ success: false, message: 'Internal Server Error (moving file)' });
                 }
 
-                fs.readFile(newPath, async (err, data) => { 
+                fs.readFile(newPath, async (err, data) => {
                     if (err) {
                         console.error('Error reading image file:', err);
-                        return res.status(500).send('Internal Server Error');
+                        return res
+                            .status(500)
+                            .json({ success: false, message: 'Internal Server Error (reading file)' });
                     }
 
                     try {
@@ -279,18 +302,24 @@ app.post('/add-blog', (req, res) => {
                             category: BlogCategory,
                             blog_link: blog_link
                         });
-                        
-                        res.status(200).json({ success: true, message: 'Blog added successfully' });
+
+                        return res
+                            .status(200)
+                            .json({ success: true, message: 'Blog added successfully' });
 
                     } catch (dbError) {
                         console.error('Database insertion error:', dbError);
-                        return res.status(500).send('Error adding blog');
+                        return res
+                            .status(500)
+                            .json({ success: false, message: 'Error adding blog' });
                     }
                 });
             });
         } else {
             console.error('No blog image uploaded or file size is 0');
-            return res.status(400).send('No image uploaded');
+            return res
+                .status(400)
+                .json({ success: false, message: 'No image uploaded' });
         }
     });
 });
