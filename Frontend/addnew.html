@@ -264,22 +264,441 @@
     opacity: 0.9;
 }
 
-/* Edit modal tweaks */
-.edit-modal {
-    max-width: 500px;
+/* ---------- Edit Modal Enhancements (final merged & responsive) ---------- */
+
+/* Overlay: ensure centered and padded so modal never touches edges */
+#editModal {
+  display: none;            /* controlled by your .show toggle */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;            /* small safe padding around modal */
+  overflow: auto;
 }
 
-#blogEditFields,
-#courseEditFields {
-    display: none;
+/* shown state (you already add .show) */
+#editModal.show {
+  display: flex;
 }
 
-#editModal input,
-#editModal textarea,
-#editModal select {
+/* Modal content: responsive width + internal scroll */
+#editModal .modal-content.edit-modal {
+    max-width: 500px;               /* comfortable desktop width */
+    width: min(680px, 94%);
+    border-radius: 18px;
+    padding: 26px 28px 24px;
+    box-sizing: border-box;
+    background: #fff;
+    color: var(--primary-color);
+    max-height: 92vh;               /* never exceed viewport height */
+    overflow-y: auto;               /* internal scrolling if content is tall */
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 18px 50px rgba(2,7,23,0.45);
+}
+
+/* Title */
+.edit-modal-title {
+    margin-bottom: 18px;
+    font-size: 1.8rem;
+    text-align: center;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--primary-color);
+}
+
+/* Image row: preview + controls */
+.edit-image-row {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-bottom: 14px;
+    flex-wrap: nowrap;               /* keep preview + controls on one line for larger view */
+}
+
+/* Thumbnail preview */
+.edit-image-preview-wrapper {
+    flex: 0 0 96px;
+    height: 96px;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(6,12,28,0.08);
+    background: #f8f9fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-image-preview-wrapper img {
     width: 100%;
-    margin-bottom: 10px;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
+
+/* file input wrapper (controls beside preview) */
+.edit-image-input-wrapper {
+    flex: 1;
+    min-width: 160px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* label for file input */
+.edit-image-label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--primary-color);
+    font-size: 0.95rem;
+}
+
+/* visually nicer file input */
+#editImageFile {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 10px;
+    border: 1px solid #d6dbe8;
+    font-size: 0.95rem;
+    background-color: #fbfbfc;
+    outline: none;
+    transition: box-shadow .18s ease, border-color .18s ease;
+}
+
+#editImageFile:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 6px 18px rgba(64, 103, 255, 0.07);
+}
+
+/* hint text under file input */
+.edit-image-hint {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.82rem;
+    color: #6b7280;
+}
+
+/* ---------- Form fields inside modal ---------- */
+/* Ensure labels are visible and positioned above inputs (no negative margins) */
+#editModal label,
+.edit-modal label {
+    display: block;
+    margin-bottom: 8px;       /* comfortable spacing */
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Inputs / textarea / select - unified style */
+.edit-modal input[type="text"],
+.edit-modal input[type="number"],
+.edit-modal input[type="url"],
+.edit-modal textarea,
+.edit-modal select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid #e1e6f2;
+    background: #fbfbfc;
+    font-size: 1rem;
+    color: #0b192c;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.edit-modal textarea { min-height: 100px; resize: vertical; }
+
+/* Focus states */
+.edit-modal input:focus,
+.edit-modal textarea:focus,
+.edit-modal select:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 10px 30px rgba(14, 47, 120, 0.06);
+}
+
+/* Submit/save button inside modal - visible and centered */
+.edit-modal .submit-btn,
+.edit-modal button.save-edit-btn {
+    display: inline-block;
+    margin: 12px auto 0 auto;
+    background: var(--primary-color);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(11,25,44,0.08);
+}
+
+/* smaller text for accessory elements */
+.edit-modal small,
+.edit-modal .small-note {
+    color: #6b7280;
+    font-size: 0.82rem;
+}
+
+/* Accessibility: ensure labels are visible */
+.edit-modal label[aria-hidden="true"] { display:block; }
+
+/* ---------- Responsive tweaks: stack image & inputs on very small screens ---------- */
+@media (max-width: 520px) {
+
+    /* stack the preview above inputs */
+    .edit-image-row {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+
+    .edit-image-preview-wrapper {
+        flex: 0 0 88px;
+        height: 88px;
+    }
+
+    .edit-modal {
+        padding: 18px 16px;
+    }
+
+    .edit-modal .submit-btn,
+    .edit-modal button.save-edit-btn {
+        width: 100%;
+        padding: 12px 18px;
+    }
+
+    /* ensure long inputs wrap and don't overflow */
+    #editModal .modal-content.edit-modal input,
+    #editModal .modal-content.edit-modal textarea,
+    #editModal .modal-content.edit-modal select {
+        max-width: 100%;
+        word-break: break-word;
+    }
+}
+
+/* extra tiny screens: ensure modal fits and scrolls inside viewport */
+@media (max-width: 420px) {
+    #editModal .modal-content.edit-modal {
+        width: 96%;
+        max-height: 94vh;
+        padding: 14px;
+    }
+    .edit-image-preview-wrapper { flex: 0 0 72px; height: 72px; }
+}
+
+/* When modal is open we should stop page behind from scrolling */
+html.modal-open,
+body.modal-open {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ---------- Mobile Cards for CRUD ---------- */
+.crud-cards {
+    display: none;        /* default: only tables on larger screens */
+    margin-top: 14px;
+    gap: 12px;
+    flex-direction: column;
+}
+
+/* Card layout */
+.crud-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 12px 12px 10px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    /* Make sure content area grows so actions can float at bottom */
+    overflow: visible;
+}
+
+/* image */
+.crud-card-img-wrapper {
+    flex: 0 0 70px;
+    height: 70px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.crud-card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* content area: arrange text and actions vertically */
+.crud-card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* puts actions at the bottom */
+}
+
+/* title/meta/link */
+.crud-card-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.crud-card-meta {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.crud-card-link {
+    font-size: 0.8rem;
+    margin-top: 4px;
+}
+
+/* ACTIONS: default (desktop/table) spacing, vertical fallback */
+.crud-card-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: nowrap !important;  /* prevents buttons from going to next line */
+}
+
+
+/* For table rows (desktop) keep a compact row of small buttons */
+.crud-table .crud-card-actions,
+.crud-table td .crud-card-actions {
+    margin-top: 0;
+}
+
+/* Shared button styling */
+.action-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    font-size: 15px;
+    transition: 0.25s ease;
+    box-shadow: 0 6px 12px rgba(11,25,44,0.06);
+}
+
+/* View / Open */
+.open-btn {
+    background: #0B192C;
+}
+.open-btn:hover {
+    background: #122949;
+}
+
+/* Edit */
+.edit-btn {
+    background: #007bff;
+}
+.edit-btn:hover {
+    background: #0066d1;
+}
+
+/* Delete */
+.delete-btn {
+    background: #dc3545;
+}
+.delete-btn:hover {
+    background: #b02a37;
+}
+
+.action-btn i {
+    font-size: 16px;
+}
+
+/* ---------- Mobile PORTRAIT: show cards (and make actions compact in one row) ---------- */
+@media (max-width: 768px) and (orientation: portrait) {
+    .crud-table {
+        display: none;
+    }
+    .crud-cards {
+        display: flex;
+    }
+
+    /* make card layout slightly taller and space content better on small screens */
+    .crud-card {
+        padding: 14px;
+        gap: 12px;
+    }
+
+    /* ensure content stacks well and actions are visible below meta */
+    .crud-card-content {
+        gap: 8px;
+    }
+
+    /* Force buttons to be in a single row on small screens */
+    .crud-card-actions {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: nowrap !important;
+}
+
+    /* smaller button sizes for compact mobile display */
+    .action-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    /* slightly larger icons for clarity on mobile */
+    .action-btn i {
+        font-size: 16px;
+    }
+
+    /* Make sure the image and text fit nicely */
+    .crud-card-img-wrapper {
+        flex: 0 0 72px;
+        height: 72px;
+    }
+}
+
+/* ---------- Mobile LANDSCAPE + Tablets/Desktops: show tables ---------- */
+@media (max-width: 768px) and (orientation: landscape),
+       (min-width: 769px) {
+    .crud-table {
+        display: table;
+    }
+    .crud-cards {
+        display: none;
+    }
+
+    /* On larger screens we prefer action buttons aligned to the row end */
+    .crud-card-actions {
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    /* slightly bigger buttons on desktop */
+    .action-btn {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* Extra small screens: make buttons even more compact */
+@media (max-width: 480px) {
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 14px;
+    }
+}
+
 
 /* Footer */
 .footer {
@@ -558,7 +977,6 @@
 =============================== -->
 <section class="crud-section">
     <h2 style="text-align:center;margin-top:10px;">Manage Blogs</h2>
-
     <table class="crud-table" id="blogsTable">
         <thead>
             <tr>
@@ -571,9 +989,9 @@
         </thead>
         <tbody></tbody>
     </table>
+    <div id="blogsCardsContainer" class="crud-cards"></div>
 
     <h2 style="text-align:center;margin-top:40px;">Manage Courses</h2>
-
     <table class="crud-table" id="coursesTable">
         <thead>
             <tr>
@@ -587,6 +1005,7 @@
         </thead>
         <tbody></tbody>
     </table>
+    <div id="coursesCardsContainer" class="crud-cards"></div>
 </section>
 
 
@@ -601,52 +1020,63 @@
 
 <!-- Edit Modal (used for both Blog & Course) -->
 <div class="overlay" id="editModal">
-    <div class="modal-content edit-modal">
-        <span class="close-btn" onclick="closeEditModal()">&times;</span>
-        <h2 id="editModalTitle">Edit</h2>
+  <div class="modal-content edit-modal">
+    <span class="close-btn" onclick="closeEditModal()">&times;</span>
+    <h2 id="editModalTitle" class="edit-modal-title">Edit</h2>
 
-        <!-- BLOG FIELDS -->
-        <div id="blogEditFields">
-            <label>Blog Title</label>
-            <input type="text" id="editBlogTitle">
-
-            <label>Blog Description</label>
-            <textarea id="editBlogDescription" rows="4"></textarea>
-
-            <label>Category</label>
-            <select id="editBlogCategory">
-                <option value="technology">Technology</option>
-                <option value="science">Science</option>
-                <option value="space-exploration">Space Exploration</option>
-                <option value="programming">Programming</option>
-            </select>
-
-            <label>Blog Link</label>
-            <input type="url" id="editBlogLink">
-        </div>
-
-        <!-- COURSE FIELDS -->
-        <div id="courseEditFields">
-            <label>Course Name</label>
-            <input type="text" id="editCourseName">
-
-            <label>Price (INR)</label>
-            <input type="number" id="editCoursePrice">
-
-            <label>Course Type</label>
-            <select id="editCourseType">
-                <option value="free">Free</option>
-                <option value="paid">Paid</option>
-            </select>
-
-            <label>Course Link</label>
-            <input type="url" id="editCourseLink">
-        </div>
-
-        <button class="submit-btn" style="margin-top:15px;" onclick="saveEdit()">Save Changes</button>
+    <!-- IMAGE PREVIEW + UPLOAD -->
+    <div class="edit-image-row">
+      <div class="edit-image-preview-wrapper">
+        <img id="editPreviewImage" src="" alt="Preview" />
+      </div>
+      <div class="edit-image-input-wrapper">
+        <label class="edit-image-label">Change Image</label>
+        <input type="file" id="editImageFile" accept="image/*" />
+        <small class="edit-image-hint">Leave empty to keep the existing image.</small>
+      </div>
     </div>
-</div>
 
+    <!-- BLOG FIELDS -->
+    <div id="blogEditFields">
+      <label>Blog Title</label>
+      <input type="text" id="editBlogTitle" />
+
+      <label>Blog Description</label>
+      <textarea id="editBlogDescription" rows="4"></textarea>
+
+      <label>Category</label>
+      <select id="editBlogCategory">
+        <option value="technology">Technology</option>
+        <option value="science">Science</option>
+        <option value="space-exploration">Space Exploration</option>
+        <option value="programming">Programming</option>
+      </select>
+
+      <label>Blog Link</label>
+      <input type="url" id="editBlogLink" />
+    </div>
+
+    <!-- COURSE FIELDS -->
+    <div id="courseEditFields">
+      <label>Course Name</label>
+      <input type="text" id="editCourseName" />
+
+      <label>Price (INR)</label>
+      <input type="number" id="editCoursePrice" />
+
+      <label>Course Type</label>
+      <select id="editCourseType">
+        <option value="free">Free</option>
+        <option value="paid">Paid</option>
+      </select>
+
+      <label>Course Link</label>
+      <input type="url" id="editCourseLink" />
+    </div>
+
+    <button class="submit-btn" style="margin-top:15px;" onclick="saveEdit()">Save Changes</button>
+  </div>
+</div>
 
 <!-- Footer -->
       <div class="footer reveal">
@@ -693,31 +1123,31 @@
     var currentEditType = null; // "blog" or "course"
     var currentEditId = null;
 
-    // ---------- SUCCESS MODAL (ALREADY EXISTING) ----------
-    // Handles showing the modal and resetting the form
+    // ---------- SUCCESS MODAL (already existed) ----------
     function showModal(message, formId) {
         const modal = document.getElementById("successModal");
         const modalText = document.getElementById("modalMessage");
         modalText.textContent = message;
         modal.classList.add("show");
         
-        // Timeout to hide the modal and reset the form
         setTimeout(() => {
             closeModal();
             const formElement = document.getElementById(formId);
             if (formElement) {
-                formElement.reset(); // Resets the form fields
+                formElement.reset();
             }
+            // Refresh lists so new item appears
+            loadBlogs();
+            loadCourses();
         }, 3000);
     }
 
-    // Close the success modal
     function closeModal() {
         const modal = document.getElementById("successModal");
         modal.classList.remove("show");
     }
 
-    // ---------- EDIT MODAL (NEW) ----------
+    // ---------- EDIT MODAL ----------
     function openEditModal() {
         var overlay = document.getElementById("editModal");
         if (overlay) overlay.classList.add("show");
@@ -728,12 +1158,13 @@
         if (overlay) overlay.classList.remove("show");
         currentEditType = null;
         currentEditId = null;
+        var imgInput = document.getElementById("editImageFile");
+        if (imgInput) imgInput.value = "";
     }
 
-    // ---------- GENERIC FORM SUBMIT (ALREADY EXISTING) ----------
-    // New generic function to handle form submission via AJAX (fetch)
+    // ---------- GENERIC FORM SUBMISSION (already existed) ----------
     async function handleFormSubmission(event, formId, successMessage) {
-        event.preventDefault(); // Stop the default page reload
+        event.preventDefault();
         const form = document.getElementById(formId);
         const url = form.action;
         const formData = new FormData(form);
@@ -744,22 +1175,15 @@
                 body: formData,
             });
             
-            // Check if the response status is 200-299
             if (response.ok) {
                 const result = await response.json();
                 
                 if (result.success) {
-                    // On successful response from server, show the modal and trigger form reset
                     showModal(successMessage, formId);
-                    // Reload lists so new items appear immediately
-                    loadBlogs();
-                    loadCourses();
                 } else {
-                    // Handle application-level error (e.g., database error)
                     alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
                 }
             } else {
-                // Handle HTTP errors (e.g., 400 Bad Request, 500 Internal Server Error)
                 let errorResult = {};
                 try {
                     errorResult = await response.json();
@@ -772,7 +1196,6 @@
         }
     }
 
-    // Attach the submission handler to the forms (ALREADY EXISTING)
     document.getElementById("upload-form").onsubmit = function (event) {
         handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
     };
@@ -781,68 +1204,160 @@
         handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
     };
 
-    // ---------- LOAD & RENDER BLOGS (NEW) ----------
+    // ---------- LOAD & RENDER BLOGS ----------
     async function loadBlogs() {
         try {
             const res = await fetch(API_BASE_URL + "/api/blogs");
             const blogs = await res.json();
             blogsData = blogs;
 
+            // TABLE
             var tbody = document.querySelector("#blogsTable tbody");
-            if (!tbody) return;
-            tbody.innerHTML = "";
+            if (tbody) {
+                tbody.innerHTML = "";
+                blogs.forEach(function (b) {
+                    var row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy"></td>
+                        <td>${b.Blog_title || ''}</td>
+                        <td>${b.category || ''}</td>
+                        <td><a href="${b.blog_link}" target="_blank" class="action-btn open-btn"> <i class="fas fa-external-link-alt"></i></a></td>
+                        <td>
+                            <button class="action-btn edit-btn" onclick="editBlog('${b._id}')"> <i class="fas fa-pencil-alt"></i></button>
+                            <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')"> <i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
 
-            blogs.forEach(function (b) {
-                var row = document.createElement("tr");
-                row.innerHTML = `
-                    <td><img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy"></td>
-                    <td>${b.Blog_title || ''}</td>
-                    <td>${b.category || ''}</td>
-                    <td><a href="${b.blog_link || '#'}" target="_blank">Open</a></td>
-                    <td>
-                        <button class="action-btn edit-btn" onclick="editBlog('${b._id}')">Edit</button>
-                        <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+            // CARDS (mobile)
+            var cardsContainer = document.getElementById("blogsCardsContainer");
+            if (cardsContainer) {
+                cardsContainer.innerHTML = "";
+                blogs.forEach(function (b) {
+                    var card = document.createElement("div");
+                    card.className = "crud-card";
+                    card.innerHTML = `
+                        <div class="crud-card-img-wrapper">
+                            <img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy">
+                        </div>
+                        <div class="crud-card-content">
+                            <div class="crud-card-title">${b.Blog_title || ''}</div>
+                            <div class="crud-card-meta">Category: ${b.category || ''}</div>
+                            <div class="crud-card-actions">
+
+    <!-- OPEN / VIEW BLOG -->
+    <a href="${b.blog_link}" target="_blank" class="action-btn open-btn">
+        <i class="fas fa-external-link-alt"></i>
+    </a>
+
+    <!-- EDIT BLOG -->
+    <button class="action-btn edit-btn" onclick="editBlog('${b._id}')">
+        <i class="fas fa-pencil-alt"></i>
+    </button>
+
+    <!-- DELETE BLOG -->
+    <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+
+</div>
+
+                        </div>
+                    `;
+                    cardsContainer.appendChild(card);
+                });
+            }
+
         } catch (err) {
             console.error("Error loading blogs:", err);
         }
     }
 
-    // ---------- LOAD & RENDER COURSES (NEW) ----------
+    // ---------- LOAD & RENDER COURSES ----------
     async function loadCourses() {
         try {
             const res = await fetch(API_BASE_URL + "/api/courses");
             const courses = await res.json();
             coursesData = courses;
 
+            // TABLE
             var tbody = document.querySelector("#coursesTable tbody");
-            if (!tbody) return;
-            tbody.innerHTML = "";
+            if (tbody) {
+                tbody.innerHTML = "";
+                courses.forEach(function (c) {
+                    var row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td><img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy"></td>
+                        <td>${c.coursename || ''}</td>
+                        <td>${c.price || ''}</td>
+                        <td>${c.course_type || ''}</td>
+                        <td>  <a href="${c.link}" target="_blank" class="action-btn open-btn"> <i class="fas fa-external-link-alt"></i> </a></td>
+                        <td>
+                            <!-- EDIT -->
+                                <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                    
+                                <!-- DELETE -->
+                                <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                    </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
 
-            courses.forEach(function (c) {
-                var row = document.createElement("tr");
-                row.innerHTML = `
-                    <td><img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy"></td>
-                    <td>${c.coursename || ''}</td>
-                    <td>${c.price || ''}</td>
-                    <td>${c.course_type || ''}</td>
-                    <td><a href="${c.link || '#'}" target="_blank">Open</a></td>
-                    <td>
-                        <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">Edit</button>
-                        <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">Delete</button>
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
+            // CARDS (mobile)
+            var cardsContainer = document.getElementById("coursesCardsContainer");
+            if (cardsContainer) {
+                cardsContainer.innerHTML = "";
+                courses.forEach(function (c) {
+                    var card = document.createElement("div");
+                    card.className = "crud-card";
+                    card.innerHTML = `
+                        <div class="crud-card-img-wrapper">
+                            <img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy">
+                        </div>
+                        <div class="crud-card-content">
+                            <div class="crud-card-title">${c.coursename || ''}</div>
+                            <div class="crud-card-meta">
+                                Price: ${c.price || ''} • Type: ${c.course_type || ''}
+                            </div>
+                            <div class="crud-card-actions">
+    
+    <!-- OPEN / VIEW -->
+    <a href="${c.link}" target="_blank" class="action-btn open-btn">
+        <i class="fas fa-external-link-alt"></i>
+    </a>
+
+    <!-- EDIT -->
+    <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">
+        <i class="fas fa-pencil-alt"></i>
+    </button>
+
+    <!-- DELETE -->
+    <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">
+        <i class="fas fa-trash-alt"></i>
+    </button>
+
+</div>
+
+                            </div>
+                        </div>
+                    `;
+                    cardsContainer.appendChild(card);
+                });
+            }
+
         } catch (err) {
             console.error("Error loading courses:", err);
         }
     }
 
-    // ---------- EDIT BLOG (OPEN MODAL) ----------
+    // ---------- EDIT BLOG / COURSE (open modal) ----------
     function editBlog(id) {
         currentEditType = "blog";
         currentEditId = id;
@@ -859,10 +1374,17 @@
         document.getElementById("editBlogCategory").value = blog.category || "technology";
         document.getElementById("editBlogLink").value = blog.blog_link || "";
 
+        // image preview
+        var preview = document.getElementById("editPreviewImage");
+        if (preview) preview.src = blog.imageUrl || "";
+
+        // reset file input
+        var imgInput = document.getElementById("editImageFile");
+        if (imgInput) imgInput.value = "";
+
         openEditModal();
     }
 
-    // ---------- EDIT COURSE (OPEN MODAL) ----------
     function editCourse(id) {
         currentEditType = "course";
         currentEditId = id;
@@ -879,15 +1401,22 @@
         document.getElementById("editCourseType").value = course.course_type || "free";
         document.getElementById("editCourseLink").value = course.link || "";
 
+        var preview = document.getElementById("editPreviewImage");
+        if (preview) preview.src = course.imageUrl || "";
+
+        var imgInput = document.getElementById("editImageFile");
+        if (imgInput) imgInput.value = "";
+
         openEditModal();
     }
 
-    // ---------- SAVE EDIT (BLOG / COURSE) ----------
+    // ---------- SAVE EDIT (text + optional new image) ----------
     async function saveEdit() {
         if (!currentEditType || !currentEditId) return;
 
         try {
             if (currentEditType === "blog") {
+                // 1) Update text fields via JSON PUT
                 var payload = {
                     Blog_title: document.getElementById("editBlogTitle").value,
                     Blog_description: document.getElementById("editBlogDescription").value,
@@ -901,14 +1430,34 @@
                     body: JSON.stringify(payload)
                 });
 
-                if (res.ok) {
-                    alert("Blog updated successfully");
-                    closeEditModal();
-                    loadBlogs();
-                } else {
-                    alert("Error updating blog");
+                if (!res.ok) {
+                    alert("Error updating blog details");
+                    return;
                 }
+
+                // 2) If new image selected, upload via multipart PUT
+                var imgInput = document.getElementById("editImageFile");
+                if (imgInput && imgInput.files && imgInput.files[0]) {
+                    var fd = new FormData();
+                    fd.append("BlogImage", imgInput.files[0]);
+
+                    // NOTE: needs backend route: PUT /api/blogs/:id/image using formidable
+                    var imgRes = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId + "/image", {
+                        method: "PUT",
+                        body: fd
+                    });
+
+                    if (!imgRes.ok) {
+                        alert("Blog updated, but image update failed.");
+                    }
+                }
+
+                alert("Blog updated successfully");
+                closeEditModal();
+                loadBlogs();
+
             } else if (currentEditType === "course") {
+                // 1) Update text fields via JSON PUT
                 var payloadC = {
                     coursename: document.getElementById("editCourseName").value,
                     price: document.getElementById("editCoursePrice").value,
@@ -922,13 +1471,31 @@
                     body: JSON.stringify(payloadC)
                 });
 
-                if (resC.ok) {
-                    alert("Course updated successfully");
-                    closeEditModal();
-                    loadCourses();
-                } else {
-                    alert("Error updating course");
+               	if (!resC.ok) {
+                    alert("Error updating course details");
+                    return;
                 }
+
+                // 2) Optional image upload
+                var imgInputC = document.getElementById("editImageFile");
+                if (imgInputC && imgInputC.files && imgInputC.files[0]) {
+                    var fdC = new FormData();
+                    fdC.append("courseImage", imgInputC.files[0]);
+
+                    // NOTE: needs backend route: PUT /api/courses/:id/image using formidable
+                    var imgResC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId + "/image", {
+                        method: "PUT",
+                        body: fdC
+                    });
+
+                    if (!imgResC.ok) {
+                        alert("Course updated, but image update failed.");
+                    }
+                }
+
+                alert("Course updated successfully");
+                closeEditModal();
+                loadCourses();
             }
         } catch (err) {
             console.error("Error saving edit:", err);
@@ -981,6 +1548,7 @@
         loadCourses();
     });
 </script>
+
 
 </body>
 </html>
