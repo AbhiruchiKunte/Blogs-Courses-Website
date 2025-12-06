@@ -200,7 +200,88 @@
             transform: translateY(-1px);
         }
         
-        /* Footer */
+        /* CRUD Tables */
+.crud-section {
+    width: 95%;
+    max-width: 1300px;
+    margin: 30px auto 60px;
+}
+
+.crud-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    font-size: 0.95rem;
+}
+
+.crud-table thead {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+.crud-table th,
+.crud-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.crud-table tr:last-child td {
+    border-bottom: none;
+}
+
+.crud-table img {
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 2px;
+    color: #fff;
+}
+
+.edit-btn {
+    background: #05668d;
+}
+
+.delete-btn {
+    background: #c62828;
+}
+
+.action-btn:hover {
+    opacity: 0.9;
+}
+
+/* Edit modal tweaks */
+.edit-modal {
+    max-width: 500px;
+}
+
+#blogEditFields,
+#courseEditFields {
+    display: none;
+}
+
+#editModal input,
+#editModal textarea,
+#editModal select {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Footer */
 .footer {
     background-color: var(--primary-color);
     color: white;
@@ -472,6 +553,43 @@
 </div>
 </section>
 
+<!-- ============================
+     MANAGE BLOGS & COURSES
+=============================== -->
+<section class="crud-section">
+    <h2 style="text-align:center;margin-top:10px;">Manage Blogs</h2>
+
+    <table class="crud-table" id="blogsTable">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Link</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <h2 style="text-align:center;margin-top:40px;">Manage Courses</h2>
+
+    <table class="crud-table" id="coursesTable">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Type</th>
+                <th>Link</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+
+
 <div class="overlay" id="successModal">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -480,6 +598,55 @@
         <p id="modalMessage">Your content has been added successfully.</p>
     </div>
 </div>
+
+<!-- Edit Modal (used for both Blog & Course) -->
+<div class="overlay" id="editModal">
+    <div class="modal-content edit-modal">
+        <span class="close-btn" onclick="closeEditModal()">&times;</span>
+        <h2 id="editModalTitle">Edit</h2>
+
+        <!-- BLOG FIELDS -->
+        <div id="blogEditFields">
+            <label>Blog Title</label>
+            <input type="text" id="editBlogTitle">
+
+            <label>Blog Description</label>
+            <textarea id="editBlogDescription" rows="4"></textarea>
+
+            <label>Category</label>
+            <select id="editBlogCategory">
+                <option value="technology">Technology</option>
+                <option value="science">Science</option>
+                <option value="space-exploration">Space Exploration</option>
+                <option value="programming">Programming</option>
+            </select>
+
+            <label>Blog Link</label>
+            <input type="url" id="editBlogLink">
+        </div>
+
+        <!-- COURSE FIELDS -->
+        <div id="courseEditFields">
+            <label>Course Name</label>
+            <input type="text" id="editCourseName">
+
+            <label>Price (INR)</label>
+            <input type="number" id="editCoursePrice">
+
+            <label>Course Type</label>
+            <select id="editCourseType">
+                <option value="free">Free</option>
+                <option value="paid">Paid</option>
+            </select>
+
+            <label>Course Link</label>
+            <input type="url" id="editCourseLink">
+        </div>
+
+        <button class="submit-btn" style="margin-top:15px;" onclick="saveEdit()">Save Changes</button>
+    </div>
+</div>
+
 
 <!-- Footer -->
       <div class="footer reveal">
@@ -518,6 +685,15 @@
       </div>
 
       <script>
+    // ---------- CONFIG & STATE ----------
+    const API_BASE_URL = "https://edufusion-blogs.onrender.com";
+
+    var blogsData = [];
+    var coursesData = [];
+    var currentEditType = null; // "blog" or "course"
+    var currentEditId = null;
+
+    // ---------- SUCCESS MODAL (ALREADY EXISTING) ----------
     // Handles showing the modal and resetting the form
     function showModal(message, formId) {
         const modal = document.getElementById("successModal");
@@ -535,56 +711,68 @@
         }, 3000);
     }
 
-    // Close the modal
+    // Close the success modal
     function closeModal() {
         const modal = document.getElementById("successModal");
         modal.classList.remove("show");
     }
 
+    // ---------- EDIT MODAL (NEW) ----------
+    function openEditModal() {
+        var overlay = document.getElementById("editModal");
+        if (overlay) overlay.classList.add("show");
+    }
+
+    function closeEditModal() {
+        var overlay = document.getElementById("editModal");
+        if (overlay) overlay.classList.remove("show");
+        currentEditType = null;
+        currentEditId = null;
+    }
+
+    // ---------- GENERIC FORM SUBMIT (ALREADY EXISTING) ----------
     // New generic function to handle form submission via AJAX (fetch)
     async function handleFormSubmission(event, formId, successMessage) {
-  event.preventDefault();
-  const form = document.getElementById(formId);
-  const url = form.action;
-  const formData = new FormData(form);
+        event.preventDefault(); // Stop the default page reload
+        const form = document.getElementById(formId);
+        const url = form.action;
+        const formData = new FormData(form);
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData,
-    });
-
-    // Try to parse JSON safely
-    let payload;
-    const contentType = response.headers.get('content-type') || '';
-
-    if (contentType.includes('application/json')) {
-      payload = await response.json();
-    } else {
-      // fallback: attempt JSON parse, otherwise get text
-      const txt = await response.text();
-      try { payload = JSON.parse(txt); }
-      catch (e) { payload = { success: false, message: txt || response.statusText }; }
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                body: formData,
+            });
+            
+            // Check if the response status is 200-299
+            if (response.ok) {
+                const result = await response.json();
+                
+                if (result.success) {
+                    // On successful response from server, show the modal and trigger form reset
+                    showModal(successMessage, formId);
+                    // Reload lists so new items appear immediately
+                    loadBlogs();
+                    loadCourses();
+                } else {
+                    // Handle application-level error (e.g., database error)
+                    alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
+                }
+            } else {
+                // Handle HTTP errors (e.g., 400 Bad Request, 500 Internal Server Error)
+                let errorResult = {};
+                try {
+                    errorResult = await response.json();
+                } catch (e) {}
+                alert(`Error: ${errorResult.message || response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Network or Parsing Error:', error);
+            alert('An unexpected network error occurred during submission.');
+        }
     }
 
-    if (response.ok) {
-      // server returned 2xx (and payload parsed)
-      if (payload && payload.success) {
-        showModal(successMessage, formId);
-      } else {
-        alert(`Submission failed: ${payload.message || 'Unknown server response'}`);
-      }
-    } else {
-      // non-2xx
-      alert(`Error ${response.status}: ${payload.message || payload || response.statusText}`);
-    }
-  } catch (error) {
-    // network or unexpected parse error
-    console.error('Network or Parsing Error:', error);
-    alert('An unexpected network error occurred during submission. See console for details.');
-  }
-}
-    // Attach the new submission handler to the forms
+    // Attach the submission handler to the forms (ALREADY EXISTING)
     document.getElementById("upload-form").onsubmit = function (event) {
         handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
     };
@@ -592,6 +780,206 @@
     document.getElementById("courseForm").onsubmit = function (event) {
         handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
     };
+
+    // ---------- LOAD & RENDER BLOGS (NEW) ----------
+    async function loadBlogs() {
+        try {
+            const res = await fetch(API_BASE_URL + "/api/blogs");
+            const blogs = await res.json();
+            blogsData = blogs;
+
+            var tbody = document.querySelector("#blogsTable tbody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            blogs.forEach(function (b) {
+                var row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy"></td>
+                    <td>${b.Blog_title || ''}</td>
+                    <td>${b.category || ''}</td>
+                    <td><a href="${b.blog_link || '#'}" target="_blank">Open</a></td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editBlog('${b._id}')">Edit</button>
+                        <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (err) {
+            console.error("Error loading blogs:", err);
+        }
+    }
+
+    // ---------- LOAD & RENDER COURSES (NEW) ----------
+    async function loadCourses() {
+        try {
+            const res = await fetch(API_BASE_URL + "/api/courses");
+            const courses = await res.json();
+            coursesData = courses;
+
+            var tbody = document.querySelector("#coursesTable tbody");
+            if (!tbody) return;
+            tbody.innerHTML = "";
+
+            courses.forEach(function (c) {
+                var row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy"></td>
+                    <td>${c.coursename || ''}</td>
+                    <td>${c.price || ''}</td>
+                    <td>${c.course_type || ''}</td>
+                    <td><a href="${c.link || '#'}" target="_blank">Open</a></td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">Edit</button>
+                        <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        } catch (err) {
+            console.error("Error loading courses:", err);
+        }
+    }
+
+    // ---------- EDIT BLOG (OPEN MODAL) ----------
+    function editBlog(id) {
+        currentEditType = "blog";
+        currentEditId = id;
+
+        var blog = blogsData.find(function (b) { return b._id === id; });
+        if (!blog) return;
+
+        document.getElementById("editModalTitle").textContent = "Edit Blog";
+        document.getElementById("blogEditFields").style.display = "block";
+        document.getElementById("courseEditFields").style.display = "none";
+
+        document.getElementById("editBlogTitle").value = blog.Blog_title || "";
+        document.getElementById("editBlogDescription").value = blog.Blog_description || "";
+        document.getElementById("editBlogCategory").value = blog.category || "technology";
+        document.getElementById("editBlogLink").value = blog.blog_link || "";
+
+        openEditModal();
+    }
+
+    // ---------- EDIT COURSE (OPEN MODAL) ----------
+    function editCourse(id) {
+        currentEditType = "course";
+        currentEditId = id;
+
+        var course = coursesData.find(function (c) { return c._id === id; });
+        if (!course) return;
+
+        document.getElementById("editModalTitle").textContent = "Edit Course";
+        document.getElementById("blogEditFields").style.display = "none";
+        document.getElementById("courseEditFields").style.display = "block";
+
+        document.getElementById("editCourseName").value = course.coursename || "";
+        document.getElementById("editCoursePrice").value = course.price || "";
+        document.getElementById("editCourseType").value = course.course_type || "free";
+        document.getElementById("editCourseLink").value = course.link || "";
+
+        openEditModal();
+    }
+
+    // ---------- SAVE EDIT (BLOG / COURSE) ----------
+    async function saveEdit() {
+        if (!currentEditType || !currentEditId) return;
+
+        try {
+            if (currentEditType === "blog") {
+                var payload = {
+                    Blog_title: document.getElementById("editBlogTitle").value,
+                    Blog_description: document.getElementById("editBlogDescription").value,
+                    category: document.getElementById("editBlogCategory").value,
+                    blog_link: document.getElementById("editBlogLink").value
+                };
+
+                var res = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    alert("Blog updated successfully");
+                    closeEditModal();
+                    loadBlogs();
+                } else {
+                    alert("Error updating blog");
+                }
+            } else if (currentEditType === "course") {
+                var payloadC = {
+                    coursename: document.getElementById("editCourseName").value,
+                    price: document.getElementById("editCoursePrice").value,
+                    course_type: document.getElementById("editCourseType").value,
+                    link: document.getElementById("editCourseLink").value
+                };
+
+                var resC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payloadC)
+                });
+
+                if (resC.ok) {
+                    alert("Course updated successfully");
+                    closeEditModal();
+                    loadCourses();
+                } else {
+                    alert("Error updating course");
+                }
+            }
+        } catch (err) {
+            console.error("Error saving edit:", err);
+            alert("Error saving changes");
+        }
+    }
+
+    // ---------- DELETE BLOG / COURSE ----------
+    async function deleteBlog(id) {
+        if (!confirm("Are you sure you want to delete this blog?")) return;
+
+        try {
+            var res = await fetch(API_BASE_URL + "/api/blogs/" + id, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                alert("Blog deleted");
+                loadBlogs();
+            } else {
+                alert("Error deleting blog");
+            }
+        } catch (err) {
+            console.error("Error deleting blog:", err);
+            alert("Error deleting blog");
+        }
+    }
+
+    async function deleteCourse(id) {
+        if (!confirm("Are you sure you want to delete this course?")) return;
+
+        try {
+            var res = await fetch(API_BASE_URL + "/api/courses/" + id, {
+                method: "DELETE"
+            });
+            if (res.ok) {
+                alert("Course deleted");
+                loadCourses();
+            } else {
+                alert("Error deleting course");
+            }
+        } catch (err) {
+            console.error("Error deleting course:", err);
+            alert("Error deleting course");
+        }
+    }
+
+    // ---------- INITIAL LOAD ----------
+    document.addEventListener("DOMContentLoaded", function () {
+        loadBlogs();
+        loadCourses();
+    });
 </script>
 
 </body>

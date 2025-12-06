@@ -16,6 +16,7 @@ import paymentRoute from './routes/paymentRoute.js';
 dotenv.config();
 const app = express();
 app.use(cors());
+app.use(express.json()); // ✅ for JSON PUT/DELETE bodies
 
 // ES Module equivalent of __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -389,6 +390,89 @@ app.post('/add-blog', (req, res, next) => {
     });
   });
 });
+
+// UPDATE blog (title, description, category, link)
+app.put('/api/blogs/:id', async (req, res) => {
+  try {
+    const { Blog_title, Blog_description, category, blog_link } = req.body;
+
+    const updated = await Blog.findByIdAndUpdate(
+      req.params.id,
+      {
+        Blog_title,
+        Blog_description,
+        category,
+        blog_link,
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Blog not found' });
+    }
+
+    res.json({ success: true, blog: updated });
+  } catch (err) {
+    console.error('Error updating blog:', err);
+    res.status(500).json({ success: false, message: 'Error updating blog' });
+  }
+});
+
+// DELETE blog
+app.delete('/api/blogs/:id', async (req, res) => {
+  try {
+    const deleted = await Blog.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: 'Blog not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting blog:', err);
+    res.status(500).json({ success: false, message: 'Error deleting blog' });
+  }
+});
+
+// UPDATE course (name, price, type, link)
+app.put('/api/courses/:id', async (req, res) => {
+  try {
+    const { coursename, price, course_type, link } = req.body;
+
+    const updated = await Course.findByIdAndUpdate(
+      req.params.id,
+      {
+        coursename,
+        price,
+        course_type,
+        link,
+      },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    res.json({ success: true, course: updated });
+  } catch (err) {
+    console.error('Error updating course:', err);
+    res.status(500).json({ success: false, message: 'Error updating course' });
+  }
+});
+
+// DELETE course
+app.delete('/api/courses/:id', async (req, res) => {
+  try {
+    const deleted = await Course.findByIdAndDelete(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Error deleting course:', err);
+    res.status(500).json({ success: false, message: 'Error deleting course' });
+  }
+});
+
 
 // --------------------------------------------------------
 // GLOBAL ERROR HANDLER
