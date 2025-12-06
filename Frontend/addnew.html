@@ -333,7 +333,8 @@
 .edit-image-preview-wrapper img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;        
+    object-position: center;  
     display: block;
 }
 
@@ -381,14 +382,14 @@
 }
 
 /* ---------- Form fields inside modal ---------- */
-/* Ensure labels are visible and positioned above inputs (no negative margins) */
 #editModal label,
 .edit-modal label {
     display: block;
-    margin-bottom: 8px;       /* comfortable spacing */
+    margin-bottom: 8px;       
     color: var(--primary-color);
     font-weight: 600;
     font-size: 0.95rem;
+    text-align: left;
 }
 
 /* Inputs / textarea / select - unified style */
@@ -874,19 +875,36 @@ body.modal-open {
         }
 
         .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            font-weight: 300;
-            color: #777;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-        
-        .close-btn:hover {
-            color: var(--primary-color);
-        }
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #ffffff;
+    background: linear-gradient(180deg, #ff4b4b, #e41313);
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 14px rgba(227, 19, 19, 0.25);
+    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Hover Effects */
+.close-btn:hover {
+    transform: scale(1.12);
+    box-shadow: 0 8px 18px rgba(227, 19, 19, 0.35);
+}
+
+/* Active click effect */
+.close-btn:active {
+    transform: scale(0.96);
+    opacity: 0.85;
+}
+
 
         .modal-content img {
             width: 70px;
@@ -1291,7 +1309,7 @@ body.modal-open {
                     row.innerHTML = `
                         <td><img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy"></td>
                         <td>${c.coursename || ''}</td>
-                        <td>${c.price || ''}</td>
+                        <td>${c.price ? c.price : '0'}</td>
                         <td>${c.course_type || ''}</td>
                         <td>  <a href="${c.link}" target="_blank" class="action-btn open-btn"> <i class="fas fa-external-link-alt"></i> </a></td>
                         <td>

@@ -961,59 +961,154 @@ html {
 }
 
 /* Modals (Admin + Form success) */
+/* Overlay (Admin + Form success) */
 #adminModal,
 #formSuccessModal {
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  z-index: 1000;
+  inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0; */
+  background-color: rgba(0, 0, 0, 0.55);
+  display: none;              /* toggle to block/flex when showing */
+  align-items: center;
+  justify-content: center;
+  padding: 20px;              /* room on small screens */
 }
 
+/* Modal card */
 .modal-content {
-    background-color: #fff;
-    position: fixed; 
-    top: 50%;        
-    left: 50%;       
-    transform: translate(-50%, -50%); 
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
-    max-width: 90%;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-}
-/* Headings */
-.modal-content h3 {
-    color:black;
-    margin-bottom: 10px;
-    text-align: center;
+  background-color: #fff;
+  width: 360px;               /* neat desktop width */
+  max-width: 95%;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(6, 16, 28, 0.45);
+  padding: 26px 26px 22px;
+  box-sizing: border-box;
+  position: relative;         /* keep overlay responsible for centering */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;                  /* consistent vertical spacing */
+  font-family: "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Labels */
-.modal-content label {
-    color: black;
+/* Header */
+.modal-content h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: #0b2340;             /* dark navy for contrast */
+  letter-spacing: 0.2px;
+}
+
+/* Sub-labels (Username, Password lines) */
+.modal-content .field-label {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Input wrapper (keeps label + input tidy) */
+.modal-field {
+  width: 100%;
+  display: block;
 }
 
 /* Inputs */
-.modal-content input {
-    margin: 10px 0;
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
+.modal-content input[type="text"],
+.modal-content input[type="password"],
+.modal-content input[type="email"],
+.modal-content textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d6dbe0;
+  border-radius: 8px;
+  background: #fbfdff;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow .15s ease, border-color .15s ease;
 }
 
-/* Buttons */
-.modal-content button {
-    padding: 8px 16px;
-    cursor: pointer;
-    margin: 10px 5px 0 5px;
+/* Input focus */
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: #6aa8ff;
+  box-shadow: 0 4px 14px rgba(106,168,255,0.14);
+}
+
+/* Optional helper text (small) */
+.modal-content .helper {
+  font-size: 12px;
+  color: #7a8694;
+  text-align: center;
+  margin-top: 4px;
+}
+
+/* Actions container — centers buttons horizontally */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;                  /* spacing between buttons */
+  margin-top: 6px;
+}
+
+/* Base button */
+.modal-content .btn {
+  min-width: 110px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(8,20,34,0.12);
+  transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Primary button (submit) */
+.modal-content .btn-primary {
+  background: linear-gradient(180deg, #12d856, #0fb944);
+  color: #fff;
+}
+
+/* Secondary button (cancel) */
+.modal-content .btn-secondary {
+  background: linear-gradient(180deg, #ff4b4b, #e41313);
+  color: #ffffff;
+  border: 1px solid #eaa4a4;
+}
+
+/* Hover / active effects */
+.modal-content .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(8,20,34,0.16);
+}
+.modal-content .btn:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(8,20,34,0.12);
+}
+.modal-content .btn:focus {
+  outline: 3px solid rgba(106,168,255,0.18);
+  outline-offset: 2px;
+}
+
+/* Small screens: make buttons stack if necessary */
+@media (max-width: 420px) {
+  .modal-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-content {
+    padding: 20px;
+  }
+  .modal-content .btn {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 /* Success modal text */
@@ -1104,18 +1199,27 @@ section {
         </ul>
     </div>
 
-    <!--Modal for admin login-->
-    <div id="adminModal">
-        <div class="modal-content">
-            <h3>Admin Panel</h3>
-            <label for="username">Username:</label><br>
-            <input type="text" id="username" placeholder="Enter username"><br>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" placeholder="Enter password"><br>
-            <button onclick="validateAdmin()">Submit</button>
-            <button onclick="closeModal()">Cancel</button>
-        </div>
+<!--Modal for admin login-->
+<div id="adminModal">
+  <div class="modal-content">
+    <h3>Admin Panel</h3>
+
+    <div class="modal-field">
+      <div class="field-label">Username:</div>
+      <input id="username" type="text" placeholder="Enter username">
     </div>
+
+    <div class="modal-field">
+      <div class="field-label">Password:</div>
+      <input id="password" type="password" placeholder="Enter password">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="validateAdmin()">Submit</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
 
     <!-- Success modal for contact form -->
     <div id="formSuccessModal">
