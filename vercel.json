@@ -10,6 +10,8 @@
     { "src": "/product.html", "dest": "/Frontend/product.html" },
     { "src": "/success.html", "dest": "/Frontend/success.html" },
 
+    { "src": "/Images/(.*)", "dest": "/Frontend/public/Images/$1" },
+
     { "src": "/public/(.*)", "dest": "/Frontend/public/$1" },
 
     { "src": "/(.*)", "dest": "/Frontend/$1" }

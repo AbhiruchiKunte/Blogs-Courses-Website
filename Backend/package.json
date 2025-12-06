@@ -26,7 +26,8 @@
     "formidable": "^3.5.2",
     "mongoose": "^8.0.0",
     "razorpay": "^2.9.5",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "sharp": "^0.34.5"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"

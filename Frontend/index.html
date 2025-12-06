@@ -1461,7 +1461,9 @@ function renderBlogs(blogs) {
         <a href="${blog.blog_link}" style="text-decoration: none; color:black;">
           <div class="card-content">
             <div class="image">
-              <img src="${blog.imageUrl}" alt="${(blog.Blog_title || blog.title || '')}" />
+              <img src="${blog.imageUrl}"
+                   alt="${blog.Blog_title || blog.title || ''}"
+                   loading="lazy" />   <!-- ✅ here -->
             </div>
             <div class="name-profession">
               <span class="name">${blog.Blog_title || blog.title || ''}</span>
@@ -1472,17 +1474,17 @@ function renderBlogs(blogs) {
             <p class="created-at">Published at: ${publishedAt}</p>
           </div>
         </a>
-      </div>`;
+      </div>
+    `;
     wrapper.appendChild(slide);
   });
 
-  // safe update
   if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
-    try { window.swiperInstances["blogs-swiper"].update(); }
-    catch (e) { console.warn('blogs-swiper update failed:', e); }
+    window.swiperInstances["blogs-swiper"].update();
   }
 }
 
+// free courses
 function renderFreeCourses(courses) {
   const wrapper = document.getElementById("free-courses-wrapper");
   if (!wrapper) return;
@@ -1495,26 +1497,30 @@ function renderFreeCourses(courses) {
       <div class="card">
         <div class="card-content">
           <div class="image">
-            <img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
+            <img src="${course.imageUrl}"
+                 alt="${course.coursename}"
+                 loading="lazy"
+                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
           </div>
           <div class="name-profession">
             <span class="name">${course.coursename}</span>
           </div>
-          <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;margin-bottom:50px;">Price: Free</p>
-          <div class="button" style="position:relative;top:-20px;">
+          <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free</p>
+          <div class="button" style="position: relative; top: -20px;">
             <button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button>
           </div>
         </div>
-      </div>`;
+      </div>
+    `;
     wrapper.appendChild(slide);
   });
 
   if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
-    try { window.swiperInstances["free-courses-swiper"].update(); }
-    catch (e) { console.warn('free-courses-swiper update failed:', e); }
+    window.swiperInstances["free-courses-swiper"].update();
   }
 }
 
+// paid courses
 function renderPaidCourses(courses) {
   const wrapper = document.getElementById("paid-courses-wrapper");
   if (!wrapper) return;
@@ -1527,23 +1533,29 @@ function renderPaidCourses(courses) {
       <div class="card">
         <div class="card-content">
           <div class="image">
-            <img src="${course.imageUrl}" alt="${course.coursename}" style="width:100%;height:100%;object-fit:cover;border-radius:20px;">
+            <img src="${course.imageUrl}"
+                 alt="${course.coursename}"
+                 loading="lazy"
+                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
           </div>
           <div class="name-profession">
             <span class="name">${course.coursename}</span>
           </div>
-          <p style="font-size:16px;margin-top:30px;color:#888;text-align:center;">Price: ₹${course.price}</p>
-          <div class="button" style="margin-top:30px;">
-            <button class="message-button" onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">Enroll Now</button>
+          <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
+          <div class="button" style="margin-top: 30px;">
+              <button class="message-button"
+                  onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">
+                  Enroll Now
+              </button>
           </div>
         </div>
-      </div>`;
+      </div>
+    `;
     wrapper.appendChild(slide);
   });
 
   if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
-    try { window.swiperInstances["paid-courses-swiper"].update(); }
-    catch (e) { console.warn('paid-courses-swiper update failed:', e); }
+    window.swiperInstances["paid-courses-swiper"].update();
   }
 }
 
