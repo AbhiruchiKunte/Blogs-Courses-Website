@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;0,700;1,300&family=Lobster&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet"> 
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;0,700;1,300&family=Lobster&family=Montserrat:wght@400;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
-            --primary-color: #0B192C; 
-            --secondary-color: #0B192C; 
+            --primary-color: #0B192C;
+            --secondary-color: #0B192C;
             --text-color: #444;
             --bg-light: #ffffff;
             --bg-dark: #f0f3f8;
@@ -34,7 +37,9 @@
             padding-top: 80px;
         }
 
-        h1, h2, h3 {
+        h1,
+        h2,
+        h3 {
             color: var(--primary-color);
             font-family: 'Kanit', sans-serif;
         }
@@ -94,7 +99,7 @@
             padding: 20px 40px;
             text-align: center;
         }
-        
+
         .welcome-message h2 {
             font-size: 1.8em;
             color: var(--primary-color);
@@ -114,7 +119,8 @@
             margin: 20px auto;
         }
 
-        .admin-blog-upload, .form-container {
+        .admin-blog-upload,
+        .form-container {
             background-color: var(--bg-light);
             padding: 30px;
             border-radius: 12px;
@@ -124,12 +130,14 @@
             transition: transform 0.3s ease;
             border: 1px solid #ddd;
         }
-        
-        .admin-blog-upload:hover, .form-container:hover {
+
+        .admin-blog-upload:hover,
+        .form-container:hover {
             transform: translateY(-5px);
         }
 
-        .admin-blog-upload h2, .form-container h1 {
+        .admin-blog-upload h2,
+        .form-container h1 {
             font-size: 1.8em;
             margin-bottom: 25px;
             text-align: center;
@@ -137,7 +145,8 @@
         }
 
         /* Form Styling */
-        #upload-form, #courseForm {
+        #upload-form,
+        #courseForm {
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -164,12 +173,14 @@
             background-color: #f7f7f7;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        
+
         input[type="file"] {
             padding: 10px;
         }
 
-        input:focus, textarea:focus, select:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             border-color: var(--secondary-color);
             box-shadow: 0 0 0 3px rgba(0, 163, 141, 0.2);
             outline: none;
@@ -182,7 +193,8 @@
         }
 
         /* Submit Button */
-        .submit-btn, .form-container button {
+        .submit-btn,
+        .form-container button {
             background-color: var(--primary-color);
             color: #fff;
             padding: 14px 25px;
@@ -195,649 +207,686 @@
             margin-top: 10px;
         }
 
-        .submit-btn:hover, .form-container button:hover {
+        .submit-btn:hover,
+        .form-container button:hover {
             background-color: var(--secondary-color);
             transform: translateY(-1px);
         }
-        
+
         /* CRUD Tables */
-.crud-section {
-    width: 95%;
-    max-width: 1300px;
-    margin: 30px auto 60px;
-}
-
-.crud-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-    font-size: 0.95rem;
-}
-
-.crud-table thead {
-    background: var(--primary-color);
-    color: #fff;
-}
-
-.crud-table th,
-.crud-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-}
-
-.crud-table tr:last-child td {
-    border-bottom: none;
-}
-
-.crud-table img {
-    width: 60px;
-    height: 60px;
-    border-radius: 6px;
-    object-fit: cover;
-}
-
-.action-btn {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    font-weight: 600;
-    margin: 2px;
-    color: #fff;
-}
-
-.edit-btn {
-    background: #05668d;
-}
-
-.delete-btn {
-    background: #c62828;
-}
-
-.action-btn:hover {
-    opacity: 0.9;
-}
-
-/* ---------- Edit Modal Enhancements (final merged & responsive) ---------- */
-
-/* Overlay: ensure centered and padded so modal never touches edges */
-#editModal {
-  display: none;            /* controlled by your .show toggle */
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  padding: 16px;            /* small safe padding around modal */
-  overflow: auto;
-}
-
-/* shown state (you already add .show) */
-#editModal.show {
-  display: flex;
-}
-
-/* Modal content: responsive width + internal scroll */
-#editModal .modal-content.edit-modal {
-    max-width: 500px;               /* comfortable desktop width */
-    width: min(680px, 94%);
-    border-radius: 18px;
-    padding: 26px 28px 24px;
-    box-sizing: border-box;
-    background: #fff;
-    color: var(--primary-color);
-    max-height: 92vh;               /* never exceed viewport height */
-    overflow-y: auto;               /* internal scrolling if content is tall */
-    -webkit-overflow-scrolling: touch;
-    box-shadow: 0 18px 50px rgba(2,7,23,0.45);
-}
-
-/* Title */
-.edit-modal-title {
-    margin-bottom: 18px;
-    font-size: 1.8rem;
-    text-align: center;
-    font-weight: 700;
-    line-height: 1.1;
-    color: var(--primary-color);
-}
-
-/* Image row: preview + controls */
-.edit-image-row {
-    display: flex;
-    gap: 18px;
-    align-items: center;
-    margin-bottom: 14px;
-    flex-wrap: nowrap;               /* keep preview + controls on one line for larger view */
-}
-
-/* Thumbnail preview */
-.edit-image-preview-wrapper {
-    flex: 0 0 96px;
-    height: 96px;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 6px 18px rgba(6,12,28,0.08);
-    background: #f8f9fb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.edit-image-preview-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;        
-    object-position: center;  
-    display: block;
-}
-
-/* file input wrapper (controls beside preview) */
-.edit-image-input-wrapper {
-    flex: 1;
-    min-width: 160px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-/* label for file input */
-.edit-image-label {
-    display: block;
-    font-weight: 700;
-    margin-bottom: 6px;
-    color: var(--primary-color);
-    font-size: 0.95rem;
-}
-
-/* visually nicer file input */
-#editImageFile {
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 10px;
-    border: 1px solid #d6dbe8;
-    font-size: 0.95rem;
-    background-color: #fbfbfc;
-    outline: none;
-    transition: box-shadow .18s ease, border-color .18s ease;
-}
-
-#editImageFile:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 6px 18px rgba(64, 103, 255, 0.07);
-}
-
-/* hint text under file input */
-.edit-image-hint {
-    display: block;
-    margin-top: 2px;
-    font-size: 0.82rem;
-    color: #6b7280;
-}
-
-/* ---------- Form fields inside modal ---------- */
-#editModal label,
-.edit-modal label {
-    display: block;
-    margin-bottom: 8px;       
-    color: var(--primary-color);
-    font-weight: 600;
-    font-size: 0.95rem;
-    text-align: left;
-}
-
-/* Inputs / textarea / select - unified style */
-.edit-modal input[type="text"],
-.edit-modal input[type="number"],
-.edit-modal input[type="url"],
-.edit-modal textarea,
-.edit-modal select {
-    width: 100%;
-    padding: 12px 14px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    border: 1px solid #e1e6f2;
-    background: #fbfbfc;
-    font-size: 1rem;
-    color: #0b192c;
-    box-sizing: border-box;
-    outline: none;
-    transition: border-color .15s ease, box-shadow .15s ease;
-}
-
-.edit-modal textarea { min-height: 100px; resize: vertical; }
-
-/* Focus states */
-.edit-modal input:focus,
-.edit-modal textarea:focus,
-.edit-modal select:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 10px 30px rgba(14, 47, 120, 0.06);
-}
-
-/* Submit/save button inside modal - visible and centered */
-.edit-modal .submit-btn,
-.edit-modal button.save-edit-btn {
-    display: inline-block;
-    margin: 12px auto 0 auto;
-    background: var(--primary-color);
-    color: #fff;
-    padding: 12px 28px;
-    border-radius: 12px;
-    border: none;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(11,25,44,0.08);
-}
-
-/* smaller text for accessory elements */
-.edit-modal small,
-.edit-modal .small-note {
-    color: #6b7280;
-    font-size: 0.82rem;
-}
-
-/* Accessibility: ensure labels are visible */
-.edit-modal label[aria-hidden="true"] { display:block; }
-
-/* ---------- Responsive tweaks: stack image & inputs on very small screens ---------- */
-@media (max-width: 520px) {
-
-    /* stack the preview above inputs */
-    .edit-image-row {
-        flex-direction: column;
-        gap: 12px;
-        align-items: flex-start;
-    }
-
-    .edit-image-preview-wrapper {
-        flex: 0 0 88px;
-        height: 88px;
-    }
-
-    .edit-modal {
-        padding: 18px 16px;
-    }
-
-    .edit-modal .submit-btn,
-    .edit-modal button.save-edit-btn {
-        width: 100%;
-        padding: 12px 18px;
-    }
-
-    /* ensure long inputs wrap and don't overflow */
-    #editModal .modal-content.edit-modal input,
-    #editModal .modal-content.edit-modal textarea,
-    #editModal .modal-content.edit-modal select {
-        max-width: 100%;
-        word-break: break-word;
-    }
-}
-
-/* extra tiny screens: ensure modal fits and scrolls inside viewport */
-@media (max-width: 420px) {
-    #editModal .modal-content.edit-modal {
-        width: 96%;
-        max-height: 94vh;
-        padding: 14px;
-    }
-    .edit-image-preview-wrapper { flex: 0 0 72px; height: 72px; }
-}
-
-/* When modal is open we should stop page behind from scrolling */
-html.modal-open,
-body.modal-open {
-  height: 100%;
-  overflow: hidden;
-}
-
-/* ---------- Mobile Cards for CRUD ---------- */
-.crud-cards {
-    display: none;        /* default: only tables on larger screens */
-    margin-top: 14px;
-    gap: 12px;
-    flex-direction: column;
-}
-
-/* Card layout */
-.crud-card {
-    background: #fff;
-    border-radius: 14px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    padding: 12px 12px 10px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
-    /* Make sure content area grows so actions can float at bottom */
-    overflow: visible;
-}
-
-/* image */
-.crud-card-img-wrapper {
-    flex: 0 0 70px;
-    height: 70px;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.crud-card-img-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-/* content area: arrange text and actions vertically */
-.crud-card-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* puts actions at the bottom */
-}
-
-/* title/meta/link */
-.crud-card-title {
-    font-weight: 600;
-    margin-bottom: 4px;
-}
-
-.crud-card-meta {
-    font-size: 0.8rem;
-    color: #666;
-}
-
-.crud-card-link {
-    font-size: 0.8rem;
-    margin-top: 4px;
-}
-
-/* ACTIONS: default (desktop/table) spacing, vertical fallback */
-.crud-card-actions {
-    display: flex !important;
-    flex-direction: row !important;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: nowrap !important;  /* prevents buttons from going to next line */
-}
-
-
-/* For table rows (desktop) keep a compact row of small buttons */
-.crud-table .crud-card-actions,
-.crud-table td .crud-card-actions {
-    margin-top: 0;
-}
-
-/* Shared button styling */
-.action-btn {
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-    font-size: 15px;
-    transition: 0.25s ease;
-    box-shadow: 0 6px 12px rgba(11,25,44,0.06);
-}
-
-/* View / Open */
-.open-btn {
-    background: #0B192C;
-}
-.open-btn:hover {
-    background: #122949;
-}
-
-/* Edit */
-.edit-btn {
-    background: #007bff;
-}
-.edit-btn:hover {
-    background: #0066d1;
-}
-
-/* Delete */
-.delete-btn {
-    background: #dc3545;
-}
-.delete-btn:hover {
-    background: #b02a37;
-}
-
-.action-btn i {
-    font-size: 16px;
-}
-
-/* ---------- Mobile PORTRAIT: show cards (and make actions compact in one row) ---------- */
-@media (max-width: 768px) and (orientation: portrait) {
-    .crud-table {
-        display: none;
-    }
-    .crud-cards {
-        display: flex;
-    }
-
-    /* make card layout slightly taller and space content better on small screens */
-    .crud-card {
-        padding: 14px;
-        gap: 12px;
-    }
-
-    /* ensure content stacks well and actions are visible below meta */
-    .crud-card-content {
-        gap: 8px;
-    }
-
-    /* Force buttons to be in a single row on small screens */
-    .crud-card-actions {
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center;
-    gap: 10px;
-    margin-top: 10px;
-    flex-wrap: nowrap !important;
-}
-
-    /* smaller button sizes for compact mobile display */
-    .action-btn {
-        width: 36px;
-        height: 36px;
-        font-size: 14px;
-    }
-
-    /* slightly larger icons for clarity on mobile */
-    .action-btn i {
-        font-size: 16px;
-    }
-
-    /* Make sure the image and text fit nicely */
-    .crud-card-img-wrapper {
-        flex: 0 0 72px;
-        height: 72px;
-    }
-}
-
-/* ---------- Mobile LANDSCAPE + Tablets/Desktops: show tables ---------- */
-@media (max-width: 768px) and (orientation: landscape),
-       (min-width: 769px) {
-    .crud-table {
-        display: table;
-    }
-    .crud-cards {
-        display: none;
-    }
-
-    /* On larger screens we prefer action buttons aligned to the row end */
-    .crud-card-actions {
-        justify-content: flex-start;
-        gap: 10px;
-    }
-
-    /* slightly bigger buttons on desktop */
-    .action-btn {
-        width: 38px;
-        height: 38px;
-    }
-}
-
-/* Extra small screens: make buttons even more compact */
-@media (max-width: 480px) {
-    .action-btn {
-        width: 34px;
-        height: 34px;
-        font-size: 14px;
-    }
-}
-
-
-/* Footer */
-.footer {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: auto;
-}
-
-.footer a {
-    text-decoration: none;
-    color: white;
-    transition: color var(--transition-base);
-}
-
-.footer a:hover {
-    color: var(--secondary-color);
-}
-
-#mail_id {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-}
-
-#three_div {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.social_icon {
-    font-size: 24px;
-    color: #fff;
-    transition: color 0.3s, transform 0.3s;
-}
-
-.social_icon:hover {
-    color: var(--secondary-color);
-    transform: scale(1.2);
-}
-
-/* Footer Sections */
-.two_footer {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-.left{
-    width: 30%;
-    text-align: left;
-}
-.mid{
-    width: 30%;
-    text-align: center;
-}
-.right{
-    width: 30%;
-    text-align: right;
-}
-
-.left h2, .mid h2, .right h2 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    color: #fff;
-}
-
-#sub_link {
-    display: block;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 8px;
-    font-size: 1rem;
-}
-
-#sub_link:hover {
-    color: var(--secondary-color);
-}
-
-/* Footer small screens */
-@media (max-width: 768px) {
-    .footer {
-        height: auto;
-        padding: 3rem 1.5rem;
-    }
-
-    .two_footer {
-        flex-direction: column;
-        align-items: center;
-        width: 100%;
-        margin-top: 1.5rem;
-    }
-
-    .left, .mid, .right {
-        width: 100%;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-}
-
-@media (max-width: 375px) {
-    #mail_id {
-        font-size: 0.9rem;
-        margin-bottom: 10px;
-    }
-
-    .social_icon {
-        font-size: 18px;
-    }
-
-    .left h2, .mid h2, .right h2 {
-        font-size: 1rem;
-        margin-bottom: 0.6rem;
-    }
-
-    #sub_link {
-        font-size: 0.8rem;
-    }
-}
-
-/* For 320px screens */
-@media (max-width: 320px) {
-    .left h2, .mid h2, .right h2 {
-        font-size: 0.9rem;
-    }
-
-    .left a, .mid a, .right a {
-        font-size: 0.75rem;
-    }
-}
-        
+        .crud-section {
+            width: 95%;
+            max-width: 1300px;
+            margin: 30px auto 60px;
+        }
+
+        .crud-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            font-size: 0.95rem;
+        }
+
+        .crud-table thead {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        .crud-table th,
+        .crud-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        .crud-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .crud-table img {
+            width: 60px;
+            height: 60px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 2px;
+            color: #fff;
+        }
+
+        .edit-btn {
+            background: #05668d;
+        }
+
+        .delete-btn {
+            background: #c62828;
+        }
+
+        .action-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* ---------- Edit Modal Enhancements (final merged & responsive) ---------- */
+
+        /* Overlay: ensure centered and padded so modal never touches edges */
+        #editModal {
+            display: none;
+            /* controlled by your .show toggle */
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            /* small safe padding around modal */
+            overflow: auto;
+        }
+
+        /* shown state (you already add .show) */
+        #editModal.show {
+            display: flex;
+        }
+
+        /* Modal content: responsive width + internal scroll */
+        #editModal .modal-content.edit-modal {
+            max-width: 500px;
+            /* comfortable desktop width */
+            width: min(680px, 94%);
+            border-radius: 18px;
+            padding: 26px 28px 24px;
+            box-sizing: border-box;
+            background: #fff;
+            color: var(--primary-color);
+            max-height: 92vh;
+            /* never exceed viewport height */
+            overflow-y: auto;
+            /* internal scrolling if content is tall */
+            -webkit-overflow-scrolling: touch;
+            box-shadow: 0 18px 50px rgba(2, 7, 23, 0.45);
+        }
+
+        /* Title */
+        .edit-modal-title {
+            margin-bottom: 18px;
+            font-size: 1.8rem;
+            text-align: center;
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--primary-color);
+        }
+
+        /* Image row: preview + controls */
+        .edit-image-row {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: nowrap;
+            /* keep preview + controls on one line for larger view */
+        }
+
+        /* Thumbnail preview */
+        .edit-image-preview-wrapper {
+            flex: 0 0 96px;
+            height: 96px;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 6px 18px rgba(6, 12, 28, 0.08);
+            background: #f8f9fb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .edit-image-preview-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        /* file input wrapper (controls beside preview) */
+        .edit-image-input-wrapper {
+            flex: 1;
+            min-width: 160px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        /* label for file input */
+        .edit-image-label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--primary-color);
+            font-size: 0.95rem;
+        }
+
+        /* visually nicer file input */
+        #editImageFile {
+            width: 100%;
+            padding: 8px 10px;
+            border-radius: 10px;
+            border: 1px solid #d6dbe8;
+            font-size: 0.95rem;
+            background-color: #fbfbfc;
+            outline: none;
+            transition: box-shadow .18s ease, border-color .18s ease;
+        }
+
+        #editImageFile:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 6px 18px rgba(64, 103, 255, 0.07);
+        }
+
+        /* hint text under file input */
+        .edit-image-hint {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+
+        /* ---------- Form fields inside modal ---------- */
+        #editModal label,
+        .edit-modal label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: left;
+        }
+
+        /* Inputs / textarea / select - unified style */
+        .edit-modal input[type="text"],
+        .edit-modal input[type="number"],
+        .edit-modal input[type="url"],
+        .edit-modal textarea,
+        .edit-modal select {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #e1e6f2;
+            background: #fbfbfc;
+            font-size: 1rem;
+            color: #0b192c;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .edit-modal textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Focus states */
+        .edit-modal input:focus,
+        .edit-modal textarea:focus,
+        .edit-modal select:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 10px 30px rgba(14, 47, 120, 0.06);
+        }
+
+        /* Submit/save button inside modal - visible and centered */
+        .edit-modal .submit-btn,
+        .edit-modal button.save-edit-btn {
+            display: inline-block;
+            margin: 12px auto 0 auto;
+            background: var(--primary-color);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(11, 25, 44, 0.08);
+        }
+
+        /* smaller text for accessory elements */
+        .edit-modal small,
+        .edit-modal .small-note {
+            color: #6b7280;
+            font-size: 0.82rem;
+        }
+
+        /* Accessibility: ensure labels are visible */
+        .edit-modal label[aria-hidden="true"] {
+            display: block;
+        }
+
+        /* ---------- Responsive tweaks: stack image & inputs on very small screens ---------- */
+        @media (max-width: 520px) {
+
+            /* stack the preview above inputs */
+            .edit-image-row {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .edit-image-preview-wrapper {
+                flex: 0 0 88px;
+                height: 88px;
+            }
+
+            .edit-modal {
+                padding: 18px 16px;
+            }
+
+            .edit-modal .submit-btn,
+            .edit-modal button.save-edit-btn {
+                width: 100%;
+                padding: 12px 18px;
+            }
+
+            /* ensure long inputs wrap and don't overflow */
+            #editModal .modal-content.edit-modal input,
+            #editModal .modal-content.edit-modal textarea,
+            #editModal .modal-content.edit-modal select {
+                max-width: 100%;
+                word-break: break-word;
+            }
+        }
+
+        /* extra tiny screens: ensure modal fits and scrolls inside viewport */
+        @media (max-width: 420px) {
+            #editModal .modal-content.edit-modal {
+                width: 96%;
+                max-height: 94vh;
+                padding: 14px;
+            }
+
+            .edit-image-preview-wrapper {
+                flex: 0 0 72px;
+                height: 72px;
+            }
+        }
+
+        /* When modal is open we should stop page behind from scrolling */
+        html.modal-open,
+        body.modal-open {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ---------- Mobile Cards for CRUD ---------- */
+        .crud-cards {
+            display: none;
+            /* default: only tables on larger screens */
+            margin-top: 14px;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        /* Card layout */
+        .crud-card {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 12px 12px 10px;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            /* Make sure content area grows so actions can float at bottom */
+            overflow: visible;
+        }
+
+        /* image */
+        .crud-card-img-wrapper {
+            flex: 0 0 70px;
+            height: 70px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .crud-card-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* content area: arrange text and actions vertically */
+        .crud-card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* puts actions at the bottom */
+        }
+
+        /* title/meta/link */
+        .crud-card-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .crud-card-meta {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .crud-card-link {
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        /* ACTIONS: default (desktop/table) spacing, vertical fallback */
+        .crud-card-actions {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: nowrap !important;
+            /* prevents buttons from going to next line */
+        }
+
+
+        /* For table rows (desktop) keep a compact row of small buttons */
+        .crud-table .crud-card-actions,
+        .crud-table td .crud-card-actions {
+            margin-top: 0;
+        }
+
+        /* Shared button styling */
+        .action-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-size: 15px;
+            transition: 0.25s ease;
+            box-shadow: 0 6px 12px rgba(11, 25, 44, 0.06);
+        }
+
+        /* View / Open */
+        .open-btn {
+            background: #0B192C;
+        }
+
+        .open-btn:hover {
+            background: #122949;
+        }
+
+        /* Edit */
+        .edit-btn {
+            background: #007bff;
+        }
+
+        .edit-btn:hover {
+            background: #0066d1;
+        }
+
+        /* Delete */
+        .delete-btn {
+            background: #dc3545;
+        }
+
+        .delete-btn:hover {
+            background: #b02a37;
+        }
+
+        .action-btn i {
+            font-size: 16px;
+        }
+
+        /* ---------- Mobile PORTRAIT: show cards (and make actions compact in one row) ---------- */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .crud-table {
+                display: none;
+            }
+
+            .crud-cards {
+                display: flex;
+            }
+
+            /* make card layout slightly taller and space content better on small screens */
+            .crud-card {
+                padding: 14px;
+                gap: 12px;
+            }
+
+            /* ensure content stacks well and actions are visible below meta */
+            .crud-card-content {
+                gap: 8px;
+            }
+
+            /* Force buttons to be in a single row on small screens */
+            .crud-card-actions {
+                display: flex !important;
+                flex-direction: row !important;
+                align-items: center;
+                gap: 10px;
+                margin-top: 10px;
+                flex-wrap: nowrap !important;
+            }
+
+            /* smaller button sizes for compact mobile display */
+            .action-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+
+            /* slightly larger icons for clarity on mobile */
+            .action-btn i {
+                font-size: 16px;
+            }
+
+            /* Make sure the image and text fit nicely */
+            .crud-card-img-wrapper {
+                flex: 0 0 72px;
+                height: 72px;
+            }
+        }
+
+        /* ---------- Mobile LANDSCAPE + Tablets/Desktops: show tables ---------- */
+        @media (max-width: 768px) and (orientation: landscape),
+        (min-width: 769px) {
+            .crud-table {
+                display: table;
+            }
+
+            .crud-cards {
+                display: none;
+            }
+
+            /* On larger screens we prefer action buttons aligned to the row end */
+            .crud-card-actions {
+                justify-content: flex-start;
+                gap: 10px;
+            }
+
+            /* slightly bigger buttons on desktop */
+            .action-btn {
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        /* Extra small screens: make buttons even more compact */
+        @media (max-width: 480px) {
+            .action-btn {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+        }
+
+
+        /* Footer */
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            height: auto;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: white;
+            transition: color var(--transition-base);
+        }
+
+        .footer a:hover {
+            color: var(--secondary-color);
+        }
+
+        #mail_id {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        #three_div {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social_icon {
+            font-size: 24px;
+            color: #fff;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .social_icon:hover {
+            color: var(--secondary-color);
+            transform: scale(1.2);
+        }
+
+        /* Footer Sections */
+        .two_footer {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .left {
+            width: 30%;
+            text-align: left;
+        }
+
+        .mid {
+            width: 30%;
+            text-align: center;
+        }
+
+        .right {
+            width: 30%;
+            text-align: right;
+        }
+
+        .left h2,
+        .mid h2,
+        .right h2 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        #sub_link {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        #sub_link:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Footer small screens */
+        @media (max-width: 768px) {
+            .footer {
+                height: auto;
+                padding: 3rem 1.5rem;
+            }
+
+            .two_footer {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin-top: 1.5rem;
+            }
+
+            .left,
+            .mid,
+            .right {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (max-width: 375px) {
+            #mail_id {
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+
+            .social_icon {
+                font-size: 18px;
+            }
+
+            .left h2,
+            .mid h2,
+            .right h2 {
+                font-size: 1rem;
+                margin-bottom: 0.6rem;
+            }
+
+            #sub_link {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* For 320px screens */
+        @media (max-width: 320px) {
+
+            .left h2,
+            .mid h2,
+            .right h2 {
+                font-size: 0.9rem;
+            }
+
+            .left a,
+            .mid a,
+            .right a {
+                font-size: 0.75rem;
+            }
+        }
+
         /* Modal Styles - unchanged and fine */
         .overlay {
             position: fixed;
@@ -845,16 +894,16 @@ body.modal-open {
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.7); 
-            display: none; 
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000; 
+            z-index: 1000;
             backdrop-filter: blur(5px);
         }
 
         .overlay.show {
-            display: flex; 
+            display: flex;
         }
 
         .modal-content {
@@ -863,47 +912,54 @@ body.modal-open {
             border-radius: 12px;
             text-align: center;
             max-width: 450px;
-            width: 90%; 
+            width: 90%;
             box-shadow: var(--shadow-dark);
             position: relative;
             animation: fadeIn 0.3s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .close-btn {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    font-size: 26px;
-    font-weight: bold;
-    cursor: pointer;
-    color: #ffffff;
-    background: linear-gradient(180deg, #ff4b4b, #e41313);
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 6px 14px rgba(227, 19, 19, 0.25);
-    transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
-}
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            font-size: 26px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #ffffff;
+            background: linear-gradient(180deg, #ff4b4b, #e41313);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 14px rgba(227, 19, 19, 0.25);
+            transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+        }
 
-/* Hover Effects */
-.close-btn:hover {
-    transform: scale(1.12);
-    box-shadow: 0 8px 18px rgba(227, 19, 19, 0.35);
-}
+        /* Hover Effects */
+        .close-btn:hover {
+            transform: scale(1.12);
+            box-shadow: 0 8px 18px rgba(227, 19, 19, 0.35);
+        }
 
-/* Active click effect */
-.close-btn:active {
-    transform: scale(0.96);
-    opacity: 0.85;
-}
+        /* Active click effect */
+        .close-btn:active {
+            transform: scale(0.96);
+            opacity: 0.85;
+        }
 
 
         .modal-content img {
@@ -914,7 +970,7 @@ body.modal-open {
 
         .modal-content h2 {
             font-size: 1.6em;
-            color: var(--secondary-color); 
+            color: var(--secondary-color);
             margin-bottom: 10px;
         }
 
@@ -924,187 +980,267 @@ body.modal-open {
         }
     </style>
 </head>
+</head>
+
 <body>
 
-<div class="navbar">
-    <div class="logo">SciAstra</div><br>
-    <ul class="nav-links">
-        <li><a href="/">Log out</a></li>
-    </ul>
-</div>
-<div class="welcome-message">
-<h2>Welcome to SciAstra Admin Page !!</h2>
-</div>
+    <!-- Config Injection -->
+    <script>
+        window.FIREBASE_CONFIG = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "sciastra-ak25.firebaseapp.com",
+            projectId: "sciastra-ak25",
+            storageBucket: "sciastra-ak25.firebasestorage.app",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+    </script>
+    <script type="module">
+        import { auth, onAuthChange } from '/js/auth.js';
 
-<section class="blog-content">
-    <div class="admin-blog-upload">
-        <h2>Blog Management</h2>
-        <form action="https://edufusion-blogs.onrender.com/add-blog" id="upload-form" method="POST" enctype="multipart/form-data">
-            <label for="BlogTitle">Blog Title</label>
-            <input type="text" id="BlogTitle" name="BlogTitle" required>
+        onAuthChange(async (user) => {
+            if (!user) {
+                window.location.href = '/login.html';
+            } else {
+                // Optional: Check if admin claim exists or fetch from backend
+                // For now, we rely on backend verif for writes, but we could redirect if not admin
+                const token = await user.getIdTokenResult();
+                // Logic to show/hide admin UI based on token
+                renderAdminProfile(user);
+            }
+        });
 
-            <label for="BlogDescription">Blog Description</label>
-            <textarea id="BlogDescription" name="BlogDescription" rows="4" required></textarea>
+        function renderAdminProfile(user) {
+            const container = document.getElementById('adminProfileSection');
+            if (container) {
+                container.innerHTML = `
+                <h2>Admin Profile</h2>
+                <p><strong>Name:</strong> ${user.displayName || 'Admin'}</p>
+                <p><strong>Email:</strong> ${user.email}</p>
+             `;
+            }
+        }
+    </script>
 
-            <label for="BlogCategory">Category</label>
-            <select id="BlogCategory" name="BlogCategory" required>
-                <option value="technology">Technology</option>
-                <option value="science">Science</option>
-                <option value="space-exploration">Space Exploration</option>
-                <option value="programming">Programming</option>
-            </select>
-
-            <label for="BlogImage">Blog Image:</label>
-            <input type="file" id="BlogImage" name="BlogImage" class="file-input" accept="image/*" required>
-             <label for="bloglink">Blog Link:</label>
-             <input type="url" id="bloglink" name="bloglink" placeholder="Enter the blog link" required>
- 
-            <button type="submit" class="submit-btn">Upload Blog</button>
-        </form>
+    <div class="navbar">
+        <div class="logo">SciAstra</div><br>
+        <ul class="nav-links">
+            <li><a href="/">Log out</a></li>
+        </ul>
     </div>
+    <div class="welcome-message">
+        <div class="welcome-message">
+            <h2>Welcome to SciAstra Admin Page !!</h2>
+        </div>
+
+        <section style="max-width: 1200px; margin: 0 auto; padding: 20px; text-align:center;">
+            <div id="adminProfileSection"
+                style="background:#fff; padding:20px; border-radius:12px; display:inline-block; text-align:left; min-width:300px;">
+                <h2>Admin Profile</h2>
+                <p>Loading...</p>
+            </div>
+        </section>
+
+        <section class="blog-content">
+            <div class="admin-blog-upload">
+                <h2>Blog Management</h2>
+                <form action="https://edufusion-blogs.onrender.com/add-blog" id="upload-form" method="POST"
+                    enctype="multipart/form-data">
+                    <label for="BlogTitle">Blog Title</label>
+                    <input type="text" id="BlogTitle" name="BlogTitle" required>
+
+                    <label for="BlogDescription">Blog Description</label>
+                    <textarea id="BlogDescription" name="BlogDescription" rows="4" required></textarea>
+
+                    <label for="BlogCategory">Category</label>
+                    <select id="BlogCategory" name="BlogCategory" required>
+                        <option value="technology">Technology</option>
+                        <option value="science">Science</option>
+                        <option value="space-exploration">Space Exploration</option>
+                        <option value="programming">Programming</option>
+                    </select>
+
+                    <label for="BlogImage">Blog Image:</label>
+                    <input type="file" id="BlogImage" name="BlogImage" class="file-input" accept="image/*" required>
+                    <label for="bloglink">Blog Link:</label>
+                    <input type="url" id="bloglink" name="bloglink" placeholder="Enter the blog link" required>
+
+                    <button type="submit" class="submit-btn">Upload Blog</button>
+                </form>
+            </div>
 
 
-    <div class="form-container">
-    <h1>Register a New Course</h1>
-    <form id="courseForm" action="https://edufusion-blogs.onrender.com/add-course" method="POST" enctype="multipart/form-data">
-        <label for="coursename">Course Name:</label>
-        <input type="text" id="coursename" name="coursename" required>
+            <div class="form-container">
+                <h1>Register a New Course</h1>
+                <form id="courseForm" action="https://edufusion-blogs.onrender.com/add-course" method="POST"
+                    enctype="multipart/form-data">
+                    <label for="coursename">Course Name:</label>
+                    <input type="text" id="coursename" name="coursename" required>
 
-        <label for="price">Price (in INR):</label>
-        <input type="number" id="price" name="price" required>
+                    <label for="price">Price (in INR):</label>
+                    <input type="number" id="price" name="price" required>
 
-        <label for="courseImage">Course Image:</label>
-        <input type="file" id="courseImage" name="courseImage" accept="image/*" required>
+                    <label for="courseImage">Course Image:</label>
+                    <input type="file" id="courseImage" name="courseImage" accept="image/*" required>
 
-        <label for="courselink">Course Link:</label>
-        <input type="url" id="courselink" name="courselink" placeholder="Enter the course link" required>
+                    <label for="courselink">Course Link:</label>
+                    <input type="url" id="courselink" name="courselink" placeholder="Enter the course link" required>
 
-        <label for="coursetype">Course Type:</label>
-        <select id="coursetype" name="coursetype" required>
-            <option value="free">Free</option>
-            <option value="paid">Paid</option>
-        </select>
+                    <label for="coursetype">Course Type:</label>
+                    <select id="coursetype" name="coursetype" required>
+                        <option value="free">Free</option>
+                        <option value="paid">Paid</option>
+                    </select>
 
-        <button type="submit">Add Course</button>
-    </form>
-</div>
-</section>
+                    <button type="submit">Add Course</button>
+                </form>
+            </div>
+    </div>
+    </section>
 
-<!-- ============================
+    <!-- User Analytics Section -->
+    <section class="crud-section">
+        <h2 style="text-align:center;">User Analytics</h2>
+        <div style="background:#fff; padding:20px; border-radius:12px; margin-top:15px; overflow-x:auto;">
+            <table class="crud-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Purchased</th>
+                        <th>Enrolled</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr>
+                        <td colspan="5">Analytics data would be fetched here...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============================
      MANAGE BLOGS & COURSES
 =============================== -->
-<section class="crud-section">
-    <h2 style="text-align:center;margin-top:10px;">Manage Blogs</h2>
-    <table class="crud-table" id="blogsTable">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Link</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <div id="blogsCardsContainer" class="crud-cards"></div>
+    <section class="crud-section">
+        <h2 style="text-align:center;margin-top:10px;">Manage Blogs</h2>
+        <table class="crud-table" id="blogsTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Link</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="blogsCardsContainer" class="crud-cards"></div>
 
-    <h2 style="text-align:center;margin-top:40px;">Manage Courses</h2>
-    <table class="crud-table" id="coursesTable">
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Type</th>
-                <th>Link</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <div id="coursesCardsContainer" class="crud-cards"></div>
-</section>
+        <h2 style="text-align:center;margin-top:40px;">Manage Courses</h2>
+        <table class="crud-table" id="coursesTable">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Type</th>
+                    <th>Link</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div id="coursesCardsContainer" class="crud-cards"></div>
+    </section>
 
 
-<div class="overlay" id="successModal">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success Icon">
-        <h2>Success!</h2>
-        <p id="modalMessage">Your content has been added successfully.</p>
-    </div>
-</div>
-
-<!-- Edit Modal (used for both Blog & Course) -->
-<div class="overlay" id="editModal">
-  <div class="modal-content edit-modal">
-    <span class="close-btn" onclick="closeEditModal()">&times;</span>
-    <h2 id="editModalTitle" class="edit-modal-title">Edit</h2>
-
-    <!-- IMAGE PREVIEW + UPLOAD -->
-    <div class="edit-image-row">
-      <div class="edit-image-preview-wrapper">
-        <img id="editPreviewImage" src="" alt="Preview" />
-      </div>
-      <div class="edit-image-input-wrapper">
-        <label class="edit-image-label">Change Image</label>
-        <input type="file" id="editImageFile" accept="image/*" />
-        <small class="edit-image-hint">Leave empty to keep the existing image.</small>
-      </div>
+    <div class="overlay" id="successModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success Icon">
+            <h2>Success!</h2>
+            <p id="modalMessage">Your content has been added successfully.</p>
+        </div>
     </div>
 
-    <!-- BLOG FIELDS -->
-    <div id="blogEditFields">
-      <label>Blog Title</label>
-      <input type="text" id="editBlogTitle" />
+    <!-- Edit Modal (used for both Blog & Course) -->
+    <div class="overlay" id="editModal">
+        <div class="modal-content edit-modal">
+            <span class="close-btn" onclick="closeEditModal()">&times;</span>
+            <h2 id="editModalTitle" class="edit-modal-title">Edit</h2>
 
-      <label>Blog Description</label>
-      <textarea id="editBlogDescription" rows="4"></textarea>
+            <!-- IMAGE PREVIEW + UPLOAD -->
+            <div class="edit-image-row">
+                <div class="edit-image-preview-wrapper">
+                    <img id="editPreviewImage" src="" alt="Preview" />
+                </div>
+                <div class="edit-image-input-wrapper">
+                    <label class="edit-image-label">Change Image</label>
+                    <input type="file" id="editImageFile" accept="image/*" />
+                    <small class="edit-image-hint">Leave empty to keep the existing image.</small>
+                </div>
+            </div>
 
-      <label>Category</label>
-      <select id="editBlogCategory">
-        <option value="technology">Technology</option>
-        <option value="science">Science</option>
-        <option value="space-exploration">Space Exploration</option>
-        <option value="programming">Programming</option>
-      </select>
+            <!-- BLOG FIELDS -->
+            <div id="blogEditFields">
+                <label>Blog Title</label>
+                <input type="text" id="editBlogTitle" />
 
-      <label>Blog Link</label>
-      <input type="url" id="editBlogLink" />
+                <label>Blog Description</label>
+                <textarea id="editBlogDescription" rows="4"></textarea>
+
+                <label>Category</label>
+                <select id="editBlogCategory">
+                    <option value="technology">Technology</option>
+                    <option value="science">Science</option>
+                    <option value="space-exploration">Space Exploration</option>
+                    <option value="programming">Programming</option>
+                </select>
+
+                <label>Blog Link</label>
+                <input type="url" id="editBlogLink" />
+            </div>
+
+            <!-- COURSE FIELDS -->
+            <div id="courseEditFields">
+                <label>Course Name</label>
+                <input type="text" id="editCourseName" />
+
+                <label>Price (INR)</label>
+                <input type="number" id="editCoursePrice" />
+
+                <label>Course Type</label>
+                <select id="editCourseType">
+                    <option value="free">Free</option>
+                    <option value="paid">Paid</option>
+                </select>
+
+                <label>Course Link</label>
+                <input type="url" id="editCourseLink" />
+            </div>
+
+            <button class="submit-btn" style="margin-top:15px;" onclick="saveEdit()">Save Changes</button>
+        </div>
     </div>
 
-    <!-- COURSE FIELDS -->
-    <div id="courseEditFields">
-      <label>Course Name</label>
-      <input type="text" id="editCourseName" />
-
-      <label>Price (INR)</label>
-      <input type="number" id="editCoursePrice" />
-
-      <label>Course Type</label>
-      <select id="editCourseType">
-        <option value="free">Free</option>
-        <option value="paid">Paid</option>
-      </select>
-
-      <label>Course Link</label>
-      <input type="url" id="editCourseLink" />
-    </div>
-
-    <button class="submit-btn" style="margin-top:15px;" onclick="saveEdit()">Save Changes</button>
-  </div>
-</div>
-
-<!-- Footer -->
-      <div class="footer reveal">
+    <!-- Footer -->
+    <div class="footer reveal">
         <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
         <div id="three_div">
-            <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i class="fab fa-instagram social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i class="fab fa-linkedin social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i class="fab fa-telegram social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i class="fab fa-whatsapp social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i
+                    class="fab fa-youtube social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i
+                    class="fab fa-instagram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i
+                    class="fab fa-linkedin social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i
+                    class="fab fa-telegram social_icon"></i></a>
+            <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i
+                    class="fab fa-whatsapp social_icon"></i></a>
         </div>
         <div class="two_footer">
             <div class="left">
@@ -1116,11 +1252,14 @@ body.modal-open {
             <div class="mid">
                 <h2 id="title">Institutes</h2>
                 <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
-                <a id="sub_link" href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
-                <a id="sub_link" href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
+                <a id="sub_link"
+                    href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
+                <a id="sub_link"
+                    href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
                 <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
                 <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
-                <a id="sub_link" href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
+                <a id="sub_link"
+                    href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
                 <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
             </div>
             <div class="right">
@@ -1130,112 +1269,133 @@ body.modal-open {
                 <a id="sub_link" href="#contact">Contact Us</a>
             </div>
         </div>
-      </div>
+    </div>
 
-      <script>
-    // ---------- CONFIG & STATE ----------
-    const API_BASE_URL = "https://edufusion-blogs.onrender.com";
+    <script>
+        window.FIREBASE_CONFIG = {
+            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
+            authDomain: "sciastra-ak25.firebaseapp.com",
+            projectId: "sciastra-ak25",
+            storageBucket: "sciastra-ak25.firebasestorage.app",
+            messagingSenderId: "1001911647496",
+            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
+        };
+    </script>
+    <script src="/js/adminConfig.js"></script>
+    <script>
+        // ---------- CONFIG & STATE ----------
+        const API_BASE_URL = ""; // Relative path
 
-    var blogsData = [];
-    var coursesData = [];
-    var currentEditType = null; // "blog" or "course"
-    var currentEditId = null;
+        var blogsData = [];
+        var coursesData = [];
+        var currentEditType = null; // "blog" or "course"
+        var currentEditId = null;
 
-    // ---------- SUCCESS MODAL (already existed) ----------
-    function showModal(message, formId) {
-        const modal = document.getElementById("successModal");
-        const modalText = document.getElementById("modalMessage");
-        modalText.textContent = message;
-        modal.classList.add("show");
-        
-        setTimeout(() => {
-            closeModal();
-            const formElement = document.getElementById(formId);
-            if (formElement) {
-                formElement.reset();
-            }
-            // Refresh lists so new item appears
-            loadBlogs();
-            loadCourses();
-        }, 3000);
-    }
+        // ---------- SUCCESS MODAL (already existed) ----------
+        function showModal(message, formId) {
+            const modal = document.getElementById("successModal");
+            const modalText = document.getElementById("modalMessage");
+            modalText.textContent = message;
+            modal.classList.add("show");
 
-    function closeModal() {
-        const modal = document.getElementById("successModal");
-        modal.classList.remove("show");
-    }
-
-    // ---------- EDIT MODAL ----------
-    function openEditModal() {
-        var overlay = document.getElementById("editModal");
-        if (overlay) overlay.classList.add("show");
-    }
-
-    function closeEditModal() {
-        var overlay = document.getElementById("editModal");
-        if (overlay) overlay.classList.remove("show");
-        currentEditType = null;
-        currentEditId = null;
-        var imgInput = document.getElementById("editImageFile");
-        if (imgInput) imgInput.value = "";
-    }
-
-    // ---------- GENERIC FORM SUBMISSION (already existed) ----------
-    async function handleFormSubmission(event, formId, successMessage) {
-        event.preventDefault();
-        const form = document.getElementById(formId);
-        const url = form.action;
-        const formData = new FormData(form);
-
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                body: formData,
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                
-                if (result.success) {
-                    showModal(successMessage, formId);
-                } else {
-                    alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
+            setTimeout(() => {
+                closeModal();
+                const formElement = document.getElementById(formId);
+                if (formElement) {
+                    formElement.reset();
                 }
-            } else {
-                let errorResult = {};
-                try {
-                    errorResult = await response.json();
-                } catch (e) {}
-                alert(`Error: ${errorResult.message || response.statusText}`);
-            }
-        } catch (error) {
-            console.error('Network or Parsing Error:', error);
-            alert('An unexpected network error occurred during submission.');
+                // Refresh lists so new item appears
+                loadBlogs();
+                loadCourses();
+            }, 3000);
         }
-    }
 
-    document.getElementById("upload-form").onsubmit = function (event) {
-        handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
-    };
+        function closeModal() {
+            const modal = document.getElementById("successModal");
+            modal.classList.remove("show");
+        }
 
-    document.getElementById("courseForm").onsubmit = function (event) {
-        handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
-    };
+        // ---------- EDIT MODAL ----------
+        function openEditModal() {
+            var overlay = document.getElementById("editModal");
+            if (overlay) overlay.classList.add("show");
+        }
 
-    // ---------- LOAD & RENDER BLOGS ----------
-    async function loadBlogs() {
-        try {
-            const res = await fetch(API_BASE_URL + "/api/blogs");
-            const blogs = await res.json();
-            blogsData = blogs;
+        function closeEditModal() {
+            var overlay = document.getElementById("editModal");
+            if (overlay) overlay.classList.remove("show");
+            currentEditType = null;
+            currentEditId = null;
+            var imgInput = document.getElementById("editImageFile");
+            if (imgInput) imgInput.value = "";
+        }
 
-            // TABLE
-            var tbody = document.querySelector("#blogsTable tbody");
-            if (tbody) {
-                tbody.innerHTML = "";
-                blogs.forEach(function (b) {
-                    var row = document.createElement("tr");
-                    row.innerHTML = `
+        // ---------- GENERIC FORM SUBMISSION (already existed) ----------
+        async function handleFormSubmission(event, formId, successMessage) {
+            event.preventDefault();
+            const form = document.getElementById(formId);
+            const url = form.action;
+            const formData = new FormData(form);
+
+            try {
+                // Add Auth Token
+                const { getAuthToken } = await import('/js/auth.js');
+                const token = await getAuthToken();
+
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                        // 'Content-Type' is auto-set by browser for FormData, but Authorization needs manual add
+                        // HOWEVER, FormData and Headers together with fetch is tricky.
+                        // We must NOT set Content-Type manually or boundary is lost.
+                    }
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+
+                    if (result.success) {
+                        showModal(successMessage, formId);
+                    } else {
+                        alert(`Submission failed: ${result.message || 'An unknown error occurred.'}`);
+                    }
+                } else {
+                    let errorResult = {};
+                    try {
+                        errorResult = await response.json();
+                    } catch (e) { }
+                    alert(`Error: ${errorResult.message || response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Network or Parsing Error:', error);
+                alert('An unexpected network error occurred during submission.');
+            }
+        }
+
+        document.getElementById("upload-form").onsubmit = function (event) {
+            handleFormSubmission(event, "upload-form", "Your Blog has been added successfully.");
+        };
+
+        document.getElementById("courseForm").onsubmit = function (event) {
+            handleFormSubmission(event, "courseForm", "Your Course has been added successfully.");
+        };
+
+        // ---------- LOAD & RENDER BLOGS ----------
+        async function loadBlogs() {
+            try {
+                const res = await fetch(API_BASE_URL + "/api/blogs");
+                const blogs = await res.json();
+                blogsData = blogs;
+
+                // TABLE
+                var tbody = document.querySelector("#blogsTable tbody");
+                if (tbody) {
+                    tbody.innerHTML = "";
+                    blogs.forEach(function (b) {
+                        var row = document.createElement("tr");
+                        row.innerHTML = `
                         <td><img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy"></td>
                         <td>${b.Blog_title || ''}</td>
                         <td>${b.category || ''}</td>
@@ -1245,18 +1405,18 @@ body.modal-open {
                             <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')"> <i class="fas fa-trash-alt"></i></button>
                         </td>
                     `;
-                    tbody.appendChild(row);
-                });
-            }
+                        tbody.appendChild(row);
+                    });
+                }
 
-            // CARDS (mobile)
-            var cardsContainer = document.getElementById("blogsCardsContainer");
-            if (cardsContainer) {
-                cardsContainer.innerHTML = "";
-                blogs.forEach(function (b) {
-                    var card = document.createElement("div");
-                    card.className = "crud-card";
-                    card.innerHTML = `
+                // CARDS (mobile)
+                var cardsContainer = document.getElementById("blogsCardsContainer");
+                if (cardsContainer) {
+                    cardsContainer.innerHTML = "";
+                    blogs.forEach(function (b) {
+                        var card = document.createElement("div");
+                        card.className = "crud-card";
+                        card.innerHTML = `
                         <div class="crud-card-img-wrapper">
                             <img src="${b.imageUrl}" alt="${b.Blog_title || ''}" loading="lazy">
                         </div>
@@ -1284,29 +1444,29 @@ body.modal-open {
 
                         </div>
                     `;
-                    cardsContainer.appendChild(card);
-                });
+                        cardsContainer.appendChild(card);
+                    });
+                }
+
+            } catch (err) {
+                console.error("Error loading blogs:", err);
             }
-
-        } catch (err) {
-            console.error("Error loading blogs:", err);
         }
-    }
 
-    // ---------- LOAD & RENDER COURSES ----------
-    async function loadCourses() {
-        try {
-            const res = await fetch(API_BASE_URL + "/api/courses");
-            const courses = await res.json();
-            coursesData = courses;
+        // ---------- LOAD & RENDER COURSES ----------
+        async function loadCourses() {
+            try {
+                const res = await fetch(API_BASE_URL + "/api/courses");
+                const courses = await res.json();
+                coursesData = courses;
 
-            // TABLE
-            var tbody = document.querySelector("#coursesTable tbody");
-            if (tbody) {
-                tbody.innerHTML = "";
-                courses.forEach(function (c) {
-                    var row = document.createElement("tr");
-                    row.innerHTML = `
+                // TABLE
+                var tbody = document.querySelector("#coursesTable tbody");
+                if (tbody) {
+                    tbody.innerHTML = "";
+                    courses.forEach(function (c) {
+                        var row = document.createElement("tr");
+                        row.innerHTML = `
                         <td><img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy"></td>
                         <td>${c.coursename || ''}</td>
                         <td>${c.price ? c.price : '0'}</td>
@@ -1324,18 +1484,18 @@ body.modal-open {
                                     </button>
                         </td>
                     `;
-                    tbody.appendChild(row);
-                });
-            }
+                        tbody.appendChild(row);
+                    });
+                }
 
-            // CARDS (mobile)
-            var cardsContainer = document.getElementById("coursesCardsContainer");
-            if (cardsContainer) {
-                cardsContainer.innerHTML = "";
-                courses.forEach(function (c) {
-                    var card = document.createElement("div");
-                    card.className = "crud-card";
-                    card.innerHTML = `
+                // CARDS (mobile)
+                var cardsContainer = document.getElementById("coursesCardsContainer");
+                if (cardsContainer) {
+                    cardsContainer.innerHTML = "";
+                    courses.forEach(function (c) {
+                        var card = document.createElement("div");
+                        card.className = "crud-card";
+                        card.innerHTML = `
                         <div class="crud-card-img-wrapper">
                             <img src="${c.imageUrl}" alt="${c.coursename || ''}" loading="lazy">
                         </div>
@@ -1366,207 +1526,236 @@ body.modal-open {
                             </div>
                         </div>
                     `;
-                    cardsContainer.appendChild(card);
-                });
-            }
-
-        } catch (err) {
-            console.error("Error loading courses:", err);
-        }
-    }
-
-    // ---------- EDIT BLOG / COURSE (open modal) ----------
-    function editBlog(id) {
-        currentEditType = "blog";
-        currentEditId = id;
-
-        var blog = blogsData.find(function (b) { return b._id === id; });
-        if (!blog) return;
-
-        document.getElementById("editModalTitle").textContent = "Edit Blog";
-        document.getElementById("blogEditFields").style.display = "block";
-        document.getElementById("courseEditFields").style.display = "none";
-
-        document.getElementById("editBlogTitle").value = blog.Blog_title || "";
-        document.getElementById("editBlogDescription").value = blog.Blog_description || "";
-        document.getElementById("editBlogCategory").value = blog.category || "technology";
-        document.getElementById("editBlogLink").value = blog.blog_link || "";
-
-        // image preview
-        var preview = document.getElementById("editPreviewImage");
-        if (preview) preview.src = blog.imageUrl || "";
-
-        // reset file input
-        var imgInput = document.getElementById("editImageFile");
-        if (imgInput) imgInput.value = "";
-
-        openEditModal();
-    }
-
-    function editCourse(id) {
-        currentEditType = "course";
-        currentEditId = id;
-
-        var course = coursesData.find(function (c) { return c._id === id; });
-        if (!course) return;
-
-        document.getElementById("editModalTitle").textContent = "Edit Course";
-        document.getElementById("blogEditFields").style.display = "none";
-        document.getElementById("courseEditFields").style.display = "block";
-
-        document.getElementById("editCourseName").value = course.coursename || "";
-        document.getElementById("editCoursePrice").value = course.price || "";
-        document.getElementById("editCourseType").value = course.course_type || "free";
-        document.getElementById("editCourseLink").value = course.link || "";
-
-        var preview = document.getElementById("editPreviewImage");
-        if (preview) preview.src = course.imageUrl || "";
-
-        var imgInput = document.getElementById("editImageFile");
-        if (imgInput) imgInput.value = "";
-
-        openEditModal();
-    }
-
-    // ---------- SAVE EDIT (text + optional new image) ----------
-    async function saveEdit() {
-        if (!currentEditType || !currentEditId) return;
-
-        try {
-            if (currentEditType === "blog") {
-                // 1) Update text fields via JSON PUT
-                var payload = {
-                    Blog_title: document.getElementById("editBlogTitle").value,
-                    Blog_description: document.getElementById("editBlogDescription").value,
-                    category: document.getElementById("editBlogCategory").value,
-                    blog_link: document.getElementById("editBlogLink").value
-                };
-
-                var res = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload)
-                });
-
-                if (!res.ok) {
-                    alert("Error updating blog details");
-                    return;
+                        cardsContainer.appendChild(card);
+                    });
                 }
 
-                // 2) If new image selected, upload via multipart PUT
-                var imgInput = document.getElementById("editImageFile");
-                if (imgInput && imgInput.files && imgInput.files[0]) {
-                    var fd = new FormData();
-                    fd.append("BlogImage", imgInput.files[0]);
+            } catch (err) {
+                console.error("Error loading courses:", err);
+            }
+        }
 
-                    // NOTE: needs backend route: PUT /api/blogs/:id/image using formidable
-                    var imgRes = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId + "/image", {
+        // ---------- EDIT BLOG / COURSE (open modal) ----------
+        function editBlog(id) {
+            currentEditType = "blog";
+            currentEditId = id;
+
+            var blog = blogsData.find(function (b) { return b._id === id; });
+            if (!blog) return;
+
+            document.getElementById("editModalTitle").textContent = "Edit Blog";
+            document.getElementById("blogEditFields").style.display = "block";
+            document.getElementById("courseEditFields").style.display = "none";
+
+            document.getElementById("editBlogTitle").value = blog.Blog_title || "";
+            document.getElementById("editBlogDescription").value = blog.Blog_description || "";
+            document.getElementById("editBlogCategory").value = blog.category || "technology";
+            document.getElementById("editBlogLink").value = blog.blog_link || "";
+
+            // image preview
+            var preview = document.getElementById("editPreviewImage");
+            if (preview) preview.src = blog.imageUrl || "";
+
+            // reset file input
+            var imgInput = document.getElementById("editImageFile");
+            if (imgInput) imgInput.value = "";
+
+            openEditModal();
+        }
+
+        function editCourse(id) {
+            currentEditType = "course";
+            currentEditId = id;
+
+            var course = coursesData.find(function (c) { return c._id === id; });
+            if (!course) return;
+
+            document.getElementById("editModalTitle").textContent = "Edit Course";
+            document.getElementById("blogEditFields").style.display = "none";
+            document.getElementById("courseEditFields").style.display = "block";
+
+            document.getElementById("editCourseName").value = course.coursename || "";
+            document.getElementById("editCoursePrice").value = course.price || "";
+            document.getElementById("editCourseType").value = course.course_type || "free";
+            document.getElementById("editCourseLink").value = course.link || "";
+
+            var preview = document.getElementById("editPreviewImage");
+            if (preview) preview.src = course.imageUrl || "";
+
+            var imgInput = document.getElementById("editImageFile");
+            if (imgInput) imgInput.value = "";
+
+            openEditModal();
+        }
+
+        // ---------- SAVE EDIT (text + optional new image) ----------
+        async function saveEdit() {
+            if (!currentEditType || !currentEditId) return;
+
+            try {
+                if (currentEditType === "blog") {
+                    // 1) Update text fields via JSON PUT
+                    var payload = {
+                        Blog_title: document.getElementById("editBlogTitle").value,
+                        Blog_description: document.getElementById("editBlogDescription").value,
+                        category: document.getElementById("editBlogCategory").value,
+                        blog_link: document.getElementById("editBlogLink").value
+                    };
+
+                    // Add Auth Token
+                    const { getAuthToken } = await import('/js/auth.js');
+                    const token = await getAuthToken();
+
+                    var res = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId, {
                         method: "PUT",
-                        body: fd
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
+                        },
+                        body: JSON.stringify(payload)
                     });
 
-                    if (!imgRes.ok) {
-                        alert("Blog updated, but image update failed.");
+                    if (!res.ok) {
+                        alert("Error updating blog details");
+                        return;
                     }
-                }
 
-                alert("Blog updated successfully");
-                closeEditModal();
-                loadBlogs();
+                    // 2) If new image selected, upload via multipart PUT
+                    var imgInput = document.getElementById("editImageFile");
+                    if (imgInput && imgInput.files && imgInput.files[0]) {
+                        var fd = new FormData();
+                        fd.append("BlogImage", imgInput.files[0]);
 
-            } else if (currentEditType === "course") {
-                // 1) Update text fields via JSON PUT
-                var payloadC = {
-                    coursename: document.getElementById("editCourseName").value,
-                    price: document.getElementById("editCoursePrice").value,
-                    course_type: document.getElementById("editCourseType").value,
-                    link: document.getElementById("editCourseLink").value
-                };
+                        // NOTE: needs backend route: PUT /api/blogs/:id/image using formidable
+                        var imgRes = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId + "/image", {
+                            method: "PUT",
+                            body: fd
+                        });
 
-                var resC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId, {
-                    method: "PUT",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payloadC)
-                });
+                        if (!imgRes.ok) {
+                            alert("Blog updated, but image update failed.");
+                        }
+                    }
 
-               	if (!resC.ok) {
-                    alert("Error updating course details");
-                    return;
-                }
+                    alert("Blog updated successfully");
+                    closeEditModal();
+                    loadBlogs();
 
-                // 2) Optional image upload
-                var imgInputC = document.getElementById("editImageFile");
-                if (imgInputC && imgInputC.files && imgInputC.files[0]) {
-                    var fdC = new FormData();
-                    fdC.append("courseImage", imgInputC.files[0]);
+                } else if (currentEditType === "course") {
+                    // 1) Update text fields via JSON PUT
+                    var payloadC = {
+                        coursename: document.getElementById("editCourseName").value,
+                        price: document.getElementById("editCoursePrice").value,
+                        course_type: document.getElementById("editCourseType").value,
+                        link: document.getElementById("editCourseLink").value
+                    };
 
-                    // NOTE: needs backend route: PUT /api/courses/:id/image using formidable
-                    var imgResC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId + "/image", {
+                    var resC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId, {
                         method: "PUT",
-                        body: fdC
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payloadC)
                     });
 
-                    if (!imgResC.ok) {
-                        alert("Course updated, but image update failed.");
+                    if (!resC.ok) {
+                        alert("Error updating course details");
+                        return;
                     }
+
+                    // 2) Optional image upload
+                    var imgInputC = document.getElementById("editImageFile");
+                    if (imgInputC && imgInputC.files && imgInputC.files[0]) {
+                        var fdC = new FormData();
+                        fdC.append("courseImage", imgInputC.files[0]);
+
+                        // NOTE: needs backend route: PUT /api/courses/:id/image using formidable
+                        var imgResC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId + "/image", {
+                            method: "PUT",
+                            body: fdC
+                        });
+
+                        if (!imgResC.ok) {
+                            alert("Course updated, but image update failed.");
+                        }
+                    }
+
+                    alert("Course updated successfully");
+                    closeEditModal();
+                    loadCourses();
                 }
-
-                alert("Course updated successfully");
-                closeEditModal();
-                loadCourses();
+            } catch (err) {
+                console.error("Error saving edit:", err);
+                alert("Error saving changes");
             }
-        } catch (err) {
-            console.error("Error saving edit:", err);
-            alert("Error saving changes");
         }
-    }
 
-    // ---------- DELETE BLOG / COURSE ----------
-    async function deleteBlog(id) {
-        if (!confirm("Are you sure you want to delete this blog?")) return;
+        // ---------- DELETE BLOG / COURSE ----------
+        async function deleteBlog(id) {
+            if (!confirm("Are you sure you want to delete this blog?")) return;
 
-        try {
-            var res = await fetch(API_BASE_URL + "/api/blogs/" + id, {
-                method: "DELETE"
-            });
-            if (res.ok) {
-                alert("Blog deleted");
-                loadBlogs();
-            } else {
+            try {
+                const { getAuthToken } = await import('/js/auth.js');
+                const token = await getAuthToken();
+                var res = await fetch(API_BASE_URL + "/api/blogs/" + id, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    alert("Blog deleted");
+                    loadBlogs();
+                } else {
+                    alert("Error deleting blog");
+                }
+            } catch (err) {
+                console.error("Error deleting blog:", err);
                 alert("Error deleting blog");
             }
-        } catch (err) {
-            console.error("Error deleting blog:", err);
-            alert("Error deleting blog");
         }
-    }
 
-    async function deleteCourse(id) {
-        if (!confirm("Are you sure you want to delete this course?")) return;
+        async function deleteCourse(id) {
+            if (!confirm("Are you sure you want to delete this course?")) return;
 
-        try {
-            var res = await fetch(API_BASE_URL + "/api/courses/" + id, {
-                method: "DELETE"
-            });
-            if (res.ok) {
-                alert("Course deleted");
-                loadCourses();
-            } else {
+            try {
+                var res = await fetch(API_BASE_URL + "/api/courses/" + id, {
+                    method: "DELETE"
+                });
+                if (res.ok) {
+                    alert("Course deleted");
+                    loadCourses();
+                } else {
+                    alert("Error deleting course");
+                }
+            } catch (err) {
+                console.error("Error deleting course:", err);
                 alert("Error deleting course");
             }
-        } catch (err) {
-            console.error("Error deleting course:", err);
-            alert("Error deleting course");
         }
-    }
 
-    // ---------- INITIAL LOAD ----------
-    document.addEventListener("DOMContentLoaded", function () {
-        loadBlogs();
-        loadCourses();
-    });
-</script>
+        // ---------- INITIAL LOAD ----------
+        document.addEventListener("DOMContentLoaded", function () {
+            // AUTH GUARD
+            import('/js/auth.js').then(({ auth, onAuthChange }) => {
+                onAuthChange((user) => {
+                    if (user) {
+                        // Check if admin
+                        const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@sciastra.com';
+                        if (user.email && user.email.toLowerCase() === adminEmail) {
+                            // Authorized
+                            loadBlogs();
+                            loadCourses();
+                        } else {
+                            // Not admin -> go to dashboard
+                            window.location.href = '/dashboard.html';
+                        }
+                    } else {
+                        // Not logged in -> login
+                        window.location.href = '/login.html';
+                    }
+                });
+            });
+        });
+    </script>
 
 
 </body>
+
 </html>

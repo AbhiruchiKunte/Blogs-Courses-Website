@@ -9,4 +9,3 @@ migrate.js
 
 # Ignore configuration/Admin files
 Frontend/adminConfig.js
-Frontend/create-config.mjs

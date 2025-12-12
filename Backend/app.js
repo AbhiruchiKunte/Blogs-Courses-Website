@@ -13,6 +13,9 @@ import compression from 'compression';
 import Blog from './models/Blog.js';
 import Course from './models/Course.js';
 import paymentRoute from './routes/paymentRoute.js';
+import userRoutes from './routes/userRoutes.js';
+import { verifyAdmin } from './middleware/authMiddleware.js';
+import { createForm, optimizeToWebP } from './utils/fileHelpers.js';
 
 dotenv.config();
 const app = express();
@@ -51,6 +54,13 @@ app.get('/addnew.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend', 'addnew.html'));
 });
 
+app.get('/login.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend', 'login.html'));
+});
+
+app.get('/dashboard.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../Frontend', 'dashboard.html'));
+});
 // ---------- DB CONNECTION ----------
 const mongoUri = process.env.MONGODB_URI;
 mongoose
@@ -61,32 +71,15 @@ mongoose
 // ---------- PAYMENT ROUTES ----------
 app.use('/', paymentRoute);
 
+// ---------- USER ROUTES ----------
+app.use('/api/users', userRoutes);
+
 // ---------- HELPERS ----------
 function getBaseUrl(req) {
   return `${req.protocol}://${req.get('host')}`;
 }
 
-// helper to create formidable form
-function createForm(uploadDir) {
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
 
-  return formidable({
-    uploadDir,
-    keepExtensions: true,
-    multiples: true
-  });
-}
-
-// optimize image (used on add + update image)
-async function optimizeToWebP(buffer) {
-  const optimizedBuffer = await sharp(buffer)
-    .resize({ width: 500 })    // good for cards
-    .webp({ quality: 70 })
-    .toBuffer();
-  return optimizedBuffer;
-}
 
 // ---------- READ APIs (blogs / courses) ----------
 
@@ -183,7 +176,7 @@ app.get('/api/courses/:id/image', async (req, res) => {
 // ---------- CREATE (ADD) BLOG / COURSE ----------
 
 // POST /add-course
-app.post('/add-course', (req, res, next) => {
+app.post('/add-course', verifyAdmin, (req, res, next) => {
   const uploadDir = path.join(__dirname, 'uploads');
   let form;
 
@@ -277,7 +270,7 @@ app.post('/add-course', (req, res, next) => {
 });
 
 // POST /add-blog
-app.post('/add-blog', (req, res, next) => {
+app.post('/add-blog', verifyAdmin, (req, res, next) => {
   const uploadDir = path.join(__dirname, 'uploads');
   let form;
 
@@ -374,7 +367,7 @@ app.post('/add-blog', (req, res, next) => {
 
 // ---------- UPDATE (FIELDS) BLOG / COURSE ----------
 
-app.put('/api/blogs/:id', async (req, res) => {
+app.put('/api/blogs/:id', verifyAdmin, async (req, res) => {
   try {
     const { Blog_title, Blog_description, category, blog_link } = req.body;
 
@@ -395,7 +388,7 @@ app.put('/api/blogs/:id', async (req, res) => {
   }
 });
 
-app.put('/api/courses/:id', async (req, res) => {
+app.put('/api/courses/:id', verifyAdmin, async (req, res) => {
   try {
     const { coursename, price, course_type, link } = req.body;
 
@@ -419,7 +412,7 @@ app.put('/api/courses/:id', async (req, res) => {
 // ---------- UPDATE IMAGE BLOG / COURSE (NEW) ----------
 
 // PUT /api/blogs/:id/image  (BlogImage file)
-app.put('/api/blogs/:id/image', (req, res, next) => {
+app.put('/api/blogs/:id/image', verifyAdmin, (req, res, next) => {
   const uploadDir = path.join(__dirname, 'uploads');
   let form;
 
@@ -499,7 +492,7 @@ app.put('/api/blogs/:id/image', (req, res, next) => {
 });
 
 // PUT /api/courses/:id/image  (courseImage file)
-app.put('/api/courses/:id/image', (req, res, next) => {
+app.put('/api/courses/:id/image', verifyAdmin, (req, res, next) => {
   const uploadDir = path.join(__dirname, 'uploads');
   let form;
 
@@ -581,7 +574,7 @@ app.put('/api/courses/:id/image', (req, res, next) => {
 });
 
 // ---------- DELETE BLOG / COURSE ----------
-app.delete('/api/blogs/:id', async (req, res) => {
+app.delete('/api/blogs/:id', verifyAdmin, async (req, res) => {
   try {
     const deleted = await Blog.findByIdAndDelete(req.params.id);
     if (!deleted) {
@@ -594,7 +587,7 @@ app.delete('/api/blogs/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/courses/:id', async (req, res) => {
+app.delete('/api/courses/:id', verifyAdmin, async (req, res) => {
   try {
     const deleted = await Course.findByIdAndDelete(req.params.id);
     if (!deleted) {

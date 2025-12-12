@@ -1,509 +1,572 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SciAstra Platform</title>
-    <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lobster&family=Oleo+Script&family=Spicy+Rice&display=swap" rel="stylesheet">    
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
-    <style>
-/* ------------- your existing CSS, unchanged ------------- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SciAstra Platform</title>
+  <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lobster&family=Oleo+Script&family=Spicy+Rice&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <style>
+    /* ------------- your existing CSS, unchanged ------------- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* Colors and Typography */
-:root {
-    --primary-color: #0B192C;
-    --secondary-color: #3a4f9e;
-    --text-color: #555;
-    --bg-light: #ffffff;
-    --bg-dark: #f4f4f9;
-    --transition-base: 0.3s ease;
-}
-body {
-    font-family: 'Arial', sans-serif;
-    overflow-x: hidden;
-    background-color: var(--bg-dark);
-}
+    /* Colors and Typography */
+    :root {
+      --primary-color: #0B192C;
+      --secondary-color: #3a4f9e;
+      --text-color: #555;
+      --bg-light: #ffffff;
+      --bg-dark: #f4f4f9;
+      --transition-base: 0.3s ease;
+    }
 
-/* Simple animations */
-@keyframes fadeInUp {
-    from {
+    body {
+      font-family: 'Arial', sans-serif;
+      overflow-x: hidden;
+      background-color: var(--bg-dark);
+    }
+
+    /* Simple animations */
+    @keyframes fadeInUp {
+      from {
         opacity: 0;
         transform: translateY(40px);
-    }
-    to {
+      }
+
+      to {
         opacity: 1;
         transform: translateY(0);
+      }
     }
-}
-@keyframes fadeIn {
-    from {
+
+    @keyframes fadeIn {
+      from {
         opacity: 0;
-    }
-    to {
+      }
+
+      to {
         opacity: 1;
+      }
     }
-}
-@keyframes floatHero {
-    0%   { transform: translateY(0); }
-    50%  { transform: translateY(-6px); }
-    100% { transform: translateY(0); }
-}
 
-/* Scroll reveal base */
-.reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+    @keyframes floatHero {
+      0% {
+        transform: translateY(0);
+      }
 
-/* Navbar */
-.navbar {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    background-color: var(--primary-color);
-    color: #fff;
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-    animation: fadeIn 0.8s ease-out;
-}
+      50% {
+        transform: translateY(-6px);
+      }
 
-.navbar .logo {
-    font-size: 2em;
-    font-weight: bold;
-    color: #fff;
-    font-family: "Lobster", serif;
-    font-weight: 400;
-    font-style: normal;
-    margin-left: -20px;
-    cursor: pointer;
-}
+      100% {
+        transform: translateY(0);
+      }
+    }
 
-.navbar .nav-links {
-    list-style: none;
-    display: flex;
-    margin: 0;
-    padding: 0;
-    transition: all var(--transition-base);
-}
+    /* Scroll reveal base */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
 
-.nav-links li {
-    margin: 0 15px;
-    position: relative;
-}
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-.nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    transition: color var(--transition-base);
-    font-size: 18px;
-}
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 10;
+      animation: fadeIn 0.8s ease-out;
+    }
 
-/* Underline animation */
-.nav-links a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -4px;
-    width: 0%;
-    height: 2px;
-    background: #f4f4f9;
-    transition: width 0.25s ease;
-}
-.nav-links a:hover::after,
-.nav-links .active::after {
-    width: 100%;
-}
+    .navbar .logo {
+      font-size: 2em;
+      font-weight: bold;
+      color: #fff;
+      font-family: "Lobster", serif;
+      font-weight: 400;
+      font-style: normal;
+      margin-left: -20px;
+      cursor: pointer;
+    }
 
-.nav-links a:hover,
-.nav-links .active {
-    color: #f4f4f9;
-}
+    .nav-btn {
+      padding: 8px 18px;
+      background: #fff;
+      color: var(--primary-color);
+      border-radius: 99px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: 0.3s;
+      /* Fix: Ensure button style link doesn't use the underline animation */
+      position: relative;
+    }
 
-/* Mobile menu toggle button */
-.menu-toggle {
-    display: none;
-    font-size: 2rem;
-    color: #fff;
-    cursor: pointer;
-    z-index: 11;
-}
+    .nav-btn::after {
+      display: none !important;
+    }
 
-/* Hero Section */
-.hero {
-    background: url('/Images/Galaxy-HD-Pictures.jpg') center/cover no-repeat;
-    margin-top: 60px;
-    color: white;
-    text-align: center;
-    padding: 8rem 1rem;
-    position: relative;
-    min-height: 80vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;   
-    align-items: center;       
-    animation: fadeIn 1s ease-out;
-    gap: 1.5rem;
-}
+    .nav-btn:hover {
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
+    }
 
-/* overlay */
-.hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom right, rgba(11,25,44,0.85), rgba(11,25,44,0.4));
-    z-index: 0;
-}
+    .navbar .nav-links {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+      transition: all var(--transition-base);
+    }
 
-.hero h1,
-.hero p,
-.hero .hero-btn {
-    position: relative;
-    z-index: 1;
-}
+    .nav-links li {
+      margin: 0 15px;
+      position: relative;
+      /* Fix: ensure proper spacing for all elements */
+      display: flex;
+      align-items: center;
+    }
 
-.hero h1 {
-   color: #fff; 
-   font-size: 3rem; 
-   font-weight: 600; 
-   margin-bottom: 1rem; 
-   font-family: "Anton SC", sans-serif; 
-   font-weight: 400; 
-   font-style: normal; 
-   animation: floatHero 4s ease-in-out infinite;
-}
+    .nav-links a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color var(--transition-base);
+      font-size: 18px;
+    }
 
-.hero p {
-    margin-top: -1.5rem; 
-    font-size: 1.1rem; 
-    font-weight: 400; 
-    max-width: 600px;
-}
+    /* Underline animation */
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -4px;
+      width: 0%;
+      height: 2px;
+      background: #f4f4f9;
+      transition: width 0.25s ease;
+    }
 
-/* button wrapper for spacing */
-.hero-buttons {
-    margin-top: 1.8rem;
-    display: flex;
-    gap: 1rem;
-}
+    .nav-links a:hover::after,
+    .nav-links .active::after {
+      width: 100%;
+    }
 
-/* buttons */
-.hero-btn {
-    display: inline-block;
-    padding: 0.75rem 2.2rem;
-    background: linear-gradient(135deg, var(--secondary-color), #9092fe);
-    color: white;
-    border: none;
-    border-radius: 999px;
-    text-decoration: none;
-    font-size: 1.05rem;
-    font-weight: 600;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
+    .nav-links a:hover,
+    .nav-links .active {
+      color: #f4f4f9;
+    }
 
-.hero-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 14px 30px rgba(0,0,0,0.35);
-}
+    /* Mobile menu toggle button */
+    .menu-toggle {
+      display: none;
+      font-size: 2rem;
+      color: #fff;
+      cursor: pointer;
+      z-index: 11;
+    }
 
-@media (max-width: 480px) {
+    /* Hero Section */
+    .hero {
+      background: url('/Images/Galaxy-HD-Pictures.jpg') center/cover no-repeat;
+      margin-top: 60px;
+      color: white;
+      text-align: center;
+      padding: 8rem 1rem;
+      position: relative;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 1s ease-out;
+      gap: 1.5rem;
+    }
+
+    /* overlay */
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom right, rgba(11, 25, 44, 0.85), rgba(11, 25, 44, 0.4));
+      z-index: 0;
+    }
+
+    .hero h1,
+    .hero p,
+    .hero .hero-btn {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      color: #fff;
+      font-size: 3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-family: "Anton SC", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+      animation: floatHero 4s ease-in-out infinite;
+    }
+
+    .hero p {
+      margin-top: -1.5rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+      max-width: 600px;
+    }
+
+    /* button wrapper for spacing */
     .hero-buttons {
+      margin-top: 1.8rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* buttons */
+    .hero-btn {
+      display: inline-block;
+      padding: 0.75rem 2.2rem;
+      background: linear-gradient(135deg, var(--secondary-color), #9092fe);
+      color: white;
+      border: none;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hero-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    @media (max-width: 480px) {
+      .hero-buttons {
         display: flex;
         flex-direction: column;
         padding: 1rem 2.2rem;
+      }
     }
-}
 
-/* General Section Styles */
-section {
-    padding: 30px 40px;
-}
-
-/* Section Titles */
-section h1 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: -30px;
-}
-section h3 {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: 20px;
-}
-
-/* Free Courses Section */
-.free-course-section {
-    margin-top: 40px;
-    text-align: center;
-}
-
-.free-course-title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 32px;
-    letter-spacing: 0.1rem;
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-/* Paid Courses Section */
-.paid-course-section {
-    margin-top: 40px;
-    text-align: center;
-}
-
-.paid-course-title {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 32px;
-    letter-spacing: 0.1rem;
-    margin-bottom: 10px;
-    margin-top: 0;
-}
-/* Blog Section */
-.blog-section {
-    margin-top: 20px !important;
-    text-align: center;
-}
-
-.blogs-title {
-    font-size: 32px;
-    margin: 0 0 10px 0 !important;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Reduce space under swiper so cards come closer */
-.blogs-swiper {
-    padding-top: 10px !important;
-    padding-bottom: 20px !important;
-}
-
-
-/* Swiper Container */
-.container {
-    position: relative;
-    max-width: 1200px;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-/* Give some padding around sliders */
-.swiper {
-    padding: 40px 10px 60px;
-}
-.blogs-swiper,
-.free-courses-swiper,
-.paid-courses-swiper {
-    position: relative;
-}
-
-/* Card Styling */
-.card-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-}
-
-.card {
-    width: clamp(240px, 24vw, 300px);
-    min-height: 360px;
-    border-radius: 18px;
-    background: #fff;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    overflow: hidden;
-    transition: transform .35s ease, box-shadow .35s ease;
-    margin: 0 auto;
-    animation: fadeInUp 0.7s ease-out;
-}
-
-.card:hover {
-    transform: translateY(-12px) scale(1.03);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-}
-
-/* Card Content */
-.card-content {
-    padding: 15px;
-    text-align: center;
-}
-
-.card-content .image {
-    overflow: hidden;
-    border-radius: 14px;
-}
-
-.card-content .image img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 14px;
-    transition: transform 0.3s ease;
-}
-
-.card-content .image img:hover{
-    transform: scale(1.05);
-}
-.name-profession {
-    margin-top: 10px;
-    font-size: 18px;
-    font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
-}
-
-.card-description p,
-.created-at {
-    font-size: 14px;
-    color: #555;
-    margin-top: 20px;
-}
-
-.button {
-    margin-top: 15px;
-}
-
-.button .message-button {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
-}
-
-.button .message-button:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.2);
-}
-
-/* Swiper Pagination */
-.swiper-pagination {
-    bottom: 10px !important;
-    text-align: center;
-}
-
-.swiper-pagination-bullet {
-    background-color: #c4c4c4 !important;
-    opacity: 1 !important;
-}
-
-.swiper-pagination-bullet-active {
-    background-color: var(--secondary-color) !important;
-}
-/* Swiper Navigation Buttons (Modern Arrows) */
-.swiper-button-next,
-.swiper-button-prev {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(11, 25, 44, 0.85);
-    backdrop-filter: blur(5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    color: white !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all .3s ease;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 20;
-}
-
-
-/* Hover Effects */
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-    transform: translateY(-50%) scale(1.15);
-    background: var(--secondary-color);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-}
-/* Positioning for arrows */
-.blogs-swiper .swiper-button-prev,
-.free-courses-swiper .swiper-button-prev,
-.paid-courses-swiper .swiper-button-prev{
-  left:6px;
-}
-.blogs-swiper .swiper-button-next,
-.free-courses-swiper .swiper-button-next,
-.paid-courses-swiper .swiper-button-next{
-  right:6px;
-}
-/* Custom Arrow Content */
-.swiper-button-prev::after,
-.swiper-button-next::after{
-  font-size:22px; font-weight:800; color:#fff;
-}
-.swiper-button-prev::after{ content: "<"; } 
-.swiper-button-next::after{ content: ">"; }
-
-/* Smaller screens improvements */
-@media (max-width: 480px) {
-    .swiper-button-next,
-    .swiper-button-prev {
-        width: 40px;
-        height: 40px;
+    /* General Section Styles */
+    section {
+      padding: 30px 40px;
     }
-    .swiper-button-next::after,
-    .swiper-button-prev::after {
-        font-size: 18px;
-    }
-}
 
-/* Extra small devices */
-@media (max-width: 320px) {
-    .swiper-button-next {
-        margin-right: -20px;
+    /* Section Titles */
+    section h1 {
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-bottom: -30px;
     }
-    .swiper-button-prev {
-        margin-left: -20px;
-    }
-}
 
-/* Media Queries for Responsiveness */
-@media (max-width: 1200px) {
-    .card {
-        width: clamp(230px, 30vw, 260px);
+    section h3 {
+      text-align: center;
+      font-family: Arial, Helvetica, sans-serif;
+      margin-bottom: 20px;
     }
-}
 
-@media (max-width: 1024px) {
+    /* Free Courses Section */
+    .free-course-section {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .free-course-title {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 32px;
+      letter-spacing: 0.1rem;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+
+    /* Paid Courses Section */
+    .paid-course-section {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .paid-course-title {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 32px;
+      letter-spacing: 0.1rem;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+
+    /* Blog Section */
+    .blog-section {
+      margin-top: 20px !important;
+      text-align: center;
+    }
+
+    .blogs-title {
+      font-size: 32px;
+      margin: 0 0 10px 0 !important;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Reduce space under swiper so cards come closer */
+    .blogs-swiper {
+      padding-top: 10px !important;
+      padding-bottom: 20px !important;
+    }
+
+    /* Swiper Container */
+    .container {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    /* Give some padding around sliders */
+    .swiper {
+      padding: 40px 10px 60px;
+    }
+
+    .blogs-swiper,
+    .free-courses-swiper,
+    .paid-courses-swiper {
+      position: relative;
+    }
+
+    /* Card Styling */
     .card-wrapper {
-        gap: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
     }
 
     .card {
-        width: 240px;
-        min-height: 340px;
+      width: clamp(240px, 24vw, 300px);
+      min-height: 360px;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform .35s ease, box-shadow .35s ease;
+      margin: 0 auto;
+      animation: fadeInUp 0.7s ease-out;
+    }
+
+    .card:hover {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+    }
+
+    /* Card Content */
+    .card-content {
+      padding: 15px;
+      text-align: center;
+    }
+
+    .card-content .image {
+      overflow: hidden;
+      border-radius: 14px;
     }
 
     .card-content .image img {
-        height: 130px;
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 14px;
+      transition: transform 0.3s ease;
     }
-}
 
-/* Navbar + hero + layout for tablets & below */
-@media (max-width: 768px) {
-    .nav-links {
+    .card-content .image img:hover {
+      transform: scale(1.05);
+    }
+
+    .name-profession {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .card-description p,
+    .created-at {
+      font-size: 14px;
+      color: #555;
+      margin-top: 20px;
+    }
+
+    .button {
+      margin-top: 15px;
+    }
+
+    .button .message-button {
+      padding: 10px 20px;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    .button .message-button:hover {
+      background-color: #0056b3;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Swiper Pagination */
+    .swiper-pagination {
+      bottom: 10px !important;
+      text-align: center;
+    }
+
+    .swiper-pagination-bullet {
+      background-color: #c4c4c4 !important;
+      opacity: 1 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+      background-color: var(--secondary-color) !important;
+    }
+
+    /* Swiper Navigation Buttons (Modern Arrows) */
+    .swiper-button-next,
+    .swiper-button-prev {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(11, 25, 44, 0.85);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      color: white !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .3s ease;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+    }
+
+    /* Hover Effects */
+    .swiper-button-next:hover,
+    .swiper-button-prev:hover {
+      transform: translateY(-50%) scale(1.15);
+      background: var(--secondary-color);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Positioning for arrows */
+    .blogs-swiper .swiper-button-prev,
+    .free-courses-swiper .swiper-button-prev,
+    .paid-courses-swiper .swiper-button-prev {
+      left: 6px;
+    }
+
+    .blogs-swiper .swiper-button-next,
+    .free-courses-swiper .swiper-button-next,
+    .paid-courses-swiper .swiper-button-next {
+      right: 6px;
+    }
+
+    /* Custom Arrow Content */
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .swiper-button-prev::after {
+      content: "<";
+    }
+
+    .swiper-button-next::after {
+      content: ">";
+    }
+
+    /* Smaller screens improvements */
+    @media (max-width: 480px) {
+
+      .swiper-button-next,
+      .swiper-button-prev {
+        width: 40px;
+        height: 40px;
+      }
+
+      .swiper-button-next::after,
+      .swiper-button-prev::after {
+        font-size: 18px;
+      }
+    }
+
+    /* Extra small devices */
+    @media (max-width: 320px) {
+      .swiper-button-next {
+        margin-right: -20px;
+      }
+
+      .swiper-button-prev {
+        margin-left: -20px;
+      }
+    }
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 1200px) {
+      .card {
+        width: clamp(230px, 30vw, 260px);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .card-wrapper {
+        gap: 15px;
+      }
+
+      .card {
+        width: 240px;
+        min-height: 340px;
+      }
+
+      .card-content .image img {
+        height: 130px;
+      }
+    }
+
+    /* Navbar + hero + layout for tablets & below */
+    @media (max-width: 768px) {
+      .nav-links {
         flex-direction: column;
         background-color: var(--primary-color);
         position: absolute;
@@ -514,1239 +577,1357 @@ section h3 {
         overflow: hidden;
         opacity: 0;
         transition: all var(--transition-base);
-    }
+      }
 
-    .nav-links.show {
+      .nav-links.show {
         height: auto;
         opacity: 1;
         padding: 15px 0 10px;
-    }
+      }
 
-    .nav-links li {
+      .nav-links li {
         margin: 10px 30px;
         text-align: left;
-    }
+      }
 
-    .menu-toggle {
+      .menu-toggle {
         display: block;
-    }
+      }
 
-    .hero {
+      .hero {
         padding: 6rem 1.5rem;
         margin-top: 70px !important;
         min-height: 70vh;
-    }
+      }
 
-    .hero h1 {
+      .hero h1 {
         font-size: 2.2rem;
         margin-bottom: 0.75rem;
-    }
+      }
 
-    .hero p {
+      .hero p {
         font-size: 1rem;
-    }
+      }
 
-    .card-wrapper {
+      .card-wrapper {
         flex-wrap: wrap;
         gap: 10px;
-    }
+      }
 
-    .card {
+      .card {
         width: 260px;
         min-height: 320px;
         margin-bottom: 15px;
-    }
+      }
 
-    .card-content .image img {
+      .card-content .image img {
         height: 120px;
-    }
+      }
 
-    .name-profession {
+      .name-profession {
         font-size: 16px;
-    }
+      }
 
-    section {
+      section {
         padding: 25px 20px;
-    }
+      }
 
-    .two_footer {
+      .two_footer {
         width: 90%;
+      }
     }
-}
 
-@media (max-width: 480px) {
-    .hero {
+    @media (max-width: 480px) {
+      .hero {
         padding: 4rem 1.2rem;
         margin-top: 60px;
-    }
+      }
 
-    .hero h1 {
+      .hero h1 {
         font-size: 1.9rem;
-    }
+      }
 
-    .hero p {
+      .hero p {
         font-size: 0.95rem;
-    }
+      }
 
-    .hero-btn {
+      .hero-btn {
         font-size: 0.85rem;
         padding: 0.55rem 1.6rem;
-    }
+      }
 
-    .card-wrapper {
+      .card-wrapper {
         flex-wrap: wrap;
         gap: 10px;
         justify-content: center;
-    }
+      }
 
-    .card {
+      .card {
         max-width: 300px;
         width: 100%;
         min-height: 0;
         margin: 0 auto 15px auto;
-    }
+      }
 
-    .card-content .image img {
+      .card-content .image img {
         width: 100%;
         height: 140px;
-    }
+      }
 
-    .name-profession {
+      .name-profession {
         font-size: 16px;
-    }
+      }
 
-    .card-description p,
-    .created-at {
+      .card-description p,
+      .created-at {
         font-size: 13px;
-    }
+      }
 
-    .button .message-button {
+      .button .message-button {
         padding: 8px 16px;
         font-size: 14px;
-    }
+      }
 
-    section {
+      section {
         padding: 25px 15px;
+      }
     }
-}
 
-@media (max-width: 375px) {
-    .hero h1 {
+    @media (max-width: 375px) {
+      .hero h1 {
         font-size: 1.7rem;
-    }
+      }
 
-    .hero p {
+      .hero p {
         font-size: 0.9rem;
+      }
     }
-}
 
-
-/* Footer */
-.footer {
-    background-color: var(--primary-color);
-    color: white;
-    padding: 4rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    height: auto;
-}
-
-.footer a {
-    text-decoration: none;
-    color: white;
-    transition: color var(--transition-base);
-}
-
-.footer a:hover {
-    color: var(--secondary-color);
-}
-
-#mail_id {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-}
-
-#three_div {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.social_icon {
-    font-size: 24px;
-    color: #fff;
-    transition: color 0.3s, transform 0.3s;
-}
-
-.social_icon:hover {
-    color: var(--secondary-color);
-    transform: scale(1.2);
-}
-
-/* Footer Sections */
-.two_footer {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-    margin-top: 2rem;
-    flex-wrap: wrap;
-}
-
-.left{
-    width: 30%;
-    text-align: left;
-}
-.mid{
-    width: 30%;
-    text-align: center;
-}
-.right{
-    width: 30%;
-    text-align: right;
-}
-
-.left h2, .mid h2, .right h2 {
-    font-size: 1.4rem;
-    margin-bottom: 1rem;
-    color: #fff;
-}
-
-#sub_link {
-    display: block;
-    color: white;
-    text-decoration: none;
-    margin-bottom: 8px;
-    font-size: 1rem;
-}
-
-#sub_link:hover {
-    color: var(--secondary-color);
-}
-
-/* Footer small screens */
-@media (max-width: 768px) {
+    /* Footer */
     .footer {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 4rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      height: auto;
+    }
+
+    .footer a {
+      text-decoration: none;
+      color: white;
+      transition: color var(--transition-base);
+    }
+
+    .footer a:hover {
+      color: var(--secondary-color);
+    }
+
+    #mail_id {
+      font-size: 1.1rem;
+      margin-bottom: 20px;
+    }
+
+    #three_div {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .social_icon {
+      font-size: 24px;
+      color: #fff;
+      transition: color 0.3s, transform 0.3s;
+    }
+
+    .social_icon:hover {
+      color: var(--secondary-color);
+      transform: scale(1.2);
+    }
+
+    /* Footer Sections */
+    .two_footer {
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .left {
+      width: 30%;
+      text-align: left;
+    }
+
+    .mid {
+      width: 30%;
+      text-align: center;
+    }
+
+    .right {
+      width: 30%;
+      text-align: right;
+    }
+
+    .left h2,
+    .mid h2,
+    .right h2 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    #sub_link {
+      display: block;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    #sub_link:hover {
+      color: var(--secondary-color);
+    }
+
+    /* Footer small screens */
+    @media (max-width: 768px) {
+      .footer {
         height: auto;
         padding: 3rem 1.5rem;
-    }
+      }
 
-    .two_footer {
+      .two_footer {
         flex-direction: column;
         align-items: center;
         width: 100%;
         margin-top: 1.5rem;
-    }
+      }
 
-    .left, .mid, .right {
+      .left,
+      .mid,
+      .right {
         width: 100%;
         text-align: center;
         margin-bottom: 1rem;
+      }
     }
-}
 
-@media (max-width: 375px) {
-    #mail_id {
+    @media (max-width: 375px) {
+      #mail_id {
         font-size: 0.9rem;
         margin-bottom: 10px;
-    }
+      }
 
-    .social_icon {
+      .social_icon {
         font-size: 18px;
-    }
+      }
 
-    .left h2, .mid h2, .right h2 {
+      .left h2,
+      .mid h2,
+      .right h2 {
         font-size: 1rem;
         margin-bottom: 0.6rem;
-    }
+      }
 
-    #sub_link {
+      #sub_link {
         font-size: 0.8rem;
+      }
     }
-}
 
-/* For 320px screens */
-@media (max-width: 320px) {
-    .left h2, .mid h2, .right h2 {
+    /* For 320px screens */
+    @media (max-width: 320px) {
+
+      .left h2,
+      .mid h2,
+      .right h2 {
         font-size: 0.9rem;
-    }
+      }
 
-    .left a, .mid a, .right a {
+      .left a,
+      .mid a,
+      .right a {
         font-size: 0.75rem;
+      }
     }
-}
 
-/* Contact Section Wrapper */
-#contact {
-     padding-top: 20px !important;
-    background-color: var(--bg-dark);
-    text-align: center;
-    margin-top: 40px; 
-}
+    /* Contact Section Wrapper */
+    #contact {
+      padding-top: 20px !important;
+      background-color: var(--bg-dark);
+      text-align: center;
+      margin-top: 40px;
+    }
 
-/* Inner layout */
-.contact-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-}
+    /* Inner layout */
+    .contact-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 25px;
+    }
 
-/* Title Styling */
-.contact-title {
-    font-size: 32px;
-    font-family: Arial, Helvetica, sans-serif;
-    letter-spacing: 0.5px;
-    margin: 0 0 10px 0; 
-    color: var(--primary-color);
-}
+    /* Title Styling */
+    .contact-title {
+      font-size: 32px;
+      font-family: Arial, Helvetica, sans-serif;
+      letter-spacing: 0.5px;
+      margin: 0 0 10px 0;
+      color: var(--primary-color);
+    }
 
-#contact .contact-title {
-    margin-top: 0 !important;
-}
+    #contact .contact-title {
+      margin-top: 0 !important;
+    }
 
-/* Contact details box */
-.contact-details {
-    background-color: var(--bg-dark);
-    width: 600px;
-    max-width: 100%;
-    padding: 20px;
-    border: none;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
+    /* Contact details box */
+    .contact-details {
+      background-color: var(--bg-dark);
+      width: 600px;
+      max-width: 100%;
+      padding: 20px;
+      border: none;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
 
-/* Text spacing */
-.contact-details p,
-.contact-details a,
-.contact-details button {
-    margin: 10px 0;
-}
+    /* Text spacing */
+    .contact-details p,
+    .contact-details a,
+    .contact-details button {
+      margin: 10px 0;
+    }
 
-/* Email link */
-.contact-email {
-    color: #007BFF;
-    text-decoration: none;
-    font-weight: bold;
-}
+    /* Email link */
+    .contact-email {
+      color: #007BFF;
+      text-decoration: none;
+      font-weight: bold;
+    }
 
-.contact-email:hover {
-    text-decoration: underline;
-}
+    .contact-email:hover {
+      text-decoration: underline;
+    }
 
-/* Buttons below form */
-.contact-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
+    /* Buttons below form */
+    .contact-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-/* Buttons general */
-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 15px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
-}
+    /* Buttons general */
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.18);
-}
+    button:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    }
 
-button i {
-    margin-right: 5px;
-}
+    button i {
+      margin-right: 5px;
+    }
 
-/* Contact Form Box */
-.contact-form {
-    max-width: 600px;
-    width: 100%;
-    background: var(--bg-light);
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-    margin-top: 10px; 
-}
+    /* Contact Form Box */
+    .contact-form {
+      max-width: 600px;
+      width: 100%;
+      background: var(--bg-light);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+      margin-top: 10px;
+    }
 
-/* Form Inputs */
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
+    /* Form Inputs */
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-    border-color: var(--secondary-color);
-    box-shadow: 0 0 0 3px rgba(120,212,197,0.25);
-}
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: var(--secondary-color);
+      box-shadow: 0 0 0 3px rgba(120, 212, 197, 0.25);
+    }
 
-/* Labels */
-.contact-form label {
-    display: block;
-    margin-bottom: 5px;
-    color: var(--text-color);
-    font-weight: bold;
-    text-align: left;
-}
+    /* Labels */
+    .contact-form label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-color);
+      font-weight: bold;
+      text-align: left;
+    }
 
-/* Checkbox */
-.contact-form input[type="checkbox"] {
-    width: auto;
-}
+    /* Checkbox */
+    .contact-form input[type="checkbox"] {
+      width: auto;
+    }
 
-/* Submit Button */
-.contact-form button {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--primary-color);
-    color: #fff;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    border: none;
-    cursor: pointer;
-    transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
-}
+    /* Submit Button */
+    .contact-form button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary-color);
+      color: #fff;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      transition: background-color var(--transition-base), transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-.contact-form button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-1px);
-    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
-}
+    .contact-form button:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.18);
+    }
 
+    .privacy-policy {
+      max-width: 600px;
+      margin: 50px auto 0;
+      padding: 20px;
+      text-align: left;
+      color: var(--text-color);
+      background-color: var(--bg-dark);
+      border: none;
+    }
 
-.privacy-policy {
-    max-width: 600px;
-    margin: 50px auto 0;
-    padding: 20px;
-    text-align: left;
-    color: var(--text-color);
-    background-color: var(--bg-dark);
-    border: none;
-}
+    .privacy-policy h2 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      font-size: 2em;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 10px;
+    }
 
-.privacy-policy h2 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    font-size: 2em;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 10px;
-}
+    .privacy-policy p {
+      font-size: 1.05em;
+      line-height: 1.6;
+      margin-bottom: 15px;
+      color: var(--text-color);
+    }
 
-.privacy-policy p {
-    font-size: 1.05em;
-    line-height: 1.6;
-    margin-bottom: 15px;
-    color: var(--text-color);
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-html {
-    scroll-behavior: smooth;
-}
+    /* Modals (Admin + Form success) */
+    /* Overlay (Admin + Form success) */
+    #adminModal,
+    #formSuccessModal {
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      /* shorthand for top:0; right:0; bottom:0; left:0; */
+      background-color: rgba(0, 0, 0, 0.55);
+      display: none;
+      /* toggle to block/flex when showing */
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      /* room on small screens */
+    }
 
-/* Modals (Admin + Form success) */
-/* Overlay (Admin + Form success) */
-#adminModal,
-#formSuccessModal {
-  position: fixed;
-  z-index: 1000;
-  inset: 0; /* shorthand for top:0; right:0; bottom:0; left:0; */
-  background-color: rgba(0, 0, 0, 0.55);
-  display: none;              /* toggle to block/flex when showing */
-  align-items: center;
-  justify-content: center;
-  padding: 20px;              /* room on small screens */
-}
+    /* Modal card */
+    .modal-content {
+      background-color: #fff;
+      width: 360px;
+      /* neat desktop width */
+      max-width: 95%;
+      border-radius: 12px;
+      box-shadow: 0 12px 30px rgba(6, 16, 28, 0.45);
+      padding: 26px 26px 22px;
+      box-sizing: border-box;
+      position: relative;
+      /* keep overlay responsible for centering */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      /* consistent vertical spacing */
+      font-family: "Helvetica Neue", Arial, sans-serif;
+    }
 
-/* Modal card */
-.modal-content {
-  background-color: #fff;
-  width: 360px;               /* neat desktop width */
-  max-width: 95%;
-  border-radius: 12px;
-  box-shadow: 0 12px 30px rgba(6, 16, 28, 0.45);
-  padding: 26px 26px 22px;
-  box-sizing: border-box;
-  position: relative;         /* keep overlay responsible for centering */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;                  /* consistent vertical spacing */
-  font-family: "Helvetica Neue", Arial, sans-serif;
-}
+    /* Header */
+    .modal-content h3 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      color: #0b2340;
+      /* dark navy for contrast */
+      letter-spacing: 0.2px;
+    }
 
-/* Header */
-.modal-content h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 700;
-  text-align: center;
-  color: #0b2340;             /* dark navy for contrast */
-  letter-spacing: 0.2px;
-}
+    /* Sub-labels (Username, Password lines) */
+    .modal-content .field-label {
+      margin-top: 6px;
+      margin-bottom: 6px;
+      color: #333;
+      font-weight: 500;
+    }
 
-/* Sub-labels (Username, Password lines) */
-.modal-content .field-label {
-  margin-top: 6px;
-  margin-bottom: 6px;
-  color: #333;
-  font-weight: 500;
-}
+    /* Input wrapper (keeps label + input tidy) */
+    .modal-field {
+      width: 100%;
+      display: block;
+    }
 
-/* Input wrapper (keeps label + input tidy) */
-.modal-field {
-  width: 100%;
-  display: block;
-}
+    /* Inputs */
+    .modal-content input[type="text"],
+    .modal-content input[type="password"],
+    .modal-content input[type="email"],
+    .modal-content textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #d6dbe0;
+      border-radius: 8px;
+      background: #fbfdff;
+      font-size: 14px;
+      outline: none;
+      box-sizing: border-box;
+      transition: box-shadow .15s ease, border-color .15s ease;
+    }
 
-/* Inputs */
-.modal-content input[type="text"],
-.modal-content input[type="password"],
-.modal-content input[type="email"],
-.modal-content textarea {
-  width: 100%;
-  padding: 11px 12px;
-  border: 1px solid #d6dbe0;
-  border-radius: 8px;
-  background: #fbfdff;
-  font-size: 14px;
-  outline: none;
-  box-sizing: border-box;
-  transition: box-shadow .15s ease, border-color .15s ease;
-}
+    /* Input focus */
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+      border-color: #6aa8ff;
+      box-shadow: 0 4px 14px rgba(106, 168, 255, 0.14);
+    }
 
-/* Input focus */
-.modal-content input:focus,
-.modal-content textarea:focus {
-  border-color: #6aa8ff;
-  box-shadow: 0 4px 14px rgba(106,168,255,0.14);
-}
+    /* Optional helper text (small) */
+    .modal-content .helper {
+      font-size: 12px;
+      color: #7a8694;
+      text-align: center;
+      margin-top: 4px;
+    }
 
-/* Optional helper text (small) */
-.modal-content .helper {
-  font-size: 12px;
-  color: #7a8694;
-  text-align: center;
-  margin-top: 4px;
-}
+    /* Actions container — centers buttons horizontally */
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      /* spacing between buttons */
+      margin-top: 6px;
+    }
 
-/* Actions container — centers buttons horizontally */
-.modal-actions {
-  display: flex;
-  justify-content: center;
-  gap: 14px;                  /* spacing between buttons */
-  margin-top: 6px;
-}
+    /* Base button */
+    .modal-content .btn {
+      min-width: 110px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 6px 14px rgba(8, 20, 34, 0.12);
+      transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-/* Base button */
-.modal-content .btn {
-  min-width: 110px;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-weight: 600;
-  font-size: 14px;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 6px 14px rgba(8,20,34,0.12);
-  transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
+    /* Primary button (submit) */
+    .modal-content .btn-primary {
+      background: linear-gradient(180deg, #12d856, #0fb944);
+      color: #fff;
+    }
 
-/* Primary button (submit) */
-.modal-content .btn-primary {
-  background: linear-gradient(180deg, #12d856, #0fb944);
-  color: #fff;
-}
+    /* Secondary button (cancel) */
+    .modal-content .btn-secondary {
+      background: linear-gradient(180deg, #ff4b4b, #e41313);
+      color: #ffffff;
+      border: 1px solid #eaa4a4;
+    }
 
-/* Secondary button (cancel) */
-.modal-content .btn-secondary {
-  background: linear-gradient(180deg, #ff4b4b, #e41313);
-  color: #ffffff;
-  border: 1px solid #eaa4a4;
-}
+    /* Hover / active effects */
+    .modal-content .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(8, 20, 34, 0.16);
+    }
 
-/* Hover / active effects */
-.modal-content .btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(8,20,34,0.16);
-}
-.modal-content .btn:active {
-  transform: translateY(0);
-  box-shadow: 0 6px 12px rgba(8,20,34,0.12);
-}
-.modal-content .btn:focus {
-  outline: 3px solid rgba(106,168,255,0.18);
-  outline-offset: 2px;
-}
+    .modal-content .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 12px rgba(8, 20, 34, 0.12);
+    }
 
-/* Small screens: make buttons stack if necessary */
-@media (max-width: 420px) {
-  .modal-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .modal-content {
-    padding: 20px;
-  }
-  .modal-content .btn {
-    width: 100%;
-    min-width: 0;
-  }
-}
+    .modal-content .btn:focus {
+      outline: 3px solid rgba(106, 168, 255, 0.18);
+      outline-offset: 2px;
+    }
 
-/* Success modal text */
-#formSuccessModal .modal-content p {
-    color: #333;
-    margin-top: 10px;
-    text-align: center;
-}
+    /* Small screens: make buttons stack if necessary */
+    @media (max-width: 420px) {
+      .modal-actions {
+        flex-direction: column;
+        gap: 10px;
+      }
 
-#formSuccessModal .modal-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;   /* centers items horizontally */
-    justify-content: center;
-}
+      .modal-content {
+        padding: 20px;
+      }
 
+      .modal-content .btn {
+        width: 100%;
+        min-width: 0;
+      }
+    }
 
-/* All section titles inside sections */
-section h1,
-section h2,
-section h3 {
-    margin-top: 0 !important;
-    padding-top: 0 !important;
-}
+    /* Success modal text */
+    #formSuccessModal .modal-content p {
+      color: #333;
+      margin-top: 10px;
+      text-align: center;
+    }
 
-/* Remove huge space before Connect with Us */
-#contact {
-    padding-top: 10px !important;
-    margin-top: 20px !important;
-}
+    #formSuccessModal .modal-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* centers items horizontally */
+      justify-content: center;
+    }
 
-#contact .contact-title {
-    margin-top: 0 !important;
-}
+    /* All section titles inside sections */
+    section h1,
+    section h2,
+    section h3 {
+      margin-top: 0 !important;
+      padding-top: 0 !important;
+    }
 
-/* Remove huge space before Free Courses */
-.free-course-section,
-#free-courses {
-    margin-top: 20px !important;
-}
+    /* Remove huge space before Connect with Us */
+    #contact {
+      padding-top: 10px !important;
+      margin-top: 20px !important;
+    }
 
-/* Remove huge space before Paid Courses */
-.paid-course-section,
-#paid-courses {
-    margin-top: 20px !important;
-}
+    #contact .contact-title {
+      margin-top: 0 !important;
+    }
 
-/* Remove space before Latest Blogs */
-#latest-blogs,
-.blog-section {
-    margin-top: 20px !important;
-}
+    /* Remove huge space before Free Courses */
+    .free-course-section,
+    #free-courses {
+      margin-top: 20px !important;
+    }
 
-/* Reduce padding UNDER all swiper sliders */
-.swiper {
-    padding-bottom: 25px !important;
-    margin-bottom: 0 !important;
-}
+    /* Remove huge space before Paid Courses */
+    .paid-course-section,
+    #paid-courses {
+      margin-top: 20px !important;
+    }
 
-/* Remove extra spacing under cards */
-.card {
-    margin-bottom: 10px !important;
-}
+    /* Remove space before Latest Blogs */
+    #latest-blogs,
+    .blog-section {
+      margin-top: 20px !important;
+    }
 
-/* Remove extra gap under pagination dots */
-.swiper-pagination {
-    margin-top: -10px !important;
-}
+    /* Reduce padding UNDER all swiper sliders */
+    .swiper {
+      padding-bottom: 25px !important;
+      margin-bottom: 0 !important;
+    }
 
-section {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
-}
-    </style>
+    /* Remove extra spacing under cards */
+    .card {
+      margin-bottom: 10px !important;
+    }
+
+    /* Remove extra gap under pagination dots */
+    .swiper-pagination {
+      margin-top: -10px !important;
+    }
+
+    section {
+      padding-top: 20px !important;
+      padding-bottom: 20px !important;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <div class="logo">SciAstra</div>
-        <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#blogs">Blog</a></li>
-            <li><a href="#free-courses">Courses</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a href="#" onclick="showAdminModal()">Add New</a></li>
-        </ul>
+  <div class="navbar">
+    <div class="logo">SciAstra</div>
+    <div class="menu-toggle" onclick="toggleMenu()">&#9776;</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#blogs">Blog</a></li>
+      <li><a href="#free-courses">Courses</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="/login.html" id="userLink">Login</a></li>
+      <li><a href="/addnew.html" id="adminLink">Admin</a></li>
+    </ul>
+  </div>
+
+
+
+  <div id="formSuccessModal">
+    <div class="modal-content">
+      <h3>Thank you!</h3>
+      <p>Your message has been sent successfully. We will get back to you soon.</p>
+      <button onclick="closeFormModal()">Close</button>
     </div>
-
-<!--Modal for admin login-->
-<div id="adminModal">
-  <div class="modal-content">
-    <h3>Admin Panel</h3>
-
-    <div class="modal-field">
-      <div class="field-label">Username:</div>
-      <input id="username" type="text" placeholder="Enter username">
-    </div>
-
-    <div class="modal-field">
-      <div class="field-label">Password:</div>
-      <input id="password" type="password" placeholder="Enter password">
-    </div>
-
-    <div class="modal-actions">
-      <button class="btn btn-primary" onclick="validateAdmin()">Submit</button>
-      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+    <div class="contact-details">
+      <p>Contact us via email or phone for immediate assistance.</p>
+      <a class="contact-email" href="mailto:support@sciastra.com">support@sciastra.com</a>
+      <p>Call us at: +91 98765 43210 (Mon-Fri, 9am-5pm IST)</p>
     </div>
   </div>
-</div>
 
-    <!-- Success modal for contact form -->
-    <div id="formSuccessModal">
-        <div class="modal-content">
-            <h3>Thank you!</h3>
-            <p>Your message has been sent successfully. We will get back to you soon.</p>
-            <button onclick="closeFormModal()">Close</button>
-        </div>
+  <section id="home" class="hero reveal">
+    <h1>Welcome to SciAstra</h1>
+    <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
+
+    <div class="hero-buttons">
+      <a href="#blogs" class="hero-btn">Explore Blogs</a>
+      <a href="#free-courses" class="hero-btn">View Courses</a>
     </div>
+  </section>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero reveal">
-        <h1>Welcome to SciAstra</h1>
-        <p>Discover the best courses at discounted prices and stay updated with our latest blogs!</p>
-
-        <div class="hero-buttons">
-            <a href="#blogs" class="hero-btn">Explore Blogs</a>
-            <a href="#free-courses" class="hero-btn">View Courses</a>
-        </div>
-    </section>
-
-    <!-- Blogs Section -->
-    <section id="blogs" class="reveal blog-section">
-        <h3 class="blogs-title">Latest Blogs</h3>
-        <div class="swiper blogs-swiper">
-            <div class="swiper-wrapper" id="blogs-wrapper">
-                <!-- Blog slides will be injected here -->
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
-    </section>
-
-    <!-- Free Courses Section -->
-    <section id="free-courses" class="reveal free-course-section">
-        <h3 class="free-course-title">Free Courses</h3>
-        <div class="swiper free-courses-swiper">
-            <div class="swiper-wrapper" id="free-courses-wrapper">
-                <!-- Free course slides injected here -->
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
-    </section>
-     
-    <!-- Paid Courses Section -->
-    <section id="paid-courses" class="reveal paid-course-section">
-        <h3 class="paid-course-title">Paid Courses</h3>
-        <div class="swiper paid-courses-swiper">
-            <div class="swiper-wrapper" id="paid-courses-wrapper">
-                <!-- Paid course slides injected here -->
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </div>
-    </section>
-     
-    <section id="contact" class="reveal">
-        <div class="contact-section">
-            <h1 class="contact-title">Connect with Us</h1>
-            <div class="contact-form">
-                <!-- Formspree form (logic preserved, handled via JS below to show popup) -->
-                <form action="https://formspree.io/f/mkgdbqaw" method="post">
-                    <label for="fname">Your Name</label>
-                    <input type="text" id="fname" name="fullname" required>
-
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" required>
-
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="4"></textarea>
-
-                    <label>
-                        <input type="checkbox" name="consent" required> I authorize SciAstra to contact me with updates and notifications.
-                    </label>
-
-                    <button type="submit">Submit</button>
-                </form>
-            </div>
-            <div class="contact-buttons">
-                <button onclick="window.location.href='mailto:support@sciastra.com'">
-                    <i class="fas fa-envelope"></i> Email Us Now
-                </button>
-                <button onclick="window.location.href='tel:+919876543210'">
-                    <i class="fas fa-phone-alt"></i> Call Us Now
-                </button>
-            </div>
-        </div>
-
-        <div class="privacy-policy">
-            <h2>Privacy Policy</h2>
-            <p>SciAstra has framed this Privacy Policy in order to demonstrate our firm commitment to your privacy. This document outlines our policies and practices with respect to information gathering, dissemination, and protection.</p>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <div class="footer reveal">
-        <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
-        <div id="three_div">
-            <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i class="fab fa-youtube social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i class="fab fa-instagram social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i class="fab fa-linkedin social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i class="fab fa-telegram social_icon"></i></a>
-            <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i class="fab fa-whatsapp social_icon"></i></a>
-        </div>
-        <div class="two_footer">
-            <div class="left">
-                <h2 id="title">SciAstra</h2>
-                <a id="sub_link" href="../mission/">Mission</a>
-                <a id="sub_link" href="../selections/">Selections</a>
-                <a id="sub_link" href="../teams/">Team</a>
-            </div>
-            <div class="mid">
-                <h2 id="title">Institutes</h2>
-                <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
-                <a id="sub_link" href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
-                <a id="sub_link" href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
-                <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
-                <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
-                <a id="sub_link" href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
-                <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
-            </div>
-            <div class="right">
-                <h2 id="title">Links</h2>
-                <a id="sub_link" href="#free-courses">Our Courses</a>
-                <a id="sub_link" href="#blogs">Blogs</a>
-                <a id="sub_link" href="#contact">Contact Us</a>
-            </div>
-        </div>
+  <section id="blogs" class="reveal blog-section">
+    <h3 class="blogs-title">Latest Blogs</h3>
+    <div class="swiper blogs-swiper">
+      <div class="swiper-wrapper" id="blogs-wrapper">
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  </section>
 
-<script>
-/* -------------------
-   GLOBALS & HELPERS
-   ------------------- */
-const API_BASE_URL = "https://edufusion-blogs.onrender.com"; // backend base URL
-window.swiperInstances = window.swiperInstances || {};       // ensure global object
+  <section id="free-courses" class="reveal free-course-section">
+    <h3 class="free-course-title">Free Courses</h3>
+    <div class="swiper free-courses-swiper">
+      <div class="swiper-wrapper" id="free-courses-wrapper">
+      </div>
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
 
-// Safe response parser: try JSON, otherwise return text fallback
-async function parseResponseSafely(response) {
-  const ct = (response.headers.get('content-type') || '').toLowerCase();
-  try {
-    if (ct.includes('application/json')) {
-      return await response.json();
-    } else {
-      // try parse text -> maybe it's JSON as text, else fallback to raw text
-      const txt = await response.text();
-      try { return JSON.parse(txt); }
-      catch (e) { return { success: false, message: txt || response.statusText }; }
-    }
-  } catch (err) {
-    console.error('Error parsing response safely:', err);
-    return { success: false, message: 'Unable to parse server response' };
-  }
-}
-
-/* -------------------
-   SWIPER INITIALIZATION
-   ------------------- */
-const swipers = ['blogs-swiper', 'free-courses-swiper', 'paid-courses-swiper'];
-
-function initSwipers() {
-  swipers.forEach(swiperClass => {
-    // if already created, just update
-    if (window.swiperInstances[swiperClass]) {
-      try { window.swiperInstances[swiperClass].update(); }
-      catch(e){ console.warn('Swiper update failed for', swiperClass, e); }
-      return;
-    }
-
-    // create a new instance
-    try {
-      window.swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
-        slidesPerView: 4,
-        spaceBetween: 40,
-        slidesPerGroup: 4,
-        loop: true,
-        loopFillGroupWithBlank: true,
-        pagination: {
-          el: `.${swiperClass} .swiper-pagination`,
-          clickable: true,
-          dynamicBullets: true,
-        },
-        navigation: {
-          nextEl: `.${swiperClass} .swiper-button-next`,
-          prevEl: `.${swiperClass} .swiper-button-prev`,
-        },
-        breakpoints: {
-          1300: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 30 },
-          1024: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 20 },
-          768:  { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
-          480:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 12 },
-          375:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
-          320:  { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 8 }
-        }
-      });
-    } catch (e) {
-      console.warn('Failed to initialize swiper', swiperClass, e);
-    }
-  });
-}
-
-/* -------------------
-   RAZORPAY: ENROLL (fixed for production)
-   ------------------- */
-function enrollNow(coursename, price, link) {
-  // price should be in rupees on UI; backend will multiply by 100
-  fetch(`${API_BASE_URL}/createOrder`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      amount: price,
-      name: coursename,
-      description: 'Course Payment'
-    })
-  })
-  .then(async (res) => {
-    const data = await parseResponseSafely(res);
-    if (!res.ok) {
-      console.error('Order creation HTTP error:', res.status, data);
-      alert(`Order creation failed: ${data.message || res.statusText}`);
-      return null;
-    }
-    return data;
-  })
-  .then(data => {
-    if (!data) return;
-    if (data.success) {
-      const options = {
-        key: data.key_id,
-        amount: data.amount,
-        currency: 'INR',
-        name: data.name,
-        description: data.description,
-        image: 'https://www.example.com/logo.png',
-        order_id: data.order_id,
-        handler: function (response) {
-          alert('Payment successful! Redirecting to your course...');
-          if (link) window.location.href = link;
-        },
-        prefill: {
-          name: data.name,
-          email: data.email,
-          contact: data.contact
-        },
-        notes: {
-          address: 'Blogs & Courses website'
-        },
-        theme: { color: '#007bff' }
-      };
-      const rzp1 = new Razorpay(options);
-      rzp1.on('payment.failed', function(response){
-        console.error('Payment failed callback', response);
-        alert('Payment failed. Please try again.');
-      });
-      rzp1.open();
-    } else {
-      alert(data.msg || data.message || 'Order creation failed. Please try again.');
-    }
-  })
-  .catch(err => {
-    console.error('Error in enrollNow:', err);
-    alert('An error occurred while creating the order. Check console for details.');
-  });
-}
-
-/* -------------------
-   NAV & ADMIN MODAL
-   ------------------- */
-function toggleMenu() {
-  const navLinks = document.querySelector('.nav-links');
-  const menuToggle = document.querySelector('.menu-toggle');
-  navLinks.classList.toggle('show');
-  menuToggle.textContent = navLinks.classList.contains('show') ? "✖" : "☰";
-}
-
-const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
-scrollLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = link.getAttribute('href').substring(1);
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      const offset = 100;
-      window.scrollTo({ top: targetElement.offsetTop - offset, behavior: 'smooth' });
-    }
-    const nav = document.querySelector('.nav-links');
-    const menuToggle = document.querySelector('.menu-toggle');
-    if (nav && nav.classList.contains('show')) {
-      nav.classList.remove('show');
-      if (menuToggle) menuToggle.textContent = "☰";
-    }
-  });
-});
-
-// admin modal (preserved logic)
-const adminUsername = "Admin";
-const adminPassword = "Admin@123";
-
-function showAdminModal() { document.getElementById("adminModal").style.display = "flex"; }
-function validateAdmin() {
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  if (username === adminUsername && password === adminPassword) {
-    alert("Access Granted!");
-    window.location.href = "/addnew.html";
-  } else alert("Invalid Username or Password.");
-}
-function closeModal() { document.getElementById("adminModal").style.display = "none"; }
-
-/* -------------------
-   FETCH HELPERS
-   ------------------- */
-async function fetchJSON(url) {
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
-  return res.json();
-}
-
-/* -------------------
-   RENDER FUNCTIONS (safe swiper updates)
-   ------------------- */
-function renderBlogs(blogs) {
-  const wrapper = document.getElementById("blogs-wrapper");
-  if (!wrapper) return;
-  wrapper.innerHTML = "";
-
-  blogs.forEach(blog => {
-    const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : "";
-    const slide = document.createElement("div");
-    slide.className = "swiper-slide";
-    slide.innerHTML = `
-      <div class="card">
-        <a href="${blog.blog_link}" style="text-decoration: none; color:black;">
+  <section id="paid-courses" class="reveal paid-course-section">
+    <h3 class="paid-course-title">Paid Courses</h3>
+    <div class="swiper paid-courses-swiper">
+      <div class="swiper-wrapper" id="paid-courses-wrapper">
+        <div class="card">
           <div class="card-content">
             <div class="image">
-              <img src="${blog.imageUrl}"
-                   alt="${blog.Blog_title || blog.title || ''}"
-                   loading="lazy" />   <!-- ✅ here -->
+              <img src="/Images/default-course.jpg" alt="Example Course" loading="lazy" decoding="async"
+                style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
             </div>
             <div class="name-profession">
-              <span class="name">${blog.Blog_title || blog.title || ''}</span>
+              <span class="name">Course 1</span>
             </div>
-            <div class="card-description">
-              <p>${blog.Blog_description || blog.description || ''}</p>
-            </div>
-            <p class="created-at">Published at: ${publishedAt}</p>
-          </div>
-        </a>
-      </div>
-    `;
-    wrapper.appendChild(slide);
-  });
-
-  if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
-    window.swiperInstances["blogs-swiper"].update();
-  }
-}
-
-// free courses
-function renderFreeCourses(courses) {
-  const wrapper = document.getElementById("free-courses-wrapper");
-  if (!wrapper) return;
-  wrapper.innerHTML = "";
-
-  courses.forEach(course => {
-    const slide = document.createElement("div");
-    slide.className = "swiper-slide";
-    slide.innerHTML = `
-      <div class="card">
-        <div class="card-content">
-          <div class="image">
-            <img src="${course.imageUrl}"
-                 alt="${course.coursename}"
-                 loading="lazy"
-                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
-          </div>
-          <div class="name-profession">
-            <span class="name">${course.coursename}</span>
-          </div>
-          <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free</p>
-          <div class="button" style="position: relative; top: -20px;">
-            <button class="message-button" onclick="window.location.href='${course.link}'">Learn More</button>
-          </div>
-        </div>
-      </div>
-    `;
-    wrapper.appendChild(slide);
-  });
-
-  if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
-    window.swiperInstances["free-courses-swiper"].update();
-  }
-}
-
-// paid courses
-function renderPaidCourses(courses) {
-  const wrapper = document.getElementById("paid-courses-wrapper");
-  if (!wrapper) return;
-  wrapper.innerHTML = "";
-
-  courses.forEach(course => {
-    const slide = document.createElement("div");
-    slide.className = "swiper-slide";
-    slide.innerHTML = `
-      <div class="card">
-        <div class="card-content">
-          <div class="image">
-            <img src="${course.imageUrl}"
-                 alt="${course.coursename}"
-                 loading="lazy"
-                 style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
-          </div>
-          <div class="name-profession">
-            <span class="name">${course.coursename}</span>
-          </div>
-          <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
-          <div class="button" style="margin-top: 30px;">
-              <button class="message-button"
-                  onclick="enrollNow('${course.coursename}', '${course.price}', '${course.link}')">
-                  Enroll Now
+            <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹499</p>
+            <div class="button" style="margin-top: 30px;">
+              <button class="message-button" onclick="handleEnroll('Course 1', '499', '/course/1')">
+                Enroll Now
               </button>
+            </div>
           </div>
         </div>
       </div>
-    `;
-    wrapper.appendChild(slide);
-  });
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
 
-  if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
-    window.swiperInstances["paid-courses-swiper"].update();
-  }
-}
+  <section id="contact" class="reveal">
+    <div class="contact-section">
+      <h1 class="contact-title">Connect with Us</h1>
+      <div class="contact-form">
+        <form action="https://formspree.io/f/mkgdbqaw" method="post">
+          <label for="fname">Your Name</label>
+          <input type="text" id="fname" name="fullname" required>
 
-/* -------------------
-   LOAD DATA
-   ------------------- */
-async function loadDataFromBackend() {
-  try {
-    const [blogs, freeCourses, paidCourses] = await Promise.all([
-      fetchJSON(`${API_BASE_URL}/api/blogs`),
-      fetchJSON(`${API_BASE_URL}/api/courses?type=free`),
-      fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
-    ]);
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required>
 
-    renderBlogs(blogs || []);
-    renderFreeCourses(freeCourses || []);
-    renderPaidCourses(paidCourses || []);
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" required>
 
-    // Initialize swipers after DOM has slides
-    initSwipers();
-  } catch (err) {
-    console.error("Error loading data from backend:", err);
-  }
-}
+          <label for="message">Message</label>
+          <textarea id="message" name="message" rows="4"></textarea>
 
-/* -------------------
-   CONTACT FORM (robust)
-   ------------------- */
-function showFormModal() { document.getElementById("formSuccessModal").style.display = "flex"; }
-function closeFormModal() { document.getElementById("formSuccessModal").style.display = "none"; }
+          <label>
+            <input type="checkbox" name="consent" required> I authorize SciAstra to contact me with updates and
+            notifications.
+          </label>
 
-document.addEventListener('DOMContentLoaded', function () {
-  // contact form submit handler (AJAX) - robust parse
-  const contactForm = document.querySelector('.contact-form form');
-  if (contactForm) {
-    contactForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
-      const formData = new FormData(contactForm);
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div class="contact-buttons">
+        <button onclick="window.location.href='mailto:support@sciastra.com'">
+          <i class="fas fa-envelope"></i> Email Us Now
+        </button>
+        <button onclick="window.location.href='tel:+919876543210'">
+          <i class="fas fa-phone-alt"></i> Call Us Now
+        </button>
+      </div>
+    </div>
 
-      try {
-        const response = await fetch(contactForm.action, {
-          method: contactForm.method,
-          body: formData,
-          headers: { 'Accept': 'application/json' }
-        });
+    <div class="privacy-policy">
+      <h2>Privacy Policy</h2>
+      <p>SciAstra has framed this Privacy Policy in order to demonstrate our firm commitment to your privacy. This
+        document outlines our policies and practices with respect to information gathering, dissemination, and
+        protection.</p>
+    </div>
+  </section>
 
-        const payload = await parseResponseSafely(response);
+  <div class="footer reveal">
+    <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
+    <div id="three_div">
+      <a id="social_link" target="_blank" href="https://www.youtube.com/c/VivekNISERsciASTRA"><i
+          class="fab fa-youtube social_icon"></i></a>
+      <a id="social_link" target="_blank" href="https://www.instagram.com/sciastra_official/"><i
+          class="fab fa-instagram social_icon"></i></a>
+      <a id="social_link" target="_blank" href="https://www.linkedin.com/company/sciastra/"><i
+          class="fab fa-linkedin social_icon"></i></a>
+      <a id="social_link" target="_blank" href="https://telegram.me/vivekNISER3"><i
+          class="fab fa-telegram social_icon"></i></a>
+      <a id="social_link" target="_blank" href="https://whatsapp.com/channel/0029Va9dMw8LikgFQB8ckG3j"><i
+          class="fab fa-whatsapp social_icon"></i></a>
+    </div>
 
-        if (response.ok && payload) {
-          contactForm.reset();
-          showFormModal();
+    <script>
+      window.FIREBASE_CONFIG = {
+        apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
+        authDomain: "sciastra-ak25.firebaseapp.com",
+        projectId: "sciastra-ak25",
+        storageBucket: "sciastra-ak25.firebasestorage.app",
+        messagingSenderId: "1001911647496",
+        appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
+      };
+    </script>
+
+    <script type="module">
+      import { auth, onAuthChange } from '/js/auth.js';
+
+      const userLink = document.getElementById('userLink');
+
+      onAuthChange((user) => {
+        if (user) {
+          if (userLink) {
+            userLink.textContent = 'Dashboard';
+            userLink.href = '/dashboard.html';
+          }
+          trackPageView(user);
         } else {
-          alert(`Form submit failed: ${payload.message || response.statusText}`);
+          if (userLink) {
+            userLink.textContent = 'Login';
+            userLink.href = '/login.html';
+          }
+        }
+      });
+
+      async function trackPageView(user) {
+        // Determine if we are on a blog or course page, or just tracks click
+        // Since this is a One-Page scroller, we track "clicks" on cards.
+        // We'll attach listeners to all "Read More" or "View" buttons.
+
+        const cards = document.querySelectorAll('.card'); // Assuming cards have this class
+        cards.forEach(card => {
+          card.addEventListener('click', async () => {
+            // find hidden id or link to identify
+            // Implementation depends on how we identify content.
+            // For now we just log it. in real implementation we'd grab the ID.
+            console.log('Content clicked');
+          });
+        });
+      }
+    </script>
+    <div class="two_footer">
+      <div class="left">
+        <h2 id="title">SciAstra</h2>
+        <a id="sub_link" href="../mission/">Mission</a>
+        <a id="sub_link" href="../selections/">Selections</a>
+        <a id="sub_link" href="../teams/">Team</a>
+      </div>
+      <div class="mid">
+        <h2 id="title">Institutes</h2>
+        <a id="sub_link" href="https://www.sciastra.com/iisc-indian-institute-of-science/">IISC</a>
+        <a id="sub_link"
+          href="https://www.sciastra.com/iiser-indian-institutes-of-science-education-and-research/">IISER</a>
+        <a id="sub_link"
+          href="https://www.sciastra.com/niser-national-institute-of-science-education-and-research/">NISER</a>
+        <a id="sub_link" href="https://www.sciastra.com/isi-indian-statistical-institute/">ISI</a>
+        <a id="sub_link" href="https://www.sciastra.com/cmi-chennai-mathematical-institute/">CMI</a>
+        <a id="sub_link"
+          href="https://www.sciastra.com/iacs-indian-association-for-the-cultivation-of-science/">IACS</a>
+        <a id="sub_link" href="https://www.sciastra.com/cebs-center-for-excellence-in-basic-sciences/">CEBS</a>
+      </div>
+      <div class="right">
+        <h2 id="title">Links</h2>
+        <a id="sub_link" href="#free-courses">Our Courses</a>
+        <a id="sub_link" href="#blogs">Blogs</a>
+        <a id="sub_link" href="#contact">Contact Us</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+  <script type="module">
+    /* -------------------
+    GLOBALS & HELPERS
+    ------------------- */
+    const API_BASE_URL = "";
+    window.swiperInstances = window.swiperInstances || {};
+    let currentUser = null; // Global user state
+
+    // Auth Import
+    import { auth, onAuthChange } from '/js/auth.js';
+
+    // Listen for auth state
+    onAuthChange((user) => {
+      currentUser = user;
+      console.log("Current User:", currentUser);
+
+      const userLink = document.getElementById('userLink');
+      if (userLink) {
+        if (user) {
+          userLink.textContent = 'Dashboard';
+          userLink.href = '/dashboard.html';
+        } else {
+          userLink.textContent = 'Login';
+          userLink.href = '/login.html';
+        }
+      }
+    });
+
+    // Access Handler
+    window.handleAccess = function (url) {
+      if (currentUser) {
+        window.open(url, '_blank');
+      } else {
+        alert("Please login to access this content.");
+        window.location.href = '/login.html';
+      }
+    };
+
+    // Enroll Handler
+    window.handleEnroll = function (name, price, link) {
+      if (currentUser) {
+        enrollNow(name, price, link);
+      } else {
+        alert("Please login to enroll.");
+        window.location.href = '/login.html';
+      }
+    };
+
+    // Safe response parser
+    async function parseResponseSafely(response) {
+      const ct = (response.headers.get('content-type') || '').toLowerCase();
+      try {
+        if (ct.includes('application/json')) {
+          return await response.json();
+        } else {
+          // try parse text -> maybe it's JSON as text, else fallback to raw text
+          const txt = await response.text();
+          try { return JSON.parse(txt); }
+          catch (e) { return { success: false, message: txt || response.statusText }; }
         }
       } catch (err) {
-        console.error('Form submission error:', err);
-        alert('There was a problem submitting the form. Please try again.');
+        console.error('Error parsing response safely:', err);
+        return { success: false, message: 'Unable to parse server response' };
       }
-    });
-  }
+    }
 
-  // reveal animation
-  const revealEls = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
+    /* -------------------
+    SWIPER INITIALIZATION
+    ------------------- */
+    const swipers = ['blogs-swiper', 'free-courses-swiper', 'paid-courses-swiper'];
+
+    function initSwipers() {
+      swipers.forEach(swiperClass => {
+        // if already created, just update
+        if (window.swiperInstances[swiperClass]) {
+          try { window.swiperInstances[swiperClass].update(); }
+          catch (e) { console.warn('Swiper update failed for', swiperClass, e); }
+          return;
+        }
+
+        // create a new instance
+        try {
+          window.swiperInstances[swiperClass] = new Swiper(`.${swiperClass}`, {
+            slidesPerView: 4,
+            spaceBetween: 40,
+            slidesPerGroup: 4,
+            loop: true,
+            loopFillGroupWithBlank: true,
+            pagination: {
+              el: `.${swiperClass} .swiper-pagination`,
+              clickable: true,
+              dynamicBullets: true,
+            },
+            navigation: {
+              nextEl: `.${swiperClass} .swiper-button-next`,
+              prevEl: `.${swiperClass} .swiper-button-prev`,
+            },
+            breakpoints: {
+              1300: { slidesPerView: 4, slidesPerGroup: 4, spaceBetween: 30 },
+              1024: { slidesPerView: 3, slidesPerGroup: 3, spaceBetween: 20 },
+              768: { slidesPerView: 2, slidesPerGroup: 2, spaceBetween: 16 },
+              480: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 12 },
+              375: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 10 },
+              320: { slidesPerView: 1, slidesPerGroup: 1, spaceBetween: 8 }
+            }
+          });
+        } catch (e) {
+          console.warn('Failed to initialize swiper', swiperClass, e);
+        }
+      });
+    }
+
+    /* -------------------
+    RAZORPAY: ENROLL (fixed for production)
+    ------------------- */
+    function enrollNow(coursename, price, link) {
+      // price should be in rupees on UI; backend will multiply by 100
+      fetch(`${API_BASE_URL}/createOrder`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: price,
+          name: coursename,
+          description: 'Course Payment'
+        })
+      })
+        .then(async (res) => {
+          const data = await parseResponseSafely(res);
+          if (!res.ok) {
+            console.error('Order creation HTTP error:', res.status, data);
+            alert(`Order creation failed: ${data.message || res.statusText}`);
+            return null;
+          }
+          return data;
+        })
+        .then(data => {
+          if (!data) return;
+          if (data.success) {
+            const options = {
+              key: data.key_id,
+              amount: data.amount,
+              currency: 'INR',
+              name: data.name,
+              description: data.description,
+              image: 'https://www.example.com/logo.png',
+              order_id: data.order_id,
+              handler: function (response) {
+                alert('Payment successful! Redirecting to your course...');
+                if (link) window.location.href = link;
+              },
+              prefill: {
+                name: data.name,
+                email: data.email,
+                contact: data.contact
+              },
+              notes: {
+                address: 'Blogs & Courses website'
+              },
+              theme: { color: '#007bff' }
+            };
+            const rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+              console.error('Payment failed callback', response);
+              alert('Payment failed. Please try again.');
+            });
+            rzp1.open();
+          } else {
+            alert(data.msg || data.message || 'Order creation failed. Please try again.');
+          }
+        })
+        .catch(err => {
+          console.error('Error in enrollNow:', err);
+          alert('An error occurred while creating the order. Check console for details.');
+        });
+    }
+
+    /* -------------------
+    NAV & ADMIN MODAL
+    ------------------- */
+    /* -------------------
+       NAV & ADMIN MODAL
+       ------------------- */
+    window.toggleMenu = function () {
+      const navLinks = document.querySelector('.nav-links');
+      const menuToggle = document.querySelector('.menu-toggle');
+      navLinks.classList.toggle('show');
+      menuToggle.textContent = navLinks.classList.contains('show') ? "✖" : "☰";
+    }
+
+    const scrollLinks = document.querySelectorAll('a[href^="#"]:not([href="/addnew.html"])');
+    scrollLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        if (targetElement) {
+          const offset = 100;
+          window.scrollTo({ top: targetElement.offsetTop - offset, behavior: 'smooth' });
+        }
+        const nav = document.querySelector('.nav-links');
+        const menuToggle = document.querySelector('.menu-toggle');
+        if (nav && nav.classList.contains('show')) {
+          nav.classList.remove('show');
+          if (menuToggle) menuToggle.textContent = "☰";
+        }
+      });
+    });
+
+
+
+    /* -------------------
+    FETCH HELPERS
+    ------------------- */
+    async function fetchJSON(url) {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed to fetch ${url}: ${res.status}`);
+      return res.json();
+    }
+
+    /* -------------------
+    RENDER FUNCTIONS (safe swiper updates)
+    ------------------- */
+    function renderBlogs(blogs) {
+      const wrapper = document.getElementById("blogs-wrapper");
+      if (!wrapper) return;
+      wrapper.innerHTML = "";
+
+      blogs.forEach(blog => {
+        const publishedAt = blog.createdAt ? new Date(blog.createdAt).toLocaleString() : "";
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
+  <div class="card">
+    <div onclick="handleAccess('${blog.blog_link}')" style="cursor: pointer; text-decoration: none; color:black;">
+      <div class="card-content">
+        <div class="image">
+          <img src="${blog.imageUrl}" alt="${blog.Blog_title || blog.title || ''}" loading="lazy" decoding="async" />
+                </div>
+        <div class="name-profession">
+          <span class="name">${blog.Blog_title || blog.title || ''}</span>
+        </div>
+        <div class="card-description">
+          <p>${blog.Blog_description || blog.description || ''}</p>
+        </div>
+        <p class="created-at">Published at: ${publishedAt}</p>
+      </div>
+    </div>
+  </div>
+  `;
+        wrapper.appendChild(slide);
+      });
+
+      if (window.swiperInstances && window.swiperInstances["blogs-swiper"]) {
+        window.swiperInstances["blogs-swiper"].update();
       }
+    }
+
+    // free courses
+    function renderFreeCourses(courses) {
+      const wrapper = document.getElementById("free-courses-wrapper");
+      if (!wrapper) return;
+      wrapper.innerHTML = "";
+
+      courses.forEach(course => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
+  <div class="card">
+    <div class="card-content">
+      <div class="image">
+        <img src="${course.imageUrl}" alt="${course.coursename}" loading="lazy" decoding="async"
+          style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+      </div>
+      <div class="name-profession">
+        <span class="name">${course.coursename}</span>
+      </div>
+      <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free
+      </p>
+      <div class="button" style="position: relative; top: -20px;">
+        <button class="message-button" onclick="handleAccess('${course.link}')">Learn More</button>
+      </div>
+    </div>
+  </div>
+  `;
+        wrapper.appendChild(slide);
+      });
+
+      if (window.swiperInstances && window.swiperInstances["free-courses-swiper"]) {
+        window.swiperInstances["free-courses-swiper"].update();
+      }
+    }
+
+    // paid courses
+    function renderPaidCourses(courses) {
+      const wrapper = document.getElementById("paid-courses-wrapper");
+      if (!wrapper) return;
+      wrapper.innerHTML = "";
+
+      courses.forEach(course => {
+        const slide = document.createElement("div");
+        slide.className = "swiper-slide";
+        slide.innerHTML = `
+  <div class="card">
+    <div class="card-content">
+      <div class="image">
+        <img src="${course.imageUrl}" alt="${course.coursename}" loading="lazy" decoding="async"
+          style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+      </div>
+      <div class="name-profession">
+        <span class="name">${course.coursename}</span>
+      </div>
+      <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
+      <div class="button" style="margin-top: 30px;">
+        <button class="message-button"
+          onclick="handleEnroll('${course.coursename}', '${course.price}', '${course.link}')">
+          Enroll Now
+        </button>
+      </div>
+    </div>
+  </div>
+  `;
+        wrapper.appendChild(slide);
+      });
+
+      if (window.swiperInstances && window.swiperInstances["paid-courses-swiper"]) {
+        window.swiperInstances["paid-courses-swiper"].update();
+      }
+    }
+
+    /* -------------------
+    LOAD DATA
+    ------------------- */
+    async function loadDataFromBackend() {
+      // Load Blogs
+      fetchJSON(`${API_BASE_URL}/api/blogs`)
+        .then(blogs => {
+          renderBlogs(blogs || []);
+          if (window.swiperInstances && window.swiperInstances['blogs-swiper']) {
+            window.swiperInstances['blogs-swiper'].update();
+          } else {
+            initSwipers();
+          }
+        })
+        .catch(err => console.error("Error loading blogs:", err));
+
+      // Load Free Courses
+      fetchJSON(`${API_BASE_URL}/api/courses?type=free`)
+        .then(courses => {
+          renderFreeCourses(courses || []);
+          if (window.swiperInstances && window.swiperInstances['free-courses-swiper']) {
+            window.swiperInstances['free-courses-swiper'].update();
+          } else {
+            initSwipers();
+          }
+        })
+        .catch(err => console.error("Error loading free courses:", err));
+
+      // Load Paid Courses
+      fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
+        .then(courses => {
+          renderPaidCourses(courses || []);
+          if (window.swiperInstances && window.swiperInstances['paid-courses-swiper']) {
+            window.swiperInstances['paid-courses-swiper'].update();
+          } else {
+            initSwipers();
+          }
+        })
+        .catch(err => console.error("Error loading paid courses:", err));
+    }
+
+    /* -------------------
+    CONTACT FORM (robust)
+    ------------------- */
+    window.showFormModal = function () { document.getElementById("formSuccessModal").style.display = "flex"; }
+    window.closeFormModal = function () { document.getElementById("formSuccessModal").style.display = "none"; }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // contact form submit handler (AJAX) - robust parse
+      const contactForm = document.querySelector('.contact-form form');
+      if (contactForm) {
+        contactForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          const formData = new FormData(contactForm);
+
+          try {
+            const response = await fetch(contactForm.action, {
+              method: contactForm.method,
+              body: formData,
+              headers: { 'Accept': 'application/json' }
+            });
+
+            const payload = await parseResponseSafely(response);
+
+            if (response.ok && payload) {
+              contactForm.reset();
+              showFormModal();
+            } else {
+              alert(`Form submit failed: ${payload.message || response.statusText}`);
+            }
+          } catch (err) {
+            console.error('Form submission error:', err);
+            alert('There was a problem submitting the form. Please try again.');
+          }
+        });
+      }
+
+      // reveal animation
+      const revealEls = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      revealEls.forEach(el => observer.observe(el));
+
+      // Load backend content (blogs + courses)
+      loadDataFromBackend();
     });
-  }, { threshold: 0.15 });
 
-  revealEls.forEach(el => observer.observe(el));
-
-  // Load backend content (blogs + courses)
-  loadDataFromBackend();
-});
-
-// modal close when clicking outside
-window.onclick = function(event) {
-  const adminModal = document.getElementById("adminModal");
-  const formModal = document.getElementById("formSuccessModal");
-  if (event.target === adminModal && adminModal) adminModal.style.display = "none";
-  if (event.target === formModal && formModal) formModal.style.display = "none";
-};
-</script>
+    // modal close when clicking outside
+    window.onclick = function (event) {
+      const formModal = document.getElementById("formSuccessModal");
+      if (event.target === formModal && formModal) formModal.style.display = "none";
+    };
+  </script>
 
 
 </body>
+
 </html>

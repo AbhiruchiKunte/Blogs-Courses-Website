@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SciAstra</title>
+    <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/modals.css">
+    <style>
+        :root {
+            --primary-color: #0B192C;
+            --secondary-color: #3a4f9e;
+            --bg-dark: #f0f3f8;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background: #fff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            display: block;
+            text-decoration: none;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-google {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-google:hover {
+            background-color: #f7f7f7;
+        }
+
+        .toggle-text {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .toggle-text a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <a href="/" class="logo">SciAstra</a>
+        <h2 id="formTitle">Login</h2>
+
+        <form id="authForm">
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="name" placeholder="Full Name" style="display:none;">
+
+            <button type="submit" class="btn btn-primary" id="submitBtn">Log In</button>
+        </form>
+
+        <div style="margin: 20px 0; border-top: 1px solid #eee; padding-top: 20px;">
+            <button class="btn btn-google" id="googleBtn">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+        </div>
+
+        <p class="toggle-text">
+            <span id="toggleMsg">Don't have an account?</span>
+            <a id="toggleBtn">Sign Up</a>
+        </p>
+    </div>
+
+    <!-- Success/Error Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon"></div>
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-message" id="modalMessage"></p>
+            <button class="modal-btn" onclick="closeModal()">OK</button>
+        </div>
+    </div>
+
+
+    <!-- Inject Config Here -->
+    <script>
+        // Firebase Config for authentication and other services used in the app 
+        window.FIREBASE_CONFIG = {
+            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
+            authDomain: "sciastra-ak25.firebaseapp.com",
+            projectId: "sciastra-ak25",
+            storageBucket: "sciastra-ak25.firebasestorage.app",
+            messagingSenderId: "1001911647496",
+            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
+        };
+    </script>
+
+    <script src="/js/adminConfig.js"></script>
+
+    <script type="module">
+        import { loginWithGoogle, loginWithEmail, registerWithEmail, auth, logout } from '/js/auth.js';
+
+        const authForm = document.getElementById('authForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const nameInput = document.getElementById('name');
+        const formTitle = document.getElementById('formTitle');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggleBtn = document.getElementById('toggleBtn');
+        const toggleMsg = document.getElementById('toggleMsg');
+
+        // Modal Elements
+        const modal = document.getElementById('statusModal');
+        const modalIcon = document.getElementById('modalIcon');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+
+        // Global close modal function
+        window.closeModal = () => {
+            modal.classList.remove('active');
+        };
+
+        function showModal(type, title, message, redirectUrl = null) {
+            modal.classList.add('active');
+
+            if (type === 'success') {
+                modalIcon.className = 'modal-icon success fas fa-check-circle';
+            } else {
+                modalIcon.className = 'modal-icon error fas fa-times-circle';
+            }
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+
+            if (redirectUrl) {
+                // Auto redirect after 1.5s
+                setTimeout(() => {
+                    window.location.href = redirectUrl;
+                }, 1500);
+            }
+        }
+
+        let isLogin = true;
+
+        toggleBtn.addEventListener('click', () => {
+            isLogin = !isLogin;
+            if (isLogin) {
+                formTitle.textContent = 'Login';
+                submitBtn.textContent = 'Log In';
+                toggleMsg.textContent = "Don't have an account?";
+                toggleBtn.textContent = 'Sign Up';
+                nameInput.style.display = 'none';
+                nameInput.required = false;
+            } else {
+                formTitle.textContent = 'Create Account';
+                submitBtn.textContent = 'Sign Up';
+                toggleMsg.textContent = 'Already have an account?';
+                toggleBtn.textContent = 'Log In';
+                nameInput.style.display = 'block';
+                nameInput.required = true;
+            }
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+            const name = nameInput.value;
+
+            try {
+                let user;
+                if (isLogin) {
+                    user = await loginWithEmail(email, password);
+                } else {
+                    user = await registerWithEmail(email, password, name);
+                }
+
+                // Check Admin Logic
+                const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@sciastra.com';
+
+                let redirectUrl = '/dashboard.html';
+
+                // If the logged in user's email matches the admin email, go to addnew.html
+                if (user.email && user.email.toLowerCase() === adminEmail) {
+                    redirectUrl = '/addnew.html';
+                }
+
+                showModal('success', isLogin ? 'Login Successful' : 'Registration Successful', 'Redirecting you now...', redirectUrl);
+
+            } catch (error) {
+                let msg = error.message;
+                // Clean up firebase error messages
+                if (msg.includes('auth/invalid-credential')) msg = "Invalid Email or Password";
+                if (msg.includes('auth/email-already-in-use')) msg = "Email already in use";
+
+                showModal('error', 'Error', msg);
+            }
+        });
+
+        document.getElementById('googleBtn').addEventListener('click', async () => {
+            try {
+                const user = await loginWithGoogle();
+
+                // Check Admin Logic for Google Login too
+                const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@sciastra.com';
+                let redirectUrl = '/dashboard.html';
+
+                if (user.email && user.email.toLowerCase() === adminEmail) {
+                    redirectUrl = '/addnew.html';
+                }
+
+                showModal('success', 'Login Successful', 'Redirecting to your dashboard...', redirectUrl);
+            } catch (error) {
+                showModal('error', 'Login Failed', error.message);
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+
+</html>
