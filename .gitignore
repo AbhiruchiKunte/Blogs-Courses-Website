@@ -9,3 +9,7 @@ migrate.js
 
 # Ignore configuration/Admin files
 Frontend/adminConfig.js
+
+# Ignore serviceAccount keys
+serviceAccountKey.json
+
