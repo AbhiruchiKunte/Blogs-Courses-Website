@@ -98,14 +98,18 @@
         .welcome-message {
             padding: 20px 40px;
             text-align: center;
+            /* FIX: Added margin-bottom for space between Welcome Title and Admin Profile Card */
+            margin-bottom: 40px; 
+            padding-bottom: 0;
         }
 
         .welcome-message h2 {
             font-size: 1.8em;
             color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
+            /* FIX: Removed horizontal underline */
+            border-bottom: none; 
             display: inline-block;
-            padding-bottom: 5px;
+            padding-bottom: 0;
         }
 
         /* Main Content Layout */
@@ -143,6 +147,33 @@
             text-align: center;
             color: var(--secondary-color);
         }
+        
+        /* FIX: Admin Profile Card Styling - Centered and Sized */
+        #adminProfileSection {
+            background: var(--bg-light) !important;
+            padding: 30px !important; 
+            border-radius: 12px;
+            text-align: left !important;
+            /* Centering and sizing fix */
+            margin: 0 auto 40px !important; /* 40px margin bottom provides space before next section (.blog-content) */
+            width: 100% !important;
+            max-width: 550px !important; 
+            box-shadow: var(--shadow-dark);
+            display: block !important; 
+            transition: transform 0.3s ease;
+            min-width: unset !important;
+        }
+        #adminProfileSection:hover {
+            transform: translateY(-5px);
+        }
+
+        /* FIX: Remove underline for Admin Profile title and Blog Management title */
+        #adminProfileSection h2,
+        .admin-blog-upload h2 {
+            border-bottom: none; 
+            padding-bottom: 0;
+        }
+        /* END FIX */
 
         /* Form Styling */
         #upload-form,
@@ -471,61 +502,6 @@
             display: block;
         }
 
-        /* ---------- Responsive tweaks: stack image & inputs on very small screens ---------- */
-        @media (max-width: 520px) {
-
-            /* stack the preview above inputs */
-            .edit-image-row {
-                flex-direction: column;
-                gap: 12px;
-                align-items: flex-start;
-            }
-
-            .edit-image-preview-wrapper {
-                flex: 0 0 88px;
-                height: 88px;
-            }
-
-            .edit-modal {
-                padding: 18px 16px;
-            }
-
-            .edit-modal .submit-btn,
-            .edit-modal button.save-edit-btn {
-                width: 100%;
-                padding: 12px 18px;
-            }
-
-            /* ensure long inputs wrap and don't overflow */
-            #editModal .modal-content.edit-modal input,
-            #editModal .modal-content.edit-modal textarea,
-            #editModal .modal-content.edit-modal select {
-                max-width: 100%;
-                word-break: break-word;
-            }
-        }
-
-        /* extra tiny screens: ensure modal fits and scrolls inside viewport */
-        @media (max-width: 420px) {
-            #editModal .modal-content.edit-modal {
-                width: 96%;
-                max-height: 94vh;
-                padding: 14px;
-            }
-
-            .edit-image-preview-wrapper {
-                flex: 0 0 72px;
-                height: 72px;
-            }
-        }
-
-        /* When modal is open we should stop page behind from scrolling */
-        html.modal-open,
-        body.modal-open {
-            height: 100%;
-            overflow: hidden;
-        }
-
         /* ---------- Mobile Cards for CRUD ---------- */
         .crud-cards {
             display: none;
@@ -653,88 +629,6 @@
             font-size: 16px;
         }
 
-        /* ---------- Mobile PORTRAIT: show cards (and make actions compact in one row) ---------- */
-        @media (max-width: 768px) {
-            .crud-table {
-                display: none;
-            }
-
-            .crud-cards {
-                display: flex;
-            }
-
-            /* make card layout slightly taller and space content better on small screens */
-            .crud-card {
-                padding: 14px;
-                gap: 12px;
-            }
-
-            /* ensure content stacks well and actions are visible below meta */
-            .crud-card-content {
-                gap: 8px;
-            }
-
-            /* Force buttons to be in a single row on small screens */
-            .crud-card-actions {
-                display: flex !important;
-                flex-direction: row !important;
-                align-items: center;
-                gap: 10px;
-                margin-top: 10px;
-                flex-wrap: nowrap !important;
-            }
-
-            /* smaller button sizes for compact mobile display */
-            .action-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 14px;
-            }
-
-            /* slightly larger icons for clarity on mobile */
-            .action-btn i {
-                font-size: 16px;
-            }
-
-            /* Make sure the image and text fit nicely */
-            .crud-card-img-wrapper {
-                flex: 0 0 72px;
-                height: 72px;
-            }
-        }
-
-        /* ---------- Mobile LANDSCAPE + Tablets/Desktops: show tables ---------- */
-        @media (min-width: 769px) {
-            .crud-table {
-                display: table;
-            }
-
-            .crud-cards {
-                display: none;
-            }
-
-            /* On larger screens we prefer action buttons aligned to the row end */
-            .crud-card-actions {
-                justify-content: flex-start;
-                gap: 10px;
-            }
-
-            /* slightly bigger buttons on desktop */
-            .action-btn {
-                width: 38px;
-                height: 38px;
-            }
-        }
-
-        /* Extra small screens: make buttons even more compact */
-        @media (max-width: 480px) {
-            .action-btn {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-            }
-        }
-
 
         /* Footer */
         .footer {
@@ -823,67 +717,6 @@
 
         #sub_link:hover {
             color: var(--secondary-color);
-        }
-
-        /* Footer small screens */
-        @media (max-width: 768px) {
-            .footer {
-                height: auto;
-                padding: 3rem 1.5rem;
-            }
-
-            .two_footer {
-                flex-direction: column;
-                align-items: center;
-                width: 100%;
-                margin-top: 1.5rem;
-            }
-
-            .left,
-            .mid,
-            .right {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 1rem;
-            }
-        }
-
-        @media (max-width: 375px) {
-            #mail_id {
-                font-size: 0.9rem;
-                margin-bottom: 10px;
-            }
-
-            .social_icon {
-                font-size: 18px;
-            }
-
-            .left h2,
-            .mid h2,
-            .right h2 {
-                font-size: 1rem;
-                margin-bottom: 0.6rem;
-            }
-
-            #sub_link {
-                font-size: 0.8rem;
-            }
-        }
-
-        /* For 320px screens */
-        @media (max-width: 320px) {
-
-            .left h2,
-            .mid h2,
-            .right h2 {
-                font-size: 0.9rem;
-            }
-
-            .left a,
-            .mid a,
-            .right a {
-                font-size: 0.75rem;
-            }
         }
 
         /* Modal Styles - unchanged and fine */
@@ -977,21 +810,141 @@
             font-size: 1em;
             color: var(--text-color);
         }
+
+        /* ======================================================= */
+        /* ENHANCED RESPONSIVE STYLES (Mobile First) */
+        /* ======================================================= */
+
+        /* Small Screens / Mobile (Default styles are now fine-tuned for small screens) */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 15px;
+            }
+
+            .welcome-message {
+                padding: 15px 10px;
+                /* FIX: Mobile space added */
+                margin-bottom: 20px; 
+                padding-bottom: 0;
+            }
+            
+            /* Ensure Logout button is visible on small screens */
+            .navbar .nav-links {
+                display: flex;
+            }
+            
+            /* Stack Forms and use full available width */
+            .blog-content {
+                flex-direction: column;
+                gap: 20px;
+                padding: 10px;
+                margin-top: 10px;
+            }
+
+            .admin-blog-upload,
+            .form-container {
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            /* Admin Profile Card Fix for Mobile */
+            #adminProfileSection {
+                margin: 0 auto 20px !important; /* Mobile space below card */
+                padding: 20px !important;
+            }
+
+            .crud-section {
+                padding: 0 10px;
+                margin: 20px auto 40px;
+            }
+
+            /* Toggle to Card View */
+            .crud-table {
+                display: none;
+            }
+
+            .crud-cards {
+                display: flex;
+            }
+
+            /* Footer Stacking */
+            .footer {
+                padding: 2rem 1rem;
+            }
+
+            .two_footer {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                margin-top: 1.5rem;
+            }
+
+            .left,
+            .mid,
+            .right {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        /* Medium Screens (Tablets Landscape) - Ensure forms flow on one line if space allows */
+        @media (min-width: 769px) and (max-width: 1100px) {
+            .blog-content {
+                gap: 20px;
+                padding: 20px 10px;
+            }
+
+            .admin-blog-upload,
+            .form-container {
+                max-width: 48%;
+            }
+            
+            /* Toggle to Table View (as they can handle the width) */
+            .crud-table {
+                display: table;
+            }
+            .crud-cards {
+                display: none;
+            }
+        }
+
+
+        /* Desktop (Wide screens) */
+        @media (min-width: 1101px) {
+            .admin-blog-upload,
+            .form-container {
+                max-width: 550px;
+            }
+            
+            /* Ensure table view is the default */
+            .crud-table {
+                display: table;
+            }
+            .crud-cards {
+                display: none;
+            }
+        }
+
+        /* Extra Small Mobile Fixes */
+        @media (max-width: 480px) {
+            .navbar .logo {
+                font-size: 1.8em;
+            }
+        }
     </style>
-</head>
 </head>
 
 <body>
 
-    <!-- Config Injection -->
     <script>
         window.FIREBASE_CONFIG = {
-            apiKey: "YOUR_API_KEY",
+            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
             authDomain: "sciastra-ak25.firebaseapp.com",
             projectId: "sciastra-ak25",
             storageBucket: "sciastra-ak25.firebasestorage.app",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            messagingSenderId: "1001911647496",
+            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
         };
     </script>
     <script type="module">
@@ -1027,13 +980,6 @@
             <li><a href="javascript:void(0)" id="logoutBtn">Log out</a></li>
         </ul>
     </div>
-    <style>
-        @media (max-width: 768px) {
-            .navbar {
-                padding: 15px 20px;
-            }
-        }
-    </style>
 
     <script type="module">
         import { logout } from '/js/auth.js';
@@ -1050,9 +996,8 @@
             <h2>Welcome to SciAstra Admin Page !!</h2>
         </div>
 
-        <section style="max-width: 1200px; margin: 0 auto; padding: 20px; text-align:center;">
-            <div id="adminProfileSection"
-                style="background:#fff; padding:20px; border-radius:12px; display:inline-block; text-align:left; min-width:300px;">
+        <section style="max-width: 1200px; margin: 0 auto; padding: 0px; text-align:center;">
+            <div id="adminProfileSection">
                 <h2>Admin Profile</h2>
                 <p>Loading...</p>
             </div>
@@ -1061,7 +1006,7 @@
         <section class="blog-content">
             <div class="admin-blog-upload">
                 <h2>Blog Management</h2>
-                <form action="https://edufusion-blogs.onrender.com/add-blog" id="upload-form" method="POST"
+                <form action="http://localhost:3000/add-blog" id="upload-form" method="POST"
                     enctype="multipart/form-data">
                     <label for="BlogTitle">Blog Title</label>
                     <input type="text" id="BlogTitle" name="BlogTitle" required>
@@ -1089,7 +1034,7 @@
 
             <div class="form-container">
                 <h1>Register a New Course</h1>
-                <form id="courseForm" action="https://edufusion-blogs.onrender.com/add-course" method="POST"
+                <form id="courseForm" action="http://localhost:3000/add-course" method="POST"
                     enctype="multipart/form-data">
                     <label for="coursename">Course Name:</label>
                     <input type="text" id="coursename" name="coursename" required>
@@ -1115,7 +1060,6 @@
     </div>
     </section>
 
-    <!-- User Analytics Section -->
     <section class="crud-section">
         <h2 style="text-align:center;">User Analytics</h2>
         <div style="background:#fff; padding:20px; border-radius:12px; margin-top:15px; overflow-x:auto;">
@@ -1138,9 +1082,6 @@
         </div>
     </section>
 
-    <!-- ============================
-     MANAGE BLOGS & COURSES
-=============================== -->
     <section class="crud-section">
         <h2 style="text-align:center;margin-top:10px;">Manage Blogs</h2>
         <table class="crud-table" id="blogsTable">
@@ -1184,13 +1125,11 @@
         </div>
     </div>
 
-    <!-- Edit Modal (used for both Blog & Course) -->
     <div class="overlay" id="editModal">
         <div class="modal-content edit-modal">
             <span class="close-btn" onclick="closeEditModal()">&times;</span>
             <h2 id="editModalTitle" class="edit-modal-title">Edit</h2>
 
-            <!-- IMAGE PREVIEW + UPLOAD -->
             <div class="edit-image-row">
                 <div class="edit-image-preview-wrapper">
                     <img id="editPreviewImage" src="" alt="Preview" />
@@ -1202,7 +1141,6 @@
                 </div>
             </div>
 
-            <!-- BLOG FIELDS -->
             <div id="blogEditFields">
                 <label>Blog Title</label>
                 <input type="text" id="editBlogTitle" />
@@ -1222,7 +1160,6 @@
                 <input type="url" id="editBlogLink" />
             </div>
 
-            <!-- COURSE FIELDS -->
             <div id="courseEditFields">
                 <label>Course Name</label>
                 <input type="text" id="editCourseName" />
@@ -1244,7 +1181,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <div class="footer reveal">
         <a id="mail_id" href="mailto:support@sciastra.com;">support@sciastra.com</a>
         <div id="three_div">
@@ -1301,7 +1237,7 @@
     <script src="/js/adminConfig.js"></script>
     <script>
         // ---------- CONFIG & STATE ----------
-        const API_BASE_URL = ""; // Relative path
+        const API_BASE_URL = "http://localhost:3000"; // Relative path
 
         var blogsData = [];
         var coursesData = [];
@@ -1442,17 +1378,14 @@
                             <div class="crud-card-meta">Category: ${b.category || ''}</div>
                             <div class="crud-card-actions">
 
-    <!-- OPEN / VIEW BLOG -->
     <a href="${b.blog_link}" target="_blank" class="action-btn open-btn">
         <i class="fas fa-external-link-alt"></i>
     </a>
 
-    <!-- EDIT BLOG -->
     <button class="action-btn edit-btn" onclick="editBlog('${b._id}')">
         <i class="fas fa-pencil-alt"></i>
     </button>
 
-    <!-- DELETE BLOG -->
     <button class="action-btn delete-btn" onclick="deleteBlog('${b._id}')">
         <i class="fas fa-trash-alt"></i>
     </button>
@@ -1490,12 +1423,10 @@
                         <td>${c.course_type || ''}</td>
                         <td>  <a href="${c.link}" target="_blank" class="action-btn open-btn"> <i class="fas fa-external-link-alt"></i> </a></td>
                         <td>
-                            <!-- EDIT -->
-                                <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">
+                            <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">
                                     <i class="fas fa-pencil-alt"></i>
                                     </button>
                                     
-                                <!-- DELETE -->
                                 <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">
                                     <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -1523,17 +1454,14 @@
                             </div>
                             <div class="crud-card-actions">
     
-    <!-- OPEN / VIEW -->
     <a href="${c.link}" target="_blank" class="action-btn open-btn">
         <i class="fas fa-external-link-alt"></i>
     </a>
 
-    <!-- EDIT -->
     <button class="action-btn edit-btn" onclick="editCourse('${c._id}')">
         <i class="fas fa-pencil-alt"></i>
     </button>
 
-    <!-- DELETE -->
     <button class="action-btn delete-btn" onclick="deleteCourse('${c._id}')">
         <i class="fas fa-trash-alt"></i>
     </button>

@@ -8,8 +8,10 @@ uploads
 migrate.js
 
 # Ignore configuration/Admin files
-Frontend/adminConfig.js
+Frontend/public/js/adminConfig.js
 
 # Ignore serviceAccount keys
-serviceAccountKey.json
+Backend/serviceAccountKey.json
 
+# Ignore Firebase configuration file
+Frontend/public/js/firebaseConfig.js

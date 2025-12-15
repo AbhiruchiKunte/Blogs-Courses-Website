@@ -11,12 +11,12 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Toastify -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
         :root {
@@ -172,6 +172,7 @@
             padding: 10px 0;
             margin-top: 10px;
             border-radius: 5px;
+            cursor: pointer;
         }
 
         .empty-msg {
@@ -289,7 +290,6 @@
     </nav>
 
     <div class="container" id="dashboardContent" style="display:none;">
-        <!-- Profile -->
         <div class="profile-card">
             <img src="/Images/Sciastra-logo.png" alt="Profile" id="userImg">
             <div class="profile-info">
@@ -305,14 +305,12 @@
             </div>
         </div>
 
-        <!-- Activity Visualization -->
         <h2>Your Activity</h2>
         <div class="chart-container"
             style="position: relative; height:300px; width:100%; background:#fff; padding:20px; border-radius:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-top:20px;">
             <canvas id="activityChart"></canvas>
         </div>
 
-        <!-- Edit Profile Modal -->
         <div id="editProfileModal" class="modal-overlay" style="display:none;">
             <div class="modal-content">
                 <h3>Edit Profile</h3>
@@ -340,19 +338,16 @@
             </div>
         </div>
 
-        <!-- Purchased Courses -->
         <h2>My Purchased Courses</h2>
         <div class="grid" id="purchasedGrid">
             <p class="empty-msg">No purchased courses yet. <a href="/#free-courses">Explore courses</a>.</p>
         </div>
 
-        <!-- Viewed Blogs History -->
         <h2>Recently Viewed Blogs</h2>
         <div class="grid" id="historyGrid">
             <p class="empty-msg">No history yet. <a href="/#blogs">Read some blogs</a>.</p>
         </div>
 
-        <!-- Recommendations (AI) -->
         <h2>Recommended for You</h2>
         <div class="grid" id="recGrid">
             <p class="empty-msg">Loading recommendations... <a href="/">Browse content</a> to get started.</p>
@@ -362,31 +357,24 @@
 
     <div id="loading" class="loading">Loading Dashboard...</div>
 
-    <!-- Inject Config Here -->
-    <script>
-        window.FIREBASE_CONFIG = {
-            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
-            authDomain: "sciastra-ak25.firebaseapp.com",
-            projectId: "sciastra-ak25",
-            storageBucket: "sciastra-ak25.firebasestorage.app",
-            messagingSenderId: "1001911647496",
-            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
-        };
-    </script>
+   <script src="/js/firebaseConfig.js"></script>
 
     <script type="module">
-        import { auth, getAuthToken, logout } from '/js/auth.js';
+        // Import Auth functions
+        import { auth, logout } from '/js/auth.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        
+        // FIX: Only import the function that is explicitly exported (setCurrentUser)
+        // handleEnroll is now a global function set by /js/payment.js
+        import { setCurrentUser } from '/js/payment.js'; 
 
         document.getElementById('logoutBtn').addEventListener('click', logout);
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Fetch profile data
+                setCurrentUser(user); // Set the current user for the payment module
                 await loadDashboardData(user);
             } else {
-                // Only redirect if explicitly null (not loading)
-                // But onAuthStateChanged fires with null if not logged in
                 window.location.href = '/login.html';
             }
         });
@@ -403,11 +391,7 @@
 
                 if (data.success) {
                     renderDashboard(data.user);
-
-                    // Fetch recommendations separately
                     loadRecommendations(token);
-
-                    // Render Chart
                     renderActivityChart(data.user);
                 }
             } catch (err) {
@@ -415,24 +399,35 @@
             }
         }
 
+        // --- GLOBAL ACCESS HANDLER ---
+        window.handleCourseAccess = function(title, link, meta, price, id) {
+            // FIX: Explicitly convert price to a number for safe comparison and payment
+            const coursePrice = parseFloat(price); 
+            
+            if (meta === 'Purchased') {
+                // Direct access for purchased courses
+                window.open(link, '_blank');
+            } else if (coursePrice > 0) {
+                // Initiate Razorpay for paid recommended courses
+                window.handleEnroll(title, coursePrice, link, id); // Calls the GLOBAL function
+            } else {
+                // Direct access for free recommended courses
+                window.open(link, '_blank');
+            }
+        }
+
         // Edit Profile Functions
         window.openEditProfile = function () {
             document.getElementById('editProfileModal').style.display = 'flex';
-            // Pre-fill name
-            const currentName = document.getElementById('userName').innerText;
-            const currentBio = document.getElementById('userBio').innerText;
-
-            // We need to store these values possibly in data attributes or global object to retrieve properly, 
-            // but for now relying on DOM or better yet, using the `window.currentUserData` if we saved it.
-            // Let's assume we saved user data globally in renderDashboard.
-
+            
             if (window.currentUserData) {
                 document.getElementById('editName').value = window.currentUserData.name || '';
                 document.getElementById('editBio').value = window.currentUserData.bio || '';
                 document.getElementById('editPhone').value = window.currentUserData.phone || '';
                 document.getElementById('editLocation').value = window.currentUserData.location || '';
             } else {
-                document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
+                 const currentName = document.getElementById('userName').innerText;
+                 document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
             }
         }
 
@@ -449,7 +444,7 @@
                 const user = auth.currentUser;
                 if (!user) return;
                 const token = await user.getIdToken();
-
+                
                 const res = await fetch('/api/users/profile', {
                     method: 'PUT',
                     headers: {
@@ -466,7 +461,6 @@
                         backgroundColor: "green",
                     }).showToast();
                     closeEditProfile();
-                    // Reload data
                     loadDashboardData(user);
                 } else {
                     Toastify({
@@ -497,11 +491,12 @@
                         recGrid.innerHTML = '';
                         // Render blogs
                         data.recommendations.blogs.forEach(b => {
-                            recGrid.innerHTML += createCard(b.Blog_title, b.category, b.imageUrl, b.blog_link, 'Blog');
+                            recGrid.innerHTML += createCard(b.Blog_title, b.category, b.imageUrl, b.blog_link, 'Read Again', 0, b._id);
                         });
                         // Render courses
                         data.recommendations.courses.forEach(c => {
-                            recGrid.innerHTML += createCard(c.coursename, c.course_type, c.imageUrl, c.link, 'Course');
+                            const buttonText = c.price && c.price > 0 ? `Enroll Now (₹${c.price})` : 'Learn More';
+                            recGrid.innerHTML += createCard(c.coursename, c.course_type, c.imageUrl, c.link, buttonText, c.price, c._id);
                         });
                     } else {
                         recGrid.innerHTML = '<p class="empty-msg">No recommendations yet. Browse more content!</p>';
@@ -545,33 +540,45 @@
                 const pGrid = document.getElementById('purchasedGrid');
                 pGrid.innerHTML = '';
                 user.purchasedCourses.forEach(c => {
-                    pGrid.innerHTML += createCard(c.coursename, 'Purchased', c.imageUrl, c.link, 'Access');
+                    pGrid.innerHTML += createCard(c.coursename, 'Purchased', c.imageUrl, c.link, 'Access Course', 0, c.courseId);
                 });
+            } else {
+                document.getElementById('purchasedGrid').innerHTML = '<p class="empty-msg">No purchased courses yet. <a href="/#free-courses">Explore courses</a>.</p>';
             }
 
             // History (Blogs)
             if (user.viewedBlogs && user.viewedBlogs.length > 0) {
                 const hGrid = document.getElementById('historyGrid');
                 hGrid.innerHTML = '';
-                // Limit to 4
                 user.viewedBlogs.slice(0, 4).forEach(v => {
                     if (v.blogId) {
-                        hGrid.innerHTML += createCard(v.blogId.Blog_title, 'Viewed', v.blogId.imageUrl, v.blogId.blog_link, 'Read Again');
+                        hGrid.innerHTML += createCard(v.blogId.Blog_title, 'Viewed', v.blogId.imageUrl, v.blogId.blog_link, 'Read Again', 0, v.blogId._id);
                     }
                 });
+            } else {
+                document.getElementById('historyGrid').innerHTML = '<p class="empty-msg">No history yet. <a href="/#blogs">Read some blogs</a>.</p>';
             }
         }
 
-        function createCard(title, meta, img, link, btnText) {
-            // Fix image URL if needed
+        // Updated createCard to accept price and ID, and use the new handler logic
+        function createCard(title, meta, img, link, btnText, price = 0, id = '') {
             const validImg = img ? img : '/Images/bg.jpg';
+            
+            let clickHandler = `window.open('${link}', '_blank')`;
+            
+            // Use the new handler for Purchased Courses and Recommended Courses
+            if (meta === 'Purchased' || meta.toLowerCase().includes('course')) {
+                // Pass the title, link, meta (to check if 'Purchased'), price, and ID to the global handler
+                clickHandler = `handleCourseAccess('${title}', '${link}', '${meta}', ${price}, '${id}')`;
+            }
+
             return `
                 <div class="card">
                     <img src="${validImg}" loading="lazy" alt="${title}">
                     <div class="card-content">
                         <div class="card-title">${title}</div>
                         <div class="card-meta">${meta}</div>
-                        <a href="${link}" target="_blank" class="card-btn">${btnText}</a>
+                        <a href="javascript:${clickHandler}" class="card-btn">${btnText}</a>
                     </div>
                 </div>
             `;
@@ -598,7 +605,6 @@
                 if (user.viewedBlogs) {
                     count += user.viewedBlogs.filter(v => new Date(v.viewedAt).toDateString() === dateString).length;
                 }
-                // If backend sent viewedCourses (it usually doesn't populate fully in example but logic holds)
                 if (user.viewedCourses) {
                     count += user.viewedCourses.filter(v => new Date(v.viewedAt).toDateString() === dateString).length;
                 }
