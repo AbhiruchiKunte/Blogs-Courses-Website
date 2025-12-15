@@ -14,6 +14,9 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String
   },
+  bio: { type: String, default: '' },
+  phone: { type: String, default: '' },
+  location: { type: String, default: '' },
   profilePic: {
     type: Buffer
   },

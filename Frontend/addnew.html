@@ -654,7 +654,7 @@
         }
 
         /* ---------- Mobile PORTRAIT: show cards (and make actions compact in one row) ---------- */
-        @media (max-width: 768px) and (orientation: portrait) {
+        @media (max-width: 768px) {
             .crud-table {
                 display: none;
             }
@@ -704,8 +704,7 @@
         }
 
         /* ---------- Mobile LANDSCAPE + Tablets/Desktops: show tables ---------- */
-        @media (max-width: 768px) and (orientation: landscape),
-        (min-width: 769px) {
+        @media (min-width: 769px) {
             .crud-table {
                 display: table;
             }
@@ -1023,11 +1022,29 @@
     </script>
 
     <div class="navbar">
-        <div class="logo">SciAstra</div><br>
+        <div class="logo">SciAstra</div>
         <ul class="nav-links">
-            <li><a href="/">Log out</a></li>
+            <li><a href="javascript:void(0)" id="logoutBtn">Log out</a></li>
         </ul>
     </div>
+    <style>
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+
+    <script type="module">
+        import { logout } from '/js/auth.js';
+        const logoutBtn = document.getElementById('logoutBtn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                logout();
+            });
+        }
+    </script>
     <div class="welcome-message">
         <div class="welcome-message">
             <h2>Welcome to SciAstra Admin Page !!</h2>
@@ -1727,6 +1744,50 @@
             } catch (err) {
                 console.error("Error deleting course:", err);
                 alert("Error deleting course");
+            }
+        }
+
+        // ---------- ANALYTICS (User Data) ----------
+        async function loadAnalytics() {
+            try {
+                // We need auth token as this route is protected
+                const { getAuthToken } = await import('/js/auth.js');
+                const token = await getAuthToken();
+
+                const res = await fetch(API_BASE_URL + "/api/users/analytics", {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (!res.ok) throw new Error('Failed to fetch analytics');
+
+                const data = await res.json();
+                if (data.success && data.users) {
+                    const tbody = document.getElementById('usersTableBody');
+                    if (!tbody) return;
+
+                    tbody.innerHTML = ''; // clear placeholder
+
+                    if (data.users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5">No users found</td></tr>';
+                        return;
+                    }
+
+                    data.users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${user.name || 'N/A'}</td>
+                            <td>${user.email}</td>
+                            <td>${user.role}</td>
+                            <td>${user.purchasedCount}</td>
+                            <td>${user.enrolledCount}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                }
+            } catch (err) {
+                console.error("Analytics Error:", err);
+                const tbody = document.getElementById('usersTableBody');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="color:red;">Error loading data. Ensure you are admin.</td></tr>';
             }
         }
 

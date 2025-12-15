@@ -73,9 +73,16 @@ router.put('/profile', verifyUser, (req, res, next) => {
             let user = await User.findOne({ uid });
             if (!user) return res.status(404).json({ success: false, message: 'User not found' });
 
-            // Update Name
+            // Update Name & Details
             const name = Array.isArray(fields.name) ? fields.name[0] : fields.name;
+            const bio = Array.isArray(fields.bio) ? fields.bio[0] : fields.bio;
+            const phone = Array.isArray(fields.phone) ? fields.phone[0] : fields.phone;
+            const location = Array.isArray(fields.location) ? fields.location[0] : fields.location;
+
             if (name) user.name = name;
+            if (bio !== undefined) user.bio = bio;
+            if (phone !== undefined) user.phone = phone;
+            if (location !== undefined) user.location = location;
 
             // Update Image
             let imageFile = files.profileImage;
@@ -136,6 +143,28 @@ router.get('/profile', verifyUser, async (req, res) => {
         res.json({ success: true, user });
     } catch (error) {
         res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// GET /analytics (Admin only - practically)
+router.get('/analytics', verifyUser, async (req, res) => {
+    try {
+        const users = await User.find()
+            .select('name email role purchasedCourses enrolledCourses')
+            .lean();
+
+        const analytics = users.map(u => ({
+            name: u.name,
+            email: u.email,
+            role: u.role || 'user',
+            purchasedCount: u.purchasedCourses ? u.purchasedCourses.length : 0,
+            enrolledCount: u.enrolledCourses ? u.enrolledCourses.length : 0
+        }));
+
+        res.json({ success: true, users: analytics });
+    } catch (error) {
+        console.error('Analytics error:', error);
+        res.status(500).json({ success: false, error: 'Failed to fetch analytics' });
     }
 });
 

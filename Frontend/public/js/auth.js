@@ -26,22 +26,13 @@ const auth = getAuth(app);
 // If Session fails, we fall back to None, but warn user.
 import { browserSessionPersistence, inMemoryPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-setPersistence(auth, browserLocalPersistence)
+setPersistence(auth, browserSessionPersistence)
     .then(() => {
-        console.log("Firebase Persistence set to LOCAL");
+        console.log("Firebase Persistence set to SESSION");
     })
     .catch((error) => {
-        console.warn("Could not set LOCAL persistence (likely 3rd party cookies blocked). Trying SESSION.", error);
-        return setPersistence(auth, browserSessionPersistence);
-    })
-    .then(() => {
-        console.log("Firebase Persistence set to SESSION (fallback)");
-    })
-    .catch((error) => {
-        if (error) { // only log if it's a real error from the second step
-            console.warn("Could not set SESSION persistence. Falling back to IN_MEMORY.", error);
-            return setPersistence(auth, inMemoryPersistence);
-        }
+        console.warn("Could not set SESSION persistence. Falling back to IN_MEMORY.", error);
+        return setPersistence(auth, inMemoryPersistence);
     });
 
 const googleProvider = new GoogleAuthProvider();

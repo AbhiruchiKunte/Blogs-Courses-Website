@@ -6,13 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SciAstra</title>
     <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lobster&family=Oleo+Script&family=Spicy+Rice&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         :root {
             --primary-color: #0B192C;
             --secondary-color: #3a4f9e;
             --bg: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
@@ -36,9 +50,14 @@
         }
 
         .navbar .logo {
-            font-size: 1.5em;
+            font-size: 2em;
             font-weight: bold;
             color: #fff;
+            font-family: "Lobster", serif;
+            font-weight: 400;
+            font-style: normal;
+            margin-left: -20px;
+            cursor: pointer;
             text-decoration: none;
         }
 
@@ -168,9 +187,9 @@
 
         /* Edit Profile Styles */
         .edit-profile-btn {
-            background: transparent;
+            background: var(--primary-color);
             border: 1px solid var(--primary-color);
-            color: var(--primary-color);
+            color: #fff;
             padding: 5px 15px;
             border-radius: 5px;
             cursor: pointer;
@@ -239,6 +258,26 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 15px 20px;
+            }
+
+            .container {
+                padding: 15px;
+            }
+
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+
+            .profile-info {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -256,8 +295,21 @@
             <div class="profile-info">
                 <h3 id="userName">User Name</h3>
                 <p id="userEmail">user@example.com</p>
+                <p id="userBio" style="font-size: 0.9em; font-style:italic; color:#777; margin-top:5px;"></p>
+                <div style="font-size: 0.85em; color: #555; margin-top: 5px;">
+                    <span id="userLocation" style="margin-right: 15px;"><i class="fas fa-map-marker-alt"></i>
+                        <span></span></span>
+                    <span id="userPhone"><i class="fas fa-phone"></i> <span></span></span>
+                </div>
                 <button class="edit-profile-btn" onclick="openEditProfile()">Edit Profile</button>
             </div>
+        </div>
+
+        <!-- Activity Visualization -->
+        <h2>Your Activity</h2>
+        <div class="chart-container"
+            style="position: relative; height:300px; width:100%; background:#fff; padding:20px; border-radius:10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-top:20px;">
+            <canvas id="activityChart"></canvas>
         </div>
 
         <!-- Edit Profile Modal -->
@@ -267,6 +319,15 @@
                 <form id="editProfileForm">
                     <label>Full Name</label>
                     <input type="text" id="editName" name="name" required>
+
+                    <label>Bio</label>
+                    <input type="text" id="editBio" name="bio" placeholder="Tell us about yourself">
+
+                    <label>Phone</label>
+                    <input type="text" id="editPhone" name="phone" placeholder="+91 9876543210">
+
+                    <label>Location</label>
+                    <input type="text" id="editLocation" name="location" placeholder="City, Country">
 
                     <label>Profile Picture</label>
                     <input type="file" id="editImage" name="profileImage" accept="image/*">
@@ -279,22 +340,22 @@
             </div>
         </div>
 
-        <!-- Recommendations (AI) -->
-        <h2>Recommended for You</h2>
-        <div class="grid" id="recGrid">
-            <p class="empty-msg">Loading recommendations...</p>
-        </div>
-
         <!-- Purchased Courses -->
         <h2>My Purchased Courses</h2>
         <div class="grid" id="purchasedGrid">
-            <p class="empty-msg">No purchased courses yet.</p>
+            <p class="empty-msg">No purchased courses yet. <a href="/#free-courses">Explore courses</a>.</p>
         </div>
 
         <!-- Viewed Blogs History -->
         <h2>Recently Viewed Blogs</h2>
         <div class="grid" id="historyGrid">
-            <p class="empty-msg">No history.</p>
+            <p class="empty-msg">No history yet. <a href="/#blogs">Read some blogs</a>.</p>
+        </div>
+
+        <!-- Recommendations (AI) -->
+        <h2>Recommended for You</h2>
+        <div class="grid" id="recGrid">
+            <p class="empty-msg">Loading recommendations... <a href="/">Browse content</a> to get started.</p>
         </div>
 
     </div>
@@ -345,6 +406,9 @@
 
                     // Fetch recommendations separately
                     loadRecommendations(token);
+
+                    // Render Chart
+                    renderActivityChart(data.user);
                 }
             } catch (err) {
                 console.error(err);
@@ -356,7 +420,20 @@
             document.getElementById('editProfileModal').style.display = 'flex';
             // Pre-fill name
             const currentName = document.getElementById('userName').innerText;
-            document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
+            const currentBio = document.getElementById('userBio').innerText;
+
+            // We need to store these values possibly in data attributes or global object to retrieve properly, 
+            // but for now relying on DOM or better yet, using the `window.currentUserData` if we saved it.
+            // Let's assume we saved user data globally in renderDashboard.
+
+            if (window.currentUserData) {
+                document.getElementById('editName').value = window.currentUserData.name || '';
+                document.getElementById('editBio').value = window.currentUserData.bio || '';
+                document.getElementById('editPhone').value = window.currentUserData.phone || '';
+                document.getElementById('editLocation').value = window.currentUserData.location || '';
+            } else {
+                document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
+            }
         }
 
         window.closeEditProfile = function () {
@@ -383,16 +460,28 @@
 
                 const result = await res.json();
                 if (result.success) {
-                    alert('Profile updated successfully!');
+                    Toastify({
+                        text: "Profile updated successfully!",
+                        duration: 3000,
+                        backgroundColor: "green",
+                    }).showToast();
                     closeEditProfile();
                     // Reload data
                     loadDashboardData(user);
                 } else {
-                    alert('Error: ' + result.message);
+                    Toastify({
+                        text: "Error: " + result.message,
+                        duration: 3000,
+                        backgroundColor: "red",
+                    }).showToast();
                 }
             } catch (err) {
                 console.error(err);
-                alert('An error occurred');
+                Toastify({
+                    text: "An error occurred",
+                    duration: 3000,
+                    backgroundColor: "red",
+                }).showToast();
             }
         });
 
@@ -424,11 +513,28 @@
         }
 
         function renderDashboard(user) {
+            window.currentUserData = user; // Save for edit modal
             document.getElementById('loading').style.display = 'none';
             document.getElementById('dashboardContent').style.display = 'block';
 
             document.getElementById('userName').textContent = user.name || 'User';
             document.getElementById('userEmail').textContent = user.email;
+
+            document.getElementById('userBio').textContent = user.bio || '';
+
+            if (user.location) {
+                document.getElementById('userLocation').style.display = 'inline';
+                document.querySelector('#userLocation span').textContent = user.location;
+            } else {
+                document.getElementById('userLocation').style.display = 'none';
+            }
+
+            if (user.phone) {
+                document.getElementById('userPhone').style.display = 'inline';
+                document.querySelector('#userPhone span').textContent = user.phone;
+            } else {
+                document.getElementById('userPhone').style.display = 'none';
+            }
 
             if (user.imageUrl) {
                 document.getElementById('userImg').src = user.imageUrl;
@@ -469,6 +575,61 @@
                     </div>
                 </div>
             `;
+        }
+
+        function renderActivityChart(user) {
+            const ctx = document.getElementById('activityChart').getContext('2d');
+
+            // Process Data: Last 7 days views (Blogs + Courses)
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const today = new Date();
+            const labels = [];
+            const dataPoints = [];
+
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                labels.push(days[d.getDay()]);
+
+                // Count views for this date
+                const dateString = d.toDateString();
+                let count = 0;
+
+                if (user.viewedBlogs) {
+                    count += user.viewedBlogs.filter(v => new Date(v.viewedAt).toDateString() === dateString).length;
+                }
+                // If backend sent viewedCourses (it usually doesn't populate fully in example but logic holds)
+                if (user.viewedCourses) {
+                    count += user.viewedCourses.filter(v => new Date(v.viewedAt).toDateString() === dateString).length;
+                }
+                dataPoints.push(count);
+            }
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Content Viewed',
+                        data: dataPoints,
+                        borderColor: '#3a4f9e',
+                        backgroundColor: 'rgba(58, 79, 158, 0.2)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Last 7 Days Activity' }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
         }
     </script>
 </body>

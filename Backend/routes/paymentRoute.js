@@ -2,7 +2,7 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { renderProductPage, createOrder } from '../controllers/paymentController.js';
+import { renderProductPage, createOrder, verifyOrder } from '../controllers/paymentController.js';
 
 const router = express.Router();
 router.use(bodyParser.json());
@@ -14,6 +14,7 @@ router.get('/product', renderProductPage);
 
 // Route for creating order (API)
 router.post('/createOrder', createOrder);
+router.post('/verify-payment', verifyOrder);
 
 // NEW: Export the router using ES Module syntax
 export default router;

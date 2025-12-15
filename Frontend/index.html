@@ -1281,7 +1281,6 @@
       <li><a href="#free-courses">Courses</a></li>
       <li><a href="#contact">Contact</a></li>
       <li><a href="/login.html" id="userLink">Login</a></li>
-      <li><a href="/addnew.html" id="adminLink">Admin</a></li>
     </ul>
   </div>
 
@@ -1428,6 +1427,8 @@
         appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
       };
     </script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <script type="module">
       import { auth, onAuthChange } from '/js/auth.js';
@@ -1496,6 +1497,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="/js/adminConfig.js"></script>
 
   <script type="module">
     /* -------------------
@@ -1516,8 +1518,14 @@
       const userLink = document.getElementById('userLink');
       if (userLink) {
         if (user) {
-          userLink.textContent = 'Dashboard';
-          userLink.href = '/dashboard.html';
+          const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@gmail.com';
+          if (user.email && user.email.toLowerCase() === adminEmail) {
+            userLink.textContent = 'Admin Panel';
+            userLink.href = '/addnew.html';
+          } else {
+            userLink.textContent = 'Dashboard';
+            userLink.href = '/dashboard.html';
+          }
         } else {
           userLink.textContent = 'Login';
           userLink.href = '/login.html';
@@ -1525,9 +1533,29 @@
       }
     });
 
+    // Track View Helper
+    async function trackView(id, type) {
+      if (!currentUser || !id) return;
+      try {
+        const token = await currentUser.getIdToken();
+        // Fire and forget
+        fetch('/api/users/track-view', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ type, id })
+        }).catch(err => console.error("Tracking failed", err));
+      } catch (e) {
+        console.error("Tracking auth error", e);
+      }
+    }
+
     // Access Handler
-    window.handleAccess = function (url) {
+    window.handleAccess = function (url, id, type) {
       if (currentUser) {
+        if (id && type) trackView(id, type);
         window.open(url, '_blank');
       } else {
         alert("Please login to access this content.");
@@ -1536,9 +1564,10 @@
     };
 
     // Enroll Handler
-    window.handleEnroll = function (name, price, link) {
+    window.handleEnroll = function (name, price, link, id) {
       if (currentUser) {
-        enrollNow(name, price, link);
+        if (id) trackView(id, 'course');
+        enrollNow(name, price, link, id);
       } else {
         alert("Please login to enroll.");
         window.location.href = '/login.html';
@@ -1612,7 +1641,7 @@
     /* -------------------
     RAZORPAY: ENROLL (fixed for production)
     ------------------- */
-    function enrollNow(coursename, price, link) {
+    function enrollNow(coursename, price, link, courseId) {
       // price should be in rupees on UI; backend will multiply by 100
       fetch(`${API_BASE_URL}/createOrder`, {
         method: 'POST',
@@ -1643,9 +1672,45 @@
               description: data.description,
               image: 'https://www.example.com/logo.png',
               order_id: data.order_id,
-              handler: function (response) {
-                alert('Payment successful! Redirecting to your course...');
-                if (link) window.location.href = link;
+              handler: async function (response) {
+                // Verify Payment on Backend
+                try {
+                  const verifyRes = await fetch(`${API_BASE_URL}/verify-payment`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      order_id: response.razorpay_order_id,
+                      payment_id: response.razorpay_payment_id,
+                      signature: response.razorpay_signature,
+                      course_name: data.name,
+                      course_id: courseId, // Pass ID for robust matching
+                      user_uid: currentUser ? currentUser.uid : null
+                    })
+                  });
+
+                  const verifyData = await verifyRes.json();
+                  if (verifyData.success) {
+                    Toastify({
+                      text: "Payment Successful! Course Added.",
+                      duration: 3000,
+                      backgroundColor: "green",
+                    }).showToast();
+                    if (link) setTimeout(() => window.location.href = link, 1500);
+                  } else {
+                    Toastify({
+                      text: "Payment Verification Failed: " + verifyData.message,
+                      duration: 3000,
+                      backgroundColor: "red",
+                    }).showToast();
+                  }
+                } catch (err) {
+                  console.error(err);
+                  Toastify({
+                    text: "Payment Verification Error",
+                    duration: 3000,
+                    backgroundColor: "red",
+                  }).showToast();
+                }
               },
               prefill: {
                 name: data.name,
@@ -1660,7 +1725,11 @@
             const rzp1 = new Razorpay(options);
             rzp1.on('payment.failed', function (response) {
               console.error('Payment failed callback', response);
-              alert('Payment failed. Please try again.');
+              Toastify({
+                text: "Payment Failed. Please try again.",
+                duration: 3000,
+                backgroundColor: "red",
+              }).showToast();
             });
             rzp1.open();
           } else {
@@ -1669,7 +1738,11 @@
         })
         .catch(err => {
           console.error('Error in enrollNow:', err);
-          alert('An error occurred while creating the order. Check console for details.');
+          Toastify({
+            text: "Error creating order.",
+            duration: 3000,
+            backgroundColor: "red",
+          }).showToast();
         });
     }
 
@@ -1730,7 +1803,7 @@
         slide.className = "swiper-slide";
         slide.innerHTML = `
   <div class="card">
-    <div onclick="handleAccess('${blog.blog_link}')" style="cursor: pointer; text-decoration: none; color:black;">
+    <div onclick="handleAccess('${blog.blog_link}', '${blog._id}', 'blog')" style="cursor: pointer; text-decoration: none; color:black;">
       <div class="card-content">
         <div class="image">
           <img src="${blog.imageUrl}" alt="${blog.Blog_title || blog.title || ''}" loading="lazy" decoding="async" />
@@ -1776,7 +1849,7 @@
       <p style="font-size: 16px; margin-top: 30px; color: #888; text-align: center; margin-bottom: 50px;">Price: Free
       </p>
       <div class="button" style="position: relative; top: -20px;">
-        <button class="message-button" onclick="handleAccess('${course.link}')">Learn More</button>
+        <button class="message-button" onclick="handleAccess('${course.link}', '${course._id}', 'course')">Learn More</button>
       </div>
     </div>
   </div>
@@ -1811,7 +1884,7 @@
       <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹${course.price}</p>
       <div class="button" style="margin-top: 30px;">
         <button class="message-button"
-          onclick="handleEnroll('${course.coursename}', '${course.price}', '${course.link}')">
+          onclick="handleEnroll('${course.coursename}', '${course.price}', '${course.link}', '${course._id}')">
           Enroll Now
         </button>
       </div>

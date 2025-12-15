@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/css/modals.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <style>
         :root {
             --primary-color: #0B192C;
@@ -81,28 +83,63 @@
         }
 
         .btn-google {
-            background-color: #fff;
-            color: #333;
-            border: 1px solid #ddd;
+            background-color: #f3e5f5;
+            /* Lavender background */
+            color: #5e35b1;
+            /* Deep purple text */
+            border: 1px solid #5e35b1;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 600;
+            box-shadow: none;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            /* slightly smaller radius to match image if needed, or keep 6px */
         }
 
         .btn-google:hover {
-            background-color: #f7f7f7;
+            box-shadow: 0 2px 5px rgba(94, 53, 177, 0.3);
+            background-color: #ede7f6;
+        }
+
+        .btn-google i {
+            /* Standard Google colors for icon or pure purple? 
+               The image shows the standard G icon.
+               So we keep the colorful G or create a G that matches if requested.
+               The user said 'google colors for continue with google button' in previous turn,
+               but now 'make it like this' with an image showing standard G logo but purple button.
+               I will keep standard G logo as per image.
+            */
+            color: transparent;
+            background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853);
+            -webkit-background-clip: text;
+            background-clip: text;
+            font-weight: bold;
+            font-size: 1.2em;
         }
 
         .toggle-text {
             margin-top: 15px;
             font-size: 14px;
+            color: #555;
         }
 
         .toggle-text a {
-            color: var(--secondary-color);
-            text-decoration: none;
+            color: #5e35b1;
+            /* Purple link */
+            text-decoration: underline;
+            font-weight: 700;
             cursor: pointer;
+            margin-left: 5px;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 20px;
+            }
         }
     </style>
 </head>
@@ -177,22 +214,21 @@
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
 
-        // Global close modal function
+        // Global close modal function - essentially no-op or handled by Toastify
         window.closeModal = () => {
-            modal.classList.remove('active');
+            // Toastify handles auto close
         };
 
         function showModal(type, title, message, redirectUrl = null) {
-            modal.classList.add('active');
+            const color = type === 'success' ? "green" : "red";
 
-            if (type === 'success') {
-                modalIcon.className = 'modal-icon success fas fa-check-circle';
-            } else {
-                modalIcon.className = 'modal-icon error fas fa-times-circle';
-            }
-
-            modalTitle.textContent = title;
-            modalMessage.textContent = message;
+            Toastify({
+                text: `${title}: ${message}`,
+                duration: 3000,
+                backgroundColor: color,
+                gravity: "top",
+                position: "center",
+            }).showToast();
 
             if (redirectUrl) {
                 // Auto redirect after 1.5s
