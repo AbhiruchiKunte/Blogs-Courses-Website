@@ -1,7 +1,7 @@
 {
-  "name": "sciastra",
+  "name": "sciastra-frontend",
   "version": "1.0.0",
   "scripts": {
-    "build": "node ./Frontend/create-config.mjs"
+    "build": "node Frontend/create-Config.mjs"
   }
 }

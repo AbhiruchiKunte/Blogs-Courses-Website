@@ -1,16 +1,14 @@
 {
   "version": 2,
-  "public": true,
   "cleanUrls": true,
-  "builds": [
-    { "src": "package.json", "use": "@vercel/static-build" }
-  ],
-  "routes": [
-    { "src": "/js/(.*)", "dest": "/Frontend/public/js/$1" },
-    { "src": "/css/(.*)", "dest": "/Frontend/public/css/$1" },
-    { "src": "/Images/(.*)", "dest": "/Frontend/public/Images/$1" },
-    { "src": "/(.*).html", "dest": "/Frontend/$1.html" },
-    { "src": "/", "dest": "/Frontend/index.html" },
-    { "handle": "filesystem" }
+  "rewrites": [
+    { "source": "/js/(.*)", "destination": "/Frontend/public/js/$1" },
+    { "source": "/css/(.*)", "destination": "/Frontend/public/css/$1" },
+    { "source": "/Images/(.*)", "destination": "/Frontend/public/Images/$1" },
+    { "source": "/login", "destination": "/Frontend/login.html" },
+    { "source": "/admin", "destination": "/Frontend/addnew.html" },
+    { "source": "/dashboard", "destination": "/Frontend/dashboard.html" },
+    { "source": "/", "destination": "/Frontend/index.html" },
+    { "source": "/(.*)", "destination": "/Frontend/$1" }
   ]
 }
