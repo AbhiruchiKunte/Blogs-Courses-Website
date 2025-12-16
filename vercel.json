@@ -2,13 +2,15 @@
   "version": 2,
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/js/(.*)", "destination": "/Frontend/public/js/$1" },
-    { "source": "/css/(.*)", "destination": "/Frontend/public/css/$1" },
-    { "source": "/Images/(.*)", "destination": "/Frontend/public/Images/$1" },
-    { "source": "/login", "destination": "/Frontend/login.html" },
-    { "source": "/admin", "destination": "/Frontend/addnew.html" },
-     { "source": "/dashboard", "destination": "/Frontend/dashboard.html" },
-    { "source": "/", "destination": "/Frontend/index.html" },
-    { "source": "/(.*)", "destination": "/Frontend/$1" }
+    { "source": "/js/(.*)", "destination": "/public/js/$1" },
+    { "source": "/css/(.*)", "destination": "/public/css/$1" },
+    { "source": "/Images/(.*)", "destination": "/public/Images/$1" },
+
+    { "source": "/login", "destination": "/login.html" },
+    { "source": "/admin", "destination": "/addnew.html" },
+    { "source": "/dashboard", "destination": "/dashboard.html" },
+
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/(.*)", "destination": "/$1" }
   ]
 }
