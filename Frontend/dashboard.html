@@ -15,7 +15,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
@@ -348,25 +348,30 @@
             <p class="empty-msg">No history yet. <a href="/#blogs">Read some blogs</a>.</p>
         </div>
 
-        <h2>Recommended for You</h2>
-        <div class="grid" id="recGrid">
-            <p class="empty-msg">Loading recommendations... <a href="/">Browse content</a> to get started.</p>
+        <h2>Recommended Blogs</h2>
+        <div class="grid" id="recBlogsGrid">
+            <p class="empty-msg">Loading recommended blogs...</p>
+        </div>
+
+        <h2>Recommended Courses</h2>
+        <div class="grid" id="recCoursesGrid">
+            <p class="empty-msg">Loading recommended courses...</p>
         </div>
 
     </div>
 
     <div id="loading" class="loading">Loading Dashboard...</div>
 
-   <script src="/js/firebaseConfig.js"></script>
+    <script src="/js/firebaseConfig.js"></script>
 
     <script type="module">
         // Import Auth functions
         import { auth, logout } from '/js/auth.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        
+
         // FIX: Only import the function that is explicitly exported (setCurrentUser)
         // handleEnroll is now a global function set by /js/payment.js
-        import { setCurrentUser } from '/js/payment.js'; 
+        import { setCurrentUser } from '/js/payment.js';
 
         document.getElementById('logoutBtn').addEventListener('click', logout);
 
@@ -391,7 +396,7 @@
 
                 if (data.success) {
                     renderDashboard(data.user);
-                    loadRecommendations(token);
+                    loadRecommendations(token, data.user); // Pass user object
                     renderActivityChart(data.user);
                 }
             } catch (err) {
@@ -400,10 +405,10 @@
         }
 
         // --- GLOBAL ACCESS HANDLER ---
-        window.handleCourseAccess = function(title, link, meta, price, id) {
+        window.handleCourseAccess = function (title, link, meta, price, id) {
             // FIX: Explicitly convert price to a number for safe comparison and payment
-            const coursePrice = parseFloat(price); 
-            
+            const coursePrice = parseFloat(price);
+
             if (meta === 'Purchased') {
                 // Direct access for purchased courses
                 window.open(link, '_blank');
@@ -419,15 +424,15 @@
         // Edit Profile Functions
         window.openEditProfile = function () {
             document.getElementById('editProfileModal').style.display = 'flex';
-            
+
             if (window.currentUserData) {
                 document.getElementById('editName').value = window.currentUserData.name || '';
                 document.getElementById('editBio').value = window.currentUserData.bio || '';
                 document.getElementById('editPhone').value = window.currentUserData.phone || '';
                 document.getElementById('editLocation').value = window.currentUserData.location || '';
             } else {
-                 const currentName = document.getElementById('userName').innerText;
-                 document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
+                const currentName = document.getElementById('userName').innerText;
+                document.getElementById('editName').value = currentName === 'User Name' ? '' : currentName;
             }
         }
 
@@ -444,7 +449,7 @@
                 const user = auth.currentUser;
                 if (!user) return;
                 const token = await user.getIdToken();
-                
+
                 const res = await fetch('/api/users/profile', {
                     method: 'PUT',
                     headers: {
@@ -479,27 +484,57 @@
             }
         });
 
-        async function loadRecommendations(token) {
+        async function loadRecommendations(token, user) {
             try {
                 const res = await fetch('/api/users/recommendations', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
                 if (data.success) {
-                    const recGrid = document.getElementById('recGrid');
-                    if (data.recommendations.blogs.length > 0 || data.recommendations.courses.length > 0) {
-                        recGrid.innerHTML = '';
-                        // Render blogs
+                    const blogsGrid = document.getElementById('recBlogsGrid');
+                    const coursesGrid = document.getElementById('recCoursesGrid');
+
+                    if (data.recommendations.blogs.length > 0) {
+                        blogsGrid.innerHTML = '';
                         data.recommendations.blogs.forEach(b => {
-                            recGrid.innerHTML += createCard(b.Blog_title, b.category, b.imageUrl, b.blog_link, 'Read Again', 0, b._id);
-                        });
-                        // Render courses
-                        data.recommendations.courses.forEach(c => {
-                            const buttonText = c.price && c.price > 0 ? `Enroll Now (₹${c.price})` : 'Learn More';
-                            recGrid.innerHTML += createCard(c.coursename, c.course_type, c.imageUrl, c.link, buttonText, c.price, c._id);
+                            blogsGrid.innerHTML += createCard(b.Blog_title, '', b.category, b.imageUrl, b.blog_link, 'Read Again', 0, b._id);
                         });
                     } else {
-                        recGrid.innerHTML = '<p class="empty-msg">No recommendations yet. Browse more content!</p>';
+                        blogsGrid.innerHTML = '<p class="empty-msg">No recommended blogs yet.</p>';
+                    }
+
+                    if (data.recommendations.courses.length > 0) {
+                        coursesGrid.innerHTML = '';
+                        // Render courses
+                        data.recommendations.courses.forEach(c => {
+                            // Check if already purchased
+                            const isPurchased = user.purchasedCourses && user.purchasedCourses.some(pc => pc._id === c._id);
+
+                            let buttonText = 'Learn More';
+                            let price = 0;
+                            let meta = c.course_type; // Fallback
+                            let badge = '';
+
+                            if (isPurchased) {
+                                buttonText = 'Access Course';
+                                meta = 'Purchased';
+                                badge = '<span style="background:#28a745; color:white; padding:2px 6px; border-radius:4px; font-size:0.7em; margin-left:5px;">Purchased</span>';
+                            } else if (c.price && c.price > 0) {
+                                buttonText = `Enroll Now (₹${c.price})`;
+                                price = c.price;
+                                meta = 'Paid Course';
+                                badge = '<span style="background:#ffc107; color:#333; padding:2px 6px; border-radius:4px; font-size:0.7em; margin-left:5px;">PAID</span>';
+                            } else {
+                                buttonText = 'Access Course'; // Free
+                                meta = 'Free Course';
+                                badge = '<span style="background:#17a2b8; color:white; padding:2px 6px; border-radius:4px; font-size:0.7em; margin-left:5px;">FREE</span>';
+                            }
+
+                            // FIX: Pass badge separately
+                            coursesGrid.innerHTML += createCard(c.coursename, badge, meta, c.imageUrl, c.link, buttonText, price, c._id);
+                        });
+                    } else {
+                        coursesGrid.innerHTML = '<p class="empty-msg">No recommended courses yet.</p>';
                     }
                 }
             } catch (err) {
@@ -540,7 +575,8 @@
                 const pGrid = document.getElementById('purchasedGrid');
                 pGrid.innerHTML = '';
                 user.purchasedCourses.forEach(c => {
-                    pGrid.innerHTML += createCard(c.coursename, 'Purchased', c.imageUrl, c.link, 'Access Course', 0, c.courseId);
+                    // Pass empty badge
+                    pGrid.innerHTML += createCard(c.coursename, '', 'Purchased', c.imageUrl, c.link, 'Access Course', 0, c.courseId);
                 });
             } else {
                 document.getElementById('purchasedGrid').innerHTML = '<p class="empty-msg">No purchased courses yet. <a href="/#free-courses">Explore courses</a>.</p>';
@@ -552,7 +588,8 @@
                 hGrid.innerHTML = '';
                 user.viewedBlogs.slice(0, 4).forEach(v => {
                     if (v.blogId) {
-                        hGrid.innerHTML += createCard(v.blogId.Blog_title, 'Viewed', v.blogId.imageUrl, v.blogId.blog_link, 'Read Again', 0, v.blogId._id);
+                        // Pass empty badge
+                        hGrid.innerHTML += createCard(v.blogId.Blog_title, '', 'Viewed', v.blogId.imageUrl, v.blogId.blog_link, 'Read Again', 0, v.blogId._id);
                     }
                 });
             } else {
@@ -560,12 +597,12 @@
             }
         }
 
-        // Updated createCard to accept price and ID, and use the new handler logic
-        function createCard(title, meta, img, link, btnText, price = 0, id = '') {
+        // Updated createCard to accept badge, price and ID
+        function createCard(title, badge, meta, img, link, btnText, price = 0, id = '') {
             const validImg = img ? img : '/Images/bg.jpg';
-            
+
             let clickHandler = `window.open('${link}', '_blank')`;
-            
+
             // Use the new handler for Purchased Courses and Recommended Courses
             if (meta === 'Purchased' || meta.toLowerCase().includes('course')) {
                 // Pass the title, link, meta (to check if 'Purchased'), price, and ID to the global handler
@@ -576,7 +613,7 @@
                 <div class="card">
                     <img src="${validImg}" loading="lazy" alt="${title}">
                     <div class="card-content">
-                        <div class="card-title">${title}</div>
+                        <div class="card-title">${title}${badge}</div>
                         <div class="card-meta">${meta}</div>
                         <a href="javascript:${clickHandler}" class="card-btn">${btnText}</a>
                     </div>

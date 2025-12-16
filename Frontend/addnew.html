@@ -99,7 +99,7 @@
             padding: 20px 40px;
             text-align: center;
             /* FIX: Added margin-bottom for space between Welcome Title and Admin Profile Card */
-            margin-bottom: 40px; 
+            margin-bottom: 40px;
             padding-bottom: 0;
         }
 
@@ -107,7 +107,7 @@
             font-size: 1.8em;
             color: var(--primary-color);
             /* FIX: Removed horizontal underline */
-            border-bottom: none; 
+            border-bottom: none;
             display: inline-block;
             padding-bottom: 0;
         }
@@ -147,22 +147,24 @@
             text-align: center;
             color: var(--secondary-color);
         }
-        
+
         /* FIX: Admin Profile Card Styling - Centered and Sized */
         #adminProfileSection {
             background: var(--bg-light) !important;
-            padding: 30px !important; 
+            padding: 30px !important;
             border-radius: 12px;
             text-align: left !important;
             /* Centering and sizing fix */
-            margin: 0 auto 40px !important; /* 40px margin bottom provides space before next section (.blog-content) */
+            margin: 0 auto 40px !important;
+            /* 40px margin bottom provides space before next section (.blog-content) */
             width: 100% !important;
-            max-width: 550px !important; 
+            max-width: 550px !important;
             box-shadow: var(--shadow-dark);
-            display: block !important; 
+            display: block !important;
             transition: transform 0.3s ease;
             min-width: unset !important;
         }
+
         #adminProfileSection:hover {
             transform: translateY(-5px);
         }
@@ -170,9 +172,10 @@
         /* FIX: Remove underline for Admin Profile title and Blog Management title */
         #adminProfileSection h2,
         .admin-blog-upload h2 {
-            border-bottom: none; 
+            border-bottom: none;
             padding-bottom: 0;
         }
+
         /* END FIX */
 
         /* Form Styling */
@@ -824,15 +827,15 @@
             .welcome-message {
                 padding: 15px 10px;
                 /* FIX: Mobile space added */
-                margin-bottom: 20px; 
+                margin-bottom: 20px;
                 padding-bottom: 0;
             }
-            
+
             /* Ensure Logout button is visible on small screens */
             .navbar .nav-links {
                 display: flex;
             }
-            
+
             /* Stack Forms and use full available width */
             .blog-content {
                 flex-direction: column;
@@ -846,10 +849,11 @@
                 max-width: 100%;
                 padding: 20px;
             }
-            
+
             /* Admin Profile Card Fix for Mobile */
             #adminProfileSection {
-                margin: 0 auto 20px !important; /* Mobile space below card */
+                margin: 0 auto 20px !important;
+                /* Mobile space below card */
                 padding: 20px !important;
             }
 
@@ -899,11 +903,12 @@
             .form-container {
                 max-width: 48%;
             }
-            
+
             /* Toggle to Table View (as they can handle the width) */
             .crud-table {
                 display: table;
             }
+
             .crud-cards {
                 display: none;
             }
@@ -912,15 +917,17 @@
 
         /* Desktop (Wide screens) */
         @media (min-width: 1101px) {
+
             .admin-blog-upload,
             .form-container {
                 max-width: 550px;
             }
-            
+
             /* Ensure table view is the default */
             .crud-table {
                 display: table;
             }
+
             .crud-cards {
                 display: none;
             }
@@ -1061,8 +1068,12 @@
     </section>
 
     <section class="crud-section">
-        <h2 style="text-align:center;">User Analytics</h2>
-        <div style="background:#fff; padding:20px; border-radius:12px; margin-top:15px; overflow-x:auto;">
+        <h2 style="text-align:center;">User List</h2>
+
+
+
+        <div style="background:#fff; padding:20px; border-radius:12px; margin-top:25px; overflow-x:auto;">
+            <h3 style="margin-bottom: 15px;">User List</h3>
             <table class="crud-table">
                 <thead>
                     <tr>
@@ -1243,6 +1254,8 @@
         var coursesData = [];
         var currentEditType = null; // "blog" or "course"
         var currentEditId = null;
+
+
 
         // ---------- SUCCESS MODAL (already existed) ----------
         function showModal(message, formId) {
@@ -1675,7 +1688,7 @@
             }
         }
 
-        // ---------- ANALYTICS (User Data) ----------
+        // ---------- ANALYTICS (User Data & Charts) ----------
         async function loadAnalytics() {
             try {
                 // We need auth token as this route is protected
@@ -1689,6 +1702,10 @@
                 if (!res.ok) throw new Error('Failed to fetch analytics');
 
                 const data = await res.json();
+
+
+
+                // Render Table
                 if (data.success && data.users) {
                     const tbody = document.getElementById('usersTableBody');
                     if (!tbody) return;
@@ -1715,9 +1732,13 @@
             } catch (err) {
                 console.error("Analytics Error:", err);
                 const tbody = document.getElementById('usersTableBody');
-                if (tbody) tbody.innerHTML = '<tr><td colspan="5" style="color:red;">Error loading data. Ensure you are admin.</td></tr>';
+                if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="color:red;">Error loading data: ${err.message}</td></tr>`;
+
+
             }
         }
+
+
 
         // ---------- INITIAL LOAD ----------
         document.addEventListener("DOMContentLoaded", function () {
@@ -1731,6 +1752,8 @@
                             // Authorized
                             loadBlogs();
                             loadCourses();
+                            loadAnalytics();
+                            console.log("Admin loaded: initializing analytics...");
                         } else {
                             // Not admin -> go to dashboard
                             window.location.href = '/dashboard.html';

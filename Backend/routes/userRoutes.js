@@ -146,14 +146,16 @@ router.get('/profile', verifyUser, async (req, res) => {
     }
 });
 
-// GET /analytics (Admin only - practically)
+// GET /analytics (Admin only)
 router.get('/analytics', verifyUser, async (req, res) => {
     try {
-        const users = await User.find()
-            .select('name email role purchasedCourses enrolledCourses')
+        // Exclude admins from the list and stats
+        const users = await User.find({ role: { $ne: 'admin' } })
+            .select('name email role purchasedCourses enrolledCourses viewedBlogs')
             .lean();
 
-        const analytics = users.map(u => ({
+        // 1. User List
+        const userList = users.map(u => ({
             name: u.name,
             email: u.email,
             role: u.role || 'user',
@@ -161,7 +163,11 @@ router.get('/analytics', verifyUser, async (req, res) => {
             enrolledCount: u.enrolledCourses ? u.enrolledCourses.length : 0
         }));
 
-        res.json({ success: true, users: analytics });
+        res.json({
+            success: true,
+            users: userList
+        });
+
     } catch (error) {
         console.error('Analytics error:', error);
         res.status(500).json({ success: false, error: 'Failed to fetch analytics' });

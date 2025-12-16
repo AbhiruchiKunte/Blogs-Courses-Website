@@ -1339,7 +1339,7 @@
             </div>
             <p style="font-size: 16px; margin-top: 30px ; color: #888; text-align: center;">Price: ₹499</p>
             <div class="button" style="margin-top: 30px;">
-              <button class="message-button" onclick="handleEnroll('Course 1', '499', '/course/1')">
+              <button class="message-button" onclick="handleEnroll('Course 1', 499, '/course/1', null)">
                 Enroll Now
               </button>
             </div>
@@ -1501,37 +1501,37 @@
 
     // Auth Import
     import { auth, onAuthChange } from '/js/auth.js';
-    
+
     // Payment Imports (CLEANED UP)
     // Only import setCurrentUser, which is required for module state management.
-    import { setCurrentUser } from '/js/payment.js'; 
+    import { setCurrentUser } from '/js/payment.js';
 
 
     // Listen for auth state
     onAuthChange((user) => {
-        setCurrentUser(user); // Sync user state with the shared payment module
-        
-        const userLink = document.getElementById('userLink');
-        if (userLink) {
-            if (user) {
-                const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@gmail.com';
-                if (user.email && user.email.toLowerCase() === adminEmail) {
-                    userLink.textContent = 'Admin Panel';
-                    userLink.href = '/addnew.html';
-                } else {
-                    userLink.textContent = 'Dashboard';
-                    userLink.href = '/dashboard.html';
-                }
-            } else {
-                userLink.textContent = 'Login';
-                userLink.href = '/login.html';
-            }
+      setCurrentUser(user); // Sync user state with the shared payment module
+
+      const userLink = document.getElementById('userLink');
+      if (userLink) {
+        if (user) {
+          const adminEmail = (window.adminConfig && window.adminConfig.email) ? window.adminConfig.email.toLowerCase() : 'admin@gmail.com';
+          if (user.email && user.email.toLowerCase() === adminEmail) {
+            userLink.textContent = 'Admin Panel';
+            userLink.href = '/addnew.html';
+          } else {
+            userLink.textContent = 'Dashboard';
+            userLink.href = '/dashboard.html';
+          }
+        } else {
+          userLink.textContent = 'Login';
+          userLink.href = '/login.html';
         }
+      }
     });
 
     // NOTE: handleAccess and handleEnroll are now accessed via the global window object.
 
-    
+
     /* -------------------
     SWIPER INITIALIZATION
     ------------------- */
@@ -1794,7 +1794,7 @@
             });
 
             // Assuming parseResponseSafely is not imported here, relying on simple JSON parse
-            const payload = await response.json(); 
+            const payload = await response.json();
 
             if (response.ok && payload) {
               contactForm.reset();
