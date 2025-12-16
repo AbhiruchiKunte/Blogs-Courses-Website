@@ -1,19 +1,16 @@
 {
   "version": 2,
   "public": true,
+  "cleanUrls": true,
   "builds": [
-    { "src": "Frontend/**/*", "use": "@vercel/static" }
+    { "src": "package.json", "use": "@vercel/static-build" }
   ],
   "routes": [
-    { "src": "/", "dest": "/Frontend/index.html" },
-    { "src": "/addnew.html", "dest": "/Frontend/addnew.html" },
-    { "src": "/product.html", "dest": "/Frontend/product.html" },
-    { "src": "/success.html", "dest": "/Frontend/success.html" },
-
+    { "src": "/js/(.*)", "dest": "/Frontend/public/js/$1" },
+    { "src": "/css/(.*)", "dest": "/Frontend/public/css/$1" },
     { "src": "/Images/(.*)", "dest": "/Frontend/public/Images/$1" },
-
-    { "src": "/public/(.*)", "dest": "/Frontend/public/$1" },
-
-    { "src": "/(.*)", "dest": "/Frontend/$1" }
+    { "src": "/(.*).html", "dest": "/Frontend/$1.html" },
+    { "src": "/", "dest": "/Frontend/index.html" },
+    { "handle": "filesystem" }
   ]
 }
