@@ -156,7 +156,6 @@
             text-align: left !important;
             /* Centering and sizing fix */
             margin: 0 auto 40px !important;
-            /* 40px margin bottom provides space before next section (.blog-content) */
             width: 100% !important;
             max-width: 550px !important;
             box-shadow: var(--shadow-dark);
@@ -944,16 +943,7 @@
 
 <body>
 
-    <script>
-        window.FIREBASE_CONFIG = {
-            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
-            authDomain: "sciastra-ak25.firebaseapp.com",
-            projectId: "sciastra-ak25",
-            storageBucket: "sciastra-ak25.firebasestorage.app",
-            messagingSenderId: "1001911647496",
-            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
-        };
-    </script>
+    <script src="/js/firebaseConfig.js"></script>
     <script type="module">
         import { auth, onAuthChange } from '/js/auth.js';
 
@@ -1013,7 +1003,7 @@
         <section class="blog-content">
             <div class="admin-blog-upload">
                 <h2>Blog Management</h2>
-                <form action="http://localhost:3000/add-blog" id="upload-form" method="POST"
+                <form action="https://sciastra-platform.onrender.com/add-blog" id="upload-form" method="POST"
                     enctype="multipart/form-data">
                     <label for="BlogTitle">Blog Title</label>
                     <input type="text" id="BlogTitle" name="BlogTitle" required>
@@ -1041,7 +1031,7 @@
 
             <div class="form-container">
                 <h1>Register a New Course</h1>
-                <form id="courseForm" action="http://localhost:3000/add-course" method="POST"
+                <form id="courseForm" action="https://sciastra-platform.onrender.com/add-course" method="POST"
                     enctype="multipart/form-data">
                     <label for="coursename">Course Name:</label>
                     <input type="text" id="coursename" name="coursename" required>
@@ -1235,20 +1225,11 @@
         </div>
     </div>
 
-    <script>
-        window.FIREBASE_CONFIG = {
-            apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
-            authDomain: "sciastra-ak25.firebaseapp.com",
-            projectId: "sciastra-ak25",
-            storageBucket: "sciastra-ak25.firebasestorage.app",
-            messagingSenderId: "1001911647496",
-            appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
-        };
-    </script>
+   <script src="/js/firebaseConfig.js"></script>
     <script src="/js/adminConfig.js"></script>
     <script>
         // ---------- CONFIG & STATE ----------
-        const API_BASE_URL = "http://localhost:3000"; // Relative path
+        const API_BASE_URL = "https://sciastra-platform.onrender.com"; // Relative path
 
         var blogsData = [];
         var coursesData = [];

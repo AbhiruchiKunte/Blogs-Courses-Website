@@ -42,14 +42,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend', 'index.html'));
 });
 
-app.get('/product.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend', 'product.html'));
-});
-
-app.get('/success.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../Frontend', 'success.html'));
-});
-
 app.get('/addnew.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../Frontend', 'addnew.html'));
 });
@@ -78,8 +70,6 @@ app.use('/api/users', userRoutes);
 function getBaseUrl(req) {
   return `${req.protocol}://${req.get('host')}`;
 }
-
-
 
 // ---------- READ APIs (blogs / courses) ----------
 
