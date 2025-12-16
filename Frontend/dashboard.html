@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - SciAstra</title>
-    <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
+    <link rel="icon" type="image/png" href="Images/Sciastra-logo.png">
     <link
         href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lobster&family=Oleo+Script&family=Spicy+Rice&display=swap"
         rel="stylesheet">
@@ -361,9 +361,10 @@
     </div>
 
     <div id="loading" class="loading">Loading Dashboard...</div>
-
+    
+    
+    <script src="/js/config.js"></script>
     <script src="/js/firebaseConfig.js"></script>
-
     <script type="module">
         // Import Auth functions
         import { auth, logout } from '/js/auth.js';
@@ -387,7 +388,7 @@
         async function loadDashboardData(user) {
             try {
                 const token = await user.getIdToken();
-                const res = await fetch('/api/users/profile', {
+                const res = await fetch(`${API_BASE_URL}/users/profile`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
 
@@ -450,7 +451,7 @@
                 if (!user) return;
                 const token = await user.getIdToken();
 
-                const res = await fetch('/api/users/profile', {
+                const res = await fetch(`${API_BASE_URL}/users/profile`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -486,7 +487,7 @@
 
         async function loadRecommendations(token, user) {
             try {
-                const res = await fetch('/api/users/recommendations', {
+                const res = await fetch(`${API_BASE_URL}/api/users/recommendations`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();

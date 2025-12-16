@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SciAstra Admin Panel</title>
-    <link rel="icon" type="image/png" href="/Images/Sciastra-logo.png">
+    <link rel="icon" type="image/png" href="Images/Sciastra-logo.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1225,12 +1225,11 @@
         </div>
     </div>
 
+    <script src="/js/config.js"></script>
    <script src="/js/firebaseConfig.js"></script>
     <script src="/js/adminConfig.js"></script>
     <script>
         // ---------- CONFIG & STATE ----------
-        const API_BASE_URL = "https://sciastra-platform.onrender.com"; // Relative path
-
         var blogsData = [];
         var coursesData = [];
         var currentEditType = null; // "blog" or "course"
@@ -1332,7 +1331,7 @@
         // ---------- LOAD & RENDER BLOGS ----------
         async function loadBlogs() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/blogs");
+                const res = await fetch(`${API_BASE_URL}/api/blogs`);
                 const blogs = await res.json();
                 blogsData = blogs;
 
@@ -1400,7 +1399,7 @@
         // ---------- LOAD & RENDER COURSES ----------
         async function loadCourses() {
             try {
-                const res = await fetch(API_BASE_URL + "/api/courses");
+                const res = await fetch(`${API_BASE_URL}/api/courses`);
                 const courses = await res.json();
                 coursesData = courses;
 
@@ -1545,14 +1544,15 @@
                     const { getAuthToken } = await import('/js/auth.js');
                     const token = await getAuthToken();
 
-                    var res = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId, {
-                        method: "PUT",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${token}`
-                        },
-                        body: JSON.stringify(payload)
-                    });
+                    var res = await fetch(`${API_BASE_URL}/api/blogs/${currentEditId}`, {
+    method: "PUT",
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+});
+
 
                     if (!res.ok) {
                         alert("Error updating blog details");
@@ -1566,10 +1566,11 @@
                         fd.append("BlogImage", imgInput.files[0]);
 
                         // NOTE: needs backend route: PUT /api/blogs/:id/image using formidable
-                        var imgRes = await fetch(API_BASE_URL + "/api/blogs/" + currentEditId + "/image", {
-                            method: "PUT",
-                            body: fd
-                        });
+                       var imgRes = await fetch(`${API_BASE_URL}/api/blogs/${currentEditId}/image`, {
+    method: "PUT",
+    body: fd
+});
+
 
                         if (!imgRes.ok) {
                             alert("Blog updated, but image update failed.");
@@ -1589,11 +1590,12 @@
                         link: document.getElementById("editCourseLink").value
                     };
 
-                    var resC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId, {
-                        method: "PUT",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payloadC)
-                    });
+                    var resC = await fetch(`${API_BASE_URL}/api/courses/${currentEditId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payloadC)
+});
+
 
                     if (!resC.ok) {
                         alert("Error updating course details");
@@ -1607,10 +1609,11 @@
                         fdC.append("courseImage", imgInputC.files[0]);
 
                         // NOTE: needs backend route: PUT /api/courses/:id/image using formidable
-                        var imgResC = await fetch(API_BASE_URL + "/api/courses/" + currentEditId + "/image", {
-                            method: "PUT",
-                            body: fdC
-                        });
+                       var imgResC = await fetch(`${API_BASE_URL}/api/courses/${currentEditId}/image`, {
+    method: "PUT",
+    body: fdC
+});
+
 
                         if (!imgResC.ok) {
                             alert("Course updated, but image update failed.");
@@ -1634,10 +1637,11 @@
             try {
                 const { getAuthToken } = await import('/js/auth.js');
                 const token = await getAuthToken();
-                var res = await fetch(API_BASE_URL + "/api/blogs/" + id, {
-                    method: "DELETE",
-                    headers: { "Authorization": `Bearer ${token}` }
-                });
+               var res = await fetch(`${API_BASE_URL}/api/blogs/${id}`, {
+    method: "DELETE",
+    headers: { "Authorization": `Bearer ${token}` }
+});
+
                 if (res.ok) {
                     alert("Blog deleted");
                     loadBlogs();
@@ -1654,9 +1658,10 @@
             if (!confirm("Are you sure you want to delete this course?")) return;
 
             try {
-                var res = await fetch(API_BASE_URL + "/api/courses/" + id, {
-                    method: "DELETE"
-                });
+                var res = await fetch(`${API_BASE_URL}/api/courses/${id}`, {
+    method: "DELETE"
+});
+
                 if (res.ok) {
                     alert("Course deleted");
                     loadCourses();
@@ -1676,9 +1681,9 @@
                 const { getAuthToken } = await import('/js/auth.js');
                 const token = await getAuthToken();
 
-                const res = await fetch(API_BASE_URL + "/api/users/analytics", {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const res = await fetch(`${API_BASE_URL}/api/users/analytics`, {
+    headers: { 'Authorization': `Bearer ${token}` }
+});
 
                 if (!res.ok) throw new Error('Failed to fetch analytics');
 
