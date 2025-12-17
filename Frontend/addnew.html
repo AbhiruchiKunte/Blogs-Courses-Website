@@ -1331,7 +1331,7 @@
         // ---------- LOAD & RENDER BLOGS ----------
         async function loadBlogs() {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/blogs`);
+                const res = await fetch(`${API_BASE_URL}/blogs`);
                 const blogs = await res.json();
                 blogsData = blogs;
 
@@ -1399,7 +1399,7 @@
         // ---------- LOAD & RENDER COURSES ----------
         async function loadCourses() {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/courses`);
+                const res = await fetch(`${API_BASE_URL}/courses`);
                 const courses = await res.json();
                 coursesData = courses;
 
@@ -1544,7 +1544,7 @@
                     const { getAuthToken } = await import('/js/auth.js');
                     const token = await getAuthToken();
 
-                    var res = await fetch(`${API_BASE_URL}/api/blogs/${currentEditId}`, {
+                    var res = await fetch(`${API_BASE_URL}/blogs/${currentEditId}`, {
     method: "PUT",
     headers: {
         "Content-Type": "application/json",
@@ -1552,7 +1552,6 @@
     },
     body: JSON.stringify(payload)
 });
-
 
                     if (!res.ok) {
                         alert("Error updating blog details");
@@ -1566,11 +1565,10 @@
                         fd.append("BlogImage", imgInput.files[0]);
 
                         // NOTE: needs backend route: PUT /api/blogs/:id/image using formidable
-                       var imgRes = await fetch(`${API_BASE_URL}/api/blogs/${currentEditId}/image`, {
+                       var imgRes = await fetch(`${API_BASE_URL}/blogs/${currentEditId}/image`, {
     method: "PUT",
     body: fd
 });
-
 
                         if (!imgRes.ok) {
                             alert("Blog updated, but image update failed.");
@@ -1590,12 +1588,11 @@
                         link: document.getElementById("editCourseLink").value
                     };
 
-                    var resC = await fetch(`${API_BASE_URL}/api/courses/${currentEditId}`, {
+                    var resC = await fetch(`${API_BASE_URL}/courses/${currentEditId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payloadC)
 });
-
 
                     if (!resC.ok) {
                         alert("Error updating course details");
@@ -1608,12 +1605,10 @@
                         var fdC = new FormData();
                         fdC.append("courseImage", imgInputC.files[0]);
 
-                        // NOTE: needs backend route: PUT /api/courses/:id/image using formidable
-                       var imgResC = await fetch(`${API_BASE_URL}/api/courses/${currentEditId}/image`, {
+                       var imgResC = await fetch(`${API_BASE_URL}/courses/${currentEditId}/image`, {
     method: "PUT",
     body: fdC
 });
-
 
                         if (!imgResC.ok) {
                             alert("Course updated, but image update failed.");
@@ -1637,7 +1632,7 @@
             try {
                 const { getAuthToken } = await import('/js/auth.js');
                 const token = await getAuthToken();
-               var res = await fetch(`${API_BASE_URL}/api/blogs/${id}`, {
+               var res = await fetch(`${API_BASE_URL}/blogs/${id}`, {
     method: "DELETE",
     headers: { "Authorization": `Bearer ${token}` }
 });
@@ -1658,7 +1653,7 @@
             if (!confirm("Are you sure you want to delete this course?")) return;
 
             try {
-                var res = await fetch(`${API_BASE_URL}/api/courses/${id}`, {
+                var res = await fetch(`${API_BASE_URL}/courses/${id}`, {
     method: "DELETE"
 });
 
@@ -1681,15 +1676,13 @@
                 const { getAuthToken } = await import('/js/auth.js');
                 const token = await getAuthToken();
 
-                const res = await fetch(`${API_BASE_URL}/api/users/analytics`, {
+                const res = await fetch(`${API_BASE_URL}/users/analytics`, {
     headers: { 'Authorization': `Bearer ${token}` }
 });
 
                 if (!res.ok) throw new Error('Failed to fetch analytics');
 
                 const data = await res.json();
-
-
 
                 // Render Table
                 if (data.success && data.users) {
@@ -1724,8 +1717,6 @@
             }
         }
 
-
-
         // ---------- INITIAL LOAD ----------
         document.addEventListener("DOMContentLoaded", function () {
             // AUTH GUARD
@@ -1752,7 +1743,6 @@
             });
         });
     </script>
-
 
 </body>
 

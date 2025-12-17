@@ -487,7 +487,7 @@
 
         async function loadRecommendations(token, user) {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/users/recommendations`, {
+                const res = await fetch(`${API_BASE_URL}/users/recommendations`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();

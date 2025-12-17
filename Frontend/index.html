@@ -1393,16 +1393,7 @@
           class="fab fa-whatsapp social_icon"></i></a>
     </div>
 
-    <script>
-      window.FIREBASE_CONFIG = {
-        apiKey: "AIzaSyDaQwBu4_NctXRNZhBjHCLN-boqmHwgcxU",
-        authDomain: "sciastra-ak25.firebaseapp.com",
-        projectId: "sciastra-ak25",
-        storageBucket: "sciastra-ak25.firebasestorage.app",
-        messagingSenderId: "1001911647496",
-        appId: "1:1001911647496:web:5cc8dfba10f4348c72c0bd"
-      };
-    </script>
+    <script src="/js/firebaseConfig.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
@@ -1427,16 +1418,10 @@
       });
 
       async function trackPageView(user) {
-        // Determine if we are on a blog or course page, or just tracks click
-        // Since this is a One-Page scroller, we track "clicks" on cards.
-        // We'll attach listeners to all "Read More" or "View" buttons.
 
-        const cards = document.querySelectorAll('.card'); // Assuming cards have this class
+        const cards = document.querySelectorAll('.card'); 
         cards.forEach(card => {
           card.addEventListener('click', async () => {
-            // find hidden id or link to identify
-            // Implementation depends on how we identify content.
-            // For now we just log it. in real implementation we'd grab the ID.
             console.log('Content clicked');
           });
         });
@@ -1484,8 +1469,7 @@
     // Auth Import
     import { auth, onAuthChange } from '/js/auth.js';
 
-    // Payment Imports (CLEANED UP)
-    // Only import setCurrentUser, which is required for module state management.
+    // Payment Imports
     import { setCurrentUser } from '/js/payment.js';
 
 
@@ -1510,9 +1494,6 @@
         }
       }
     });
-
-    // NOTE: handleAccess and handleEnroll are now accessed via the global window object.
-
 
     /* -------------------
     SWIPER INITIALIZATION
@@ -1589,7 +1570,6 @@
         }
       });
     });
-
 
     /* -------------------
     FETCH HELPERS
@@ -1718,7 +1698,7 @@
     ------------------- */
     async function loadDataFromBackend() {
       // Load Blogs
-      fetchJSON(`${API_BASE_URL}/api/blogs`)
+      fetchJSON(`${API_BASE_URL}/blogs`)
         .then(blogs => {
           renderBlogs(blogs || []);
           if (window.swiperInstances && window.swiperInstances['blogs-swiper']) {
@@ -1730,7 +1710,7 @@
         .catch(err => console.error("Error loading blogs:", err));
 
       // Load Free Courses
-      fetchJSON(`${API_BASE_URL}/api/courses?type=free`)
+      fetchJSON(`${API_BASE_URL}/courses?type=free`)
         .then(courses => {
           renderFreeCourses(courses || []);
           if (window.swiperInstances && window.swiperInstances['free-courses-swiper']) {
@@ -1742,7 +1722,7 @@
         .catch(err => console.error("Error loading free courses:", err));
 
       // Load Paid Courses
-      fetchJSON(`${API_BASE_URL}/api/courses?type=paid`)
+      fetchJSON(`${API_BASE_URL}/courses?type=paid`)
         .then(courses => {
           renderPaidCourses(courses || []);
           if (window.swiperInstances && window.swiperInstances['paid-courses-swiper']) {
