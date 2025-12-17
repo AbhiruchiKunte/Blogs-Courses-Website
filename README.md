@@ -1,36 +1,45 @@
-# 🚀 SciAstra Platform - Blogs & Courses 🌌
+# 🚀 SciAstra Platform – Blogs & Courses 🌌
 
-Welcome to **SciAstra**! 🌠 A place where knowledge meets convenience, empowering users with engaging blogs and easy-to-access courses.
+Welcome to **SciAstra**! 🌠  
+A place where **knowledge meets convenience**, empowering users with engaging blogs and easy-to-access courses. This platform provides a seamless experience for both learners and administrators, featuring a dynamic UI and secure payment integrations.
 
 ---
 
 ## ✨ Key Highlights
 
-- 🎨 **Responsive & Dynamic UI**  
-  A seamless, visually pleasing interface built with **HTML, CSS, and JavaScript**. The homepage dynamically displays real-time course discounts.
+### 🎨 Responsive & Dynamic UI
+A seamless, visually pleasing interface built with **HTML, CSS, and JavaScript**.  
+The homepage dynamically displays **real-time course discounts**.
 
-- ✏️ **Easy Blog Management**  
-  Admins can upload, manage, and schedule blogs to go live at specific times — ensuring fresh, timely content.
+### ✏️ Easy Blog Management
+Admins can **upload, manage, and schedule blogs** to go live at specific times—ensuring fresh and timely content.
 
-- 📚 **Effortless Course Purchase Flow**  
-  Users can browse, select, and purchase courses easily. After selection, they’re redirected to a secure Razorpay payment gateway.
+### 📚 Effortless Course Purchase Flow
+Users can browse, select, and purchase courses easily. After selection, they’re redirected to a **secure Razorpay payment gateway**.
 
-- 💳 **Secure Payment Options**  
-  Razorpay integration supports net banking, cards, wallets, UPI, and “Pay Later” options. All transactions include **two-step verification** for extra security.
+### 💳 Secure Payment Options
+**Razorpay integration** supports net banking, cards, wallets, UPI, and *Pay Later* options.  
+All transactions include **two-step verification** for enhanced security.
 
 ---
 
-## 🗄️ Backend Tech Stack
+## 🛠️ Tech Stack
 
-- **Node.js** and **Express.js** – For fast, scalable server-side routing.
-- **MySQL** – For structured data storage (courses, blogs, transactions).
-- **Razorpay API** – For smooth and secure payment handling.
+### Frontend
+- **HTML5, CSS3, JavaScript (ES6+)** – Core technologies for building a responsive UI  
+- **EJS** – Templating engine for server-side rendering  
+
+### Backend
+- **Node.js & Express.js** – Fast, scalable server-side environment and routing  
+- **MongoDB & Mongoose** – NoSQL database for blogs, courses, and users  
+- **Razorpay API** – Secure and smooth payment handling  
+- **Firebase Admin** – Secure authentication and admin-level operations  
 
 ---
 
 ## 🔗 Live Preview
 
-🌐 [**View Project Demo**](https://edufusion-blogs.onrender.com/)
+🌐 [**View Project Demo**](https://sciastra-platform.vercel.app/)
 
 ---
 
@@ -42,6 +51,6 @@ Welcome to **SciAstra**! 🌠 A place where knowledge meets convenience, empower
 
 ---
 
-**Enjoy exploring SciAstra! 🚀🌌**
+**✨ Enjoy exploring SciAstra! 🚀🌌**
 
 
